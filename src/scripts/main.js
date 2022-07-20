@@ -13,28 +13,17 @@ const config = {
   backgroundColor: '#808080',
 
   // Add physics, arcade, scene, and audio
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: {
-        y: 0,
-      },
-      debug: false,
-    },
-  },
   scene: [MyGameScene],
   audio: {
     disableWebAudio: true,
   },
   plugins: {
-    global: [
-      {
-        key: 'GlobalState',
-        plugin: GlobalState,
-        start: false,
-        mapping: 'globalState'
-      }
-    ],
+    global: [{
+      key: 'GlobalState',
+      plugin: GlobalState,
+      start: false,
+      mapping: 'globalState'
+    }],
   },
 };
 

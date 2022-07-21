@@ -11,6 +11,15 @@ const config = {
   width: 1080,
   height: 720,
   backgroundColor: '#808080',
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: {
+        y: 0,
+      },
+      debug: true,
+    },
+  },
 
   // Add physics, arcade, scene, and audio
   scene: [MyGameScene],
@@ -22,7 +31,7 @@ const config = {
       key: 'GlobalState',
       plugin: GlobalState,
       start: false,
-      mapping: 'globalState'
+      mapping: 'globalState',
     }],
   },
 };

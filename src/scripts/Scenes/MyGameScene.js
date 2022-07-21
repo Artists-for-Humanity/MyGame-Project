@@ -14,21 +14,26 @@ export default class GameScene extends Phaser.Scene {
         this.player5;
         this.player6;
         this.cursors;
-        this.playerPositions = [
-            [660, 190],
-            [660, 340],
-            [660, 490],
-            [660, 640],
-            [300, 640],
-            [300, 490],
-            [300, 340]
-        ]
         this.scoreTextA;
         this.scoreTextB;
         this.scoreTextC;
         this.scoreTextD;
         this.gameOverText;
         this.timeText;
+        this.left;
+        this.right;
+        this.up;
+        this.down;
+        this.moveBeep;
+        this.pickUpBeep;
+        this.scoreBeep;
+        this.loseBeep;
+        this.beltBeep;
+        this.music;
+        this.boxA;
+        this.boxB;
+        this.boxC;
+        this.boxD;
     }
     preload() {
         this.load.image('background', new URL('/assets/factoryBackground.png',
@@ -43,8 +48,22 @@ export default class GameScene extends Phaser.Scene {
             import.meta.url).href);
         this.load.image('boxd', new URL('/assets/Box_D.png',
             import.meta.url).href);
+        this.load.audio('move', new URL('/assets/move.mp3',
+            import.meta.url).href);
+        this.load.audio('pickup', new URL('/assets/pickUp.mp3',
+            import.meta.url).href);
+        this.load.audio('score', new URL('/assets/score.mp3',
+            import.meta.url).href);
+        this.load.audio('lose', new URL('/assets/lose.mp3',
+            import.meta.url).href);
+        this.load.audio('belt', new URL('/assets/belt.mp3',
+            import.meta.url).href);
     }
     create() {
+        this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.add.image(540, 360, 'background');
         this.player = this.add.image(660, 190, 'worker');
         this.player.visible = false
@@ -54,16 +73,25 @@ export default class GameScene extends Phaser.Scene {
         this.player2.visible = false
         this.player3 = this.add.image(660, 640, 'worker');
         this.player3.visible = false
-        this.player4 = this.add.image(300, 640, 'worker');
+        this.player4 = this.physics.add.image(315, 640, 'worker');
         this.player4.visible = false
-        this.player5 = this.add.image(300, 490, 'worker');
+        this.player5 = this.physics.add.image(315, 490, 'worker');
         this.player5.visible = false
-        this.player6 = this.add.image(300, 340, 'worker');
-        this.add.image(135, 340, 'boxb');
-        this.add.image(135, 490, 'boxc');
-        this.add.image(135, 640, 'boxd');
-        this.add.image(135, 190, 'boxa');
+        this.player6 = this.physics.add.image(315, 340, 'worker');
+        this.boxB = this.physics.add.image(135, 190, 'boxb');
+        this.boxB.body.setSize(300, 15);
+        this.boxC = this.physics.add.image(135, 190, 'boxc');
+        this.boxC.body.setSize(300, 15);
+        this.boxD = this.physics.add.image(135, 190, 'boxd');
+        this.boxD.body.setSize(300, 15);
+        this.boxA = this.physics.add.image(135, 190, 'boxa');
+        this.boxA.body.setSize(300, 15);
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.moveBeep = this.sound.add('move');
+        this.pickUpBeep = this.sound.add('pickup');
+        this.scoreBeep = this.sound.add('score');
+        this.loseBeep = this.sound.add('lose');
+        this.beltBeep = this.sound.add('belt');
         this.timeText = this.add.text(915, 30, '1:00', {
             fontSize: '56px',
             fill: '#000',
@@ -84,59 +112,45 @@ export default class GameScene extends Phaser.Scene {
             fontSize: '20px',
             fill: '#000',
         })
+        this.t = 0;
     }
-    update() {
-        if (this.cursors.left.isDown) {
-            this.onPlayerMoveLeft();
-            this.player.flipX = false;
-            this.player1.flipX = false;
-            this.player2.flipX = false;
-            this.player3.flipX = false;
-            this.player4.flipX = false;
-            this.player5.flipX = false;
-            this.player6.flipX = false;
+    update(time, delta) {
+        this.t += delta
+        if (this.t >= 1000) {
+            this.beltBeep.play({
+                volume: 0.2
+            });
+            this.boxA.y += 75;
+            this.t = 0;
         }
-        if (this.cursors.right.isDown) {
-            this.onPlayerMoveRight();
-            this.player.flipX = true;
-            this.player1.flipX = true;
-            this.player2.flipX = true;
-            this.player3.flipX = true;
-            this.player4.flipX = true;
-            this.player5.flipX = true;
-            this.player6.flipX = true;
+        if (this.t >= 2000) {
+            this.beltBeep.play({
+                volume: 0.2
+            });
+            this.boxD.y += 75;
+            this.t = 0;
         }
-        if (this.cursors.up.isDown) {
-            this.onPlayerMoveUp();
-            this.player.flipY = true;
-            this.player1.flipY = true;
-            this.player2.flipY = true;
-            this.player3.flipY = true;
-            this.player4.flipY = true;
-            this.player5.flipY = true;
-            this.player6.flipY = true;
-        }
-        if (this.cursors.down.isDown) {
-            this.onPlayerMoveDown();
-            this.player.flipY = false;
-            this.player1.flipY = false;
-            this.player2.flipY = false;
-            this.player3.flipY = false;
-            this.player4.flipY = false;
-            this.player5.flipY = false;
-            this.player6.flipY = false;
-        }
+        this.movePlayer();
     }
+
     onPlayerMoveRight() {
         if (this.player6.visible) {
             this.player6.visible = false;
             this.player1.visible = true;
+        } else if (this.player6.rotation = 3.13) {
+            this.player4.body.setSize(4, 4);
+            this.player5.body.setSize(4, 4);
+            this.player6.body.setSize(4, 4);
         }
     }
     onPlayerMoveLeft() {
         if (this.player1.visible) {
             this.player1.visible = false;
             this.player6.visible = true;
+        } else if (this.player6.visible, this.player5.visible, this.player4.visible) {
+            this.player4.body.setSize(120, 120);
+            this.player5.body.setSize(120, 120);
+            this.player6.body.setSize(120, 120);
         }
     }
     onPlayerMoveUp() {
@@ -183,5 +197,54 @@ export default class GameScene extends Phaser.Scene {
             align: 'center',
         });
         this.myText.setText('Factory');
+    }
+    movePlayer() {
+        if (Phaser.Input.Keyboard.JustDown(this.left)) {
+            this.onPlayerMoveLeft();
+            this.moveBeep.play();
+            this.player.rotation = 0;
+            this.player1.rotation = 0;
+            this.player2.rotation = 0;
+            this.player3.rotation = 0;
+            this.player4.rotation = 0;
+            this.player5.rotation = 0;
+            this.player6.rotation = 0;
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.right)) {
+            this.onPlayerMoveRight();
+            this.moveBeep.play();
+            this.player.rotation = 3.13;
+            this.player1.rotation = 3.13;
+            this.player2.rotation = 3.13;
+            this.player3.rotation = 3.13;
+            this.player4.rotation = 3.13;
+            this.player5.rotation = 3.13;
+            this.player6.rotation = 3.13;
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.up)) {
+            this.onPlayerMoveUp();
+            this.moveBeep.play();
+            this.player.rotation = 1.58;
+            this.player1.rotation = 1.58;
+            this.player2.rotation = 1.58;
+            this.player3.rotation = 1.58;
+            this.player4.rotation = 1.58;
+            this.player5.rotation = 1.58;
+            this.player6.rotation = 1.58;
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.down)) {
+            this.onPlayerMoveDown();
+            this.moveBeep.play();
+            this.player.rotation = 4.73;
+            this.player1.rotation = 4.73;
+            this.player2.rotation = 4.73;
+            this.player3.rotation = 4.73;
+            this.player4.rotation = 4.73;
+            this.player5.rotation = 4.73;
+            this.player6.rotation = 4.73;
+        }
+    }
+    onPickUp() {
+
     }
 }

@@ -34,6 +34,10 @@ export default class GameScene extends Phaser.Scene {
         this.boxB;
         this.boxC;
         this.boxD;
+        this.placeholderA;
+        this.placeholderB;
+        this.placeholderC;
+        this.placeholderD;
     }
     preload() {
         this.load.image('background', new URL('/assets/factoryBackground.png',
@@ -47,6 +51,8 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('boxc', new URL('/assets/Box_C.png',
             import.meta.url).href);
         this.load.image('boxd', new URL('/assets/Box_D.png',
+            import.meta.url).href);
+        this.load.image('place', new URL('/assets/place.png',
             import.meta.url).href);
         this.load.audio('move', new URL('/assets/move.mp3',
             import.meta.url).href);
@@ -65,27 +71,35 @@ export default class GameScene extends Phaser.Scene {
         this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.add.image(540, 360, 'background');
-        this.player = this.add.image(660, 190, 'worker');
+        this.player = this.physics.add.image(660, 190, 'worker');
         this.player.visible = false
-        this.player1 = this.add.image(660, 340, 'worker');
+        this.player1 = this.physics.add.image(660, 340, 'worker');
         this.player1.visible = false
-        this.player2 = this.add.image(660, 490, 'worker');
+        this.player2 = this.physics.add.image(660, 490, 'worker');
         this.player2.visible = false
-        this.player3 = this.add.image(660, 640, 'worker');
+        this.player3 = this.physics.add.image(660, 640, 'worker');
         this.player3.visible = false
         this.player4 = this.physics.add.image(315, 640, 'worker');
         this.player4.visible = false
         this.player5 = this.physics.add.image(315, 490, 'worker');
         this.player5.visible = false
         this.player6 = this.physics.add.image(315, 340, 'worker');
-        this.boxB = this.physics.add.image(135, 190, 'boxb');
+        this.boxB = this.physics.add.image(135, 265, 'boxb');
         this.boxB.body.setSize(300, 15);
-        this.boxC = this.physics.add.image(135, 190, 'boxc');
+        this.boxC = this.physics.add.image(135, 265, 'boxc');
         this.boxC.body.setSize(300, 15);
-        this.boxD = this.physics.add.image(135, 190, 'boxd');
+        this.boxD = this.physics.add.image(135, 265, 'boxd');
         this.boxD.body.setSize(300, 15);
-        this.boxA = this.physics.add.image(135, 190, 'boxa');
+        this.boxA = this.physics.add.image(135, 265, 'boxa');
         this.boxA.body.setSize(300, 15);
+        this.placeholderA = this.physics.add.image(800, 190, 'place');
+        this.placeholderA.body.setSize(200, 15);
+        this.placeholderB = this.physics.add.image(800, 340, 'place');
+        this.placeholderB.body.setSize(200, 15);
+        this.placeholderC = this.physics.add.image(800, 490, 'place');
+        this.placeholderC.body.setSize(200, 15);
+        this.placeholderD = this.physics.add.image(800, 640, 'place');
+        this.placeholderD.body.setSize(200, 15);
         this.cursors = this.input.keyboard.createCursorKeys();
         this.moveBeep = this.sound.add('move');
         this.pickUpBeep = this.sound.add('pickup');
@@ -123,35 +137,33 @@ export default class GameScene extends Phaser.Scene {
             this.boxA.y += 75;
             this.t = 0;
         }
-        if (this.t >= 2000) {
-            this.beltBeep.play({
-                volume: 0.2
-            });
-            this.boxD.y += 75;
-            this.t = 0;
-        }
         this.movePlayer();
     }
-
     onPlayerMoveRight() {
         if (this.player6.visible) {
             this.player6.visible = false;
             this.player1.visible = true;
-        } else if (this.player6.rotation = 3.13) {
-            this.player4.body.setSize(4, 4);
-            this.player5.body.setSize(4, 4);
-            this.player6.body.setSize(4, 4);
         }
+        this.player4.body.setSize(4, 4);
+        this.player5.body.setSize(4, 4);
+        this.player6.body.setSize(4, 4);
+        this.player.body.setSize(120, 120);
+        this.player1.body.setSize(120, 120);
+        this.player2.body.setSize(120, 120);
+        this.player3.body.setSize(120, 120);
     }
     onPlayerMoveLeft() {
         if (this.player1.visible) {
             this.player1.visible = false;
             this.player6.visible = true;
-        } else if (this.player6.visible, this.player5.visible, this.player4.visible) {
-            this.player4.body.setSize(120, 120);
-            this.player5.body.setSize(120, 120);
-            this.player6.body.setSize(120, 120);
         }
+        this.player4.body.setSize(120, 120);
+        this.player5.body.setSize(120, 120);
+        this.player6.body.setSize(120, 120);
+        this.player.body.setSize(4, 4);
+        this.player1.body.setSize(4, 4);
+        this.player2.body.setSize(4, 4);
+        this.player3.body.setSize(4, 4);
     }
     onPlayerMoveUp() {
         if (this.player1.visible) {
@@ -170,6 +182,13 @@ export default class GameScene extends Phaser.Scene {
             this.player4.visible = false;
             this.player5.visible = true;
         }
+        this.player4.body.setSize(4, 4);
+        this.player5.body.setSize(4, 4);
+        this.player6.body.setSize(4, 4);
+        this.player.body.setSize(4, 4);
+        this.player1.body.setSize(4, 4);
+        this.player2.body.setSize(4, 4);
+        this.player3.body.setSize(4, 4);
     }
     onPlayerMoveDown() {
         if (this.player.visible) {
@@ -188,6 +207,13 @@ export default class GameScene extends Phaser.Scene {
             this.player5.visible = false;
             this.player4.visible = true;
         }
+        this.player4.body.setSize(4, 4);
+        this.player5.body.setSize(4, 4);
+        this.player6.body.setSize(4, 4);
+        this.player.body.setSize(4, 4);
+        this.player1.body.setSize(4, 4);
+        this.player2.body.setSize(4, 4);
+        this.player3.body.setSize(4, 4);
     }
     setText() {
         this.myText = this.add.text(400, 360, '')

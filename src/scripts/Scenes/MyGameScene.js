@@ -76,8 +76,8 @@ export default class GameScene extends Phaser.Scene {
             import.meta.url).href);
         this.load.image('worker', new URL('/assets/factoryWorker.png',
             import.meta.url).href);
-        this.load.image('boxa', new URL('/assets/Box_A.png',
-            import.meta.url).href);
+        // this.load.image('boxa', new URL('/assets/Box_A.png',
+        // import.meta.url).href);
         this.load.image('boxb', new URL('/assets/Box_B.png',
             import.meta.url).href);
         this.load.image('boxc', new URL('/assets/Box_C.png',
@@ -86,14 +86,14 @@ export default class GameScene extends Phaser.Scene {
             import.meta.url).href);
         this.load.image('place', new URL('/assets/place.png',
             import.meta.url).href);
-        this.load.image('boxworkera', new URL('/assets/boxWorkerA.png',
-            import.meta.url).href);
-        this.load.image('boxworkerb', new URL('/assets/boxWorkerB.png',
-            import.meta.url).href);
-        this.load.image('boxworkerc', new URL('/assets/boxWorkerC.png',
-            import.meta.url).href);
-        this.load.image('boxworkerd', new URL('/assets/boxWorkerD.png',
-            import.meta.url).href);
+        // this.load.image('boxworkera', new URL('/assets/boxWorkerA.png',
+        // import.meta.url).href);
+        // this.load.image('boxworkerb', new URL('/assets/boxWorkerB.png',
+        //     import.meta.url).href);
+        // this.load.image('boxworkerc', new URL('/assets/boxWorkerC.png',
+        //     import.meta.url).href);
+        // this.load.image('boxworkerd', new URL('/assets/boxWorkerD.png',
+        //     import.meta.url).href);
         this.load.image('win', new URL('/assets/youWin.png',
             import.meta.url).href);
         this.load.image('lose', new URL('/assets/youLose.png',
@@ -115,14 +115,9 @@ export default class GameScene extends Phaser.Scene {
         this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.add.image(540, 360, 'background');
-        this.player = this.add.image(660, 190, 'worker');
-        this.player.visible = false
-        this.player1 = this.add.image(660, 340, 'worker');
-        this.player1.visible = false
-        this.player2 = this.add.image(660, 490, 'worker');
-        this.player2.visible = false
-        this.player3 = this.add.image(660, 640, 'worker');
-        this.player3.visible = false
+
+        this.createPlayer();
+
         this.player4 = this.physics.add.image(315, 640, 'worker');
         this.player4.visible = false
         this.player5 = this.physics.add.image(315, 490, 'worker');
@@ -235,6 +230,18 @@ export default class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.boxD, this.player5, this.onPickUpBox5D, null, this);
         this.physics.add.overlap(this.boxD, this.player4, this.onPickUpBox4D, null, this);
     }
+
+    createPlayer() {
+        this.player = this.add.image(660, 190, 'worker');
+        this.player.visible = false
+        // this.player1 = this.add.image(660, 340, 'worker');
+        // this.player1.visible = false
+        this.player2 = this.add.image(660, 490, 'worker');
+        this.player2.visible = false
+        this.player3 = this.add.image(660, 640, 'worker');
+        this.player3.visible = false
+    }
+
     update(time, delta) {
         this.t += delta
         if (this.t >= 750) {
@@ -274,10 +281,12 @@ export default class GameScene extends Phaser.Scene {
             this.boxD.y = 265
         }
     }
+
     onPlayerMoveRight() {
-        if (this.player6.visible) {
-            this.player6.visible = false;
-            this.player1.visible = true;
+        if (this.player6.visible && this.player6.y === 340) {
+            // this.player6.visible = false;
+            // this.player1.visible = true;
+            this.player6.x = 660;
         }
         if (this.playerBoxA6.visible) {
             this.playerBoxA6.visible = false;
@@ -315,10 +324,13 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxD2.body.setSize(120, 120);
         this.playerBoxD3.body.setSize(120, 120);
     }
+
     onPlayerMoveLeft() {
-        if (this.player1.visible) {
-            this.player1.visible = false;
-            this.player6.visible = true;
+        if (this.player6.visible) {
+            // this.player1.visible = false;
+            // this.player6.visible = true;
+            this.player6.x = 315;
+
         }
         if (this.playerBoxA1.visible) {
             this.playerBoxA1.visible = false;
@@ -356,20 +368,30 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxD2.body.setSize(4, 4);
         this.playerBoxD3.body.setSize(4, 4);
     }
+
     onPlayerMoveUp() {
-        if (this.player1.visible) {
-            this.player1.visible = false;
-            this.player.visible = true;
-        } else if (this.player2.visible) {
+        // if (this.player1.visible) {
+        //     this.player1.visible = false;
+        //     this.player.visible = true;
+        // } 
+        if (this.player2.visible) {
             this.player2.visible = false;
-            this.player1.visible = true;
+            // this.player1.visible = true;
         } else if (this.player3.visible) {
             this.player3.visible = false;
             this.player2.visible = true;
-        } else if (this.player5.visible) {
-            this.player5.visible = false;
-            this.player6.visible = true;
-        } else if (this.player4.visible) {
+        }
+        else if (this.player6.visible && this.player6.y === 490) {
+            // this.player5.visible = false;
+            // this.player6.visible = true;
+            this.player6.y = 340;
+        }
+        else if (this.player6.visible && this.player6.y === 640) {
+            // this.player5.visible = false;
+            // this.player6.visible = true;
+            this.player6.y = 490;
+        }
+        else if (this.player4.visible) {
             this.player4.visible = false;
             this.player5.visible = true;
         }
@@ -457,23 +479,31 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxD2.body.setSize(4, 4);
         this.playerBoxD3.body.setSize(4, 4);
     }
+
     onPlayerMoveDown() {
-        if (this.player.visible) {
-            this.player.visible = false;
-            this.player1.visible = true;
-        } else if (this.player1.visible) {
-            this.player1.visible = false;
-            this.player2.visible = true;
-        } else if (this.player2.visible) {
+        console.log(this.player6.y);
+        if (this.player6.visible && this.player6.y === 490) {
+            // this.player.visible = false;
+            // this.player1.visible = true;
+            this.player6.y = 640;
+        }
+        //  else if (this.player1.visible) {
+        // this.player1.visible = false;
+        // this.player2.visible = true;
+        // }
+        else if (this.player2.visible) {
             this.player2.visible = false;
             this.player3.visible = true;
-        } else if (this.player6.visible) {
-            this.player6.visible = false;
-            this.player5.visible = true;
-        } else if (this.player5.visible) {
-            this.player5.visible = false;
-            this.player4.visible = true;
         }
+        if (this.player6.visible && this.player6.y === 340) {
+            this.player6.y = 490;
+            // this.player6.visible = false;
+            // this.player5.visible = true;
+        }
+        // else if (this.player5.visible) {
+        //     this.player5.visible = false;
+        //     this.player4.visible = true;
+        // }
         if (this.playerBoxA.visible) {
             this.playerBoxA.visible = false;
             this.playerBoxA1.visible = true;
@@ -563,7 +593,7 @@ export default class GameScene extends Phaser.Scene {
             this.onPlayerMoveLeft();
             this.moveBeep.play();
             this.player.rotation = 0;
-            this.player1.rotation = 0;
+            // this.player1.rotation = 0;
             this.player2.rotation = 0;
             this.player3.rotation = 0;
             this.player4.rotation = 0;
@@ -602,7 +632,7 @@ export default class GameScene extends Phaser.Scene {
             this.onPlayerMoveRight();
             this.moveBeep.play();
             this.player.rotation = 3.13;
-            this.player1.rotation = 3.13;
+            // this.player1.rotation = 3.13;
             this.player2.rotation = 3.13;
             this.player3.rotation = 3.13;
             this.player4.rotation = 3.13;
@@ -641,7 +671,7 @@ export default class GameScene extends Phaser.Scene {
             this.onPlayerMoveUp();
             this.moveBeep.play();
             this.player.rotation = 1.58;
-            this.player1.rotation = 1.58;
+            // this.player1.rotation = 1.58;
             this.player2.rotation = 1.58;
             this.player3.rotation = 1.58;
             this.player4.rotation = 1.58;
@@ -680,7 +710,7 @@ export default class GameScene extends Phaser.Scene {
             this.onPlayerMoveDown();
             this.moveBeep.play();
             this.player.rotation = 4.73;
-            this.player1.rotation = 4.73;
+            // this.player1.rotation = 4.73;
             this.player2.rotation = 4.73;
             this.player3.rotation = 4.73;
             this.player4.rotation = 4.73;
@@ -926,7 +956,7 @@ export default class GameScene extends Phaser.Scene {
             if (this.playerBoxB1.visible) {
                 this.scoreBeep.play();
                 this.playerBoxB1.visible = false;
-                this.player1.visible = true;
+                // this.player1.visible = true;
                 this.scoreB -= 1;
                 this.scoreTextB.setText(`${this.scoreB}`);
                 this.scoreMaxB();
@@ -992,7 +1022,7 @@ export default class GameScene extends Phaser.Scene {
                         this.boxC.destroy;
                         this.boxD.destroy;
                         this.player.destroy;
-                        this.player1.destroy;
+                        // this.player1.destroy;
                         this.player2.destroy;
                         this.player3.destroy;
                         this.player4.destroy;

@@ -2,10 +2,6 @@
 import Phaser from 'phaser';
 import GlobalState from './GlobalState';
 import MyGameScene from './Scenes/MyGameScene';
-
-
-
-// Set configuration for phaser game instance
 const config = {
   type: Phaser.AUTO,
   width: 1080,
@@ -17,11 +13,9 @@ const config = {
       gravity: {
         y: 0,
       },
-      debug: true,
+      debug: false,
     },
   },
-
-  // Add physics, arcade, scene, and audio
   scene: [MyGameScene],
   audio: {
     disableWebAudio: true,
@@ -35,6 +29,4 @@ const config = {
     }],
   },
 };
-
-// Initialize game instance
 new Phaser.Game(config);

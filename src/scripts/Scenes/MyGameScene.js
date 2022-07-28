@@ -39,6 +39,7 @@ export default class GameScene extends Phaser.Scene {
         this.placeholderB;
         this.placeholderC;
         this.placeholderD;
+        this.homeScreen;
     }
     preload() {
         this.load.image('background', new URL('/assets/factoryBackground.png',
@@ -67,6 +68,8 @@ export default class GameScene extends Phaser.Scene {
             import.meta.url).href);
         this.load.image('lose', new URL('/assets/youLose.png',
             import.meta.url).href);
+        this.load.image('homescreen', new URL('/assets/startScreen.png',
+            import.meta.url).href);
         this.load.audio('move', new URL('/assets/move.mp3',
             import.meta.url).href);
         this.load.audio('pickup', new URL('/assets/pickUp.mp3',
@@ -87,20 +90,24 @@ export default class GameScene extends Phaser.Scene {
         this.add.image(540, 360, 'background');
         this.player = this.physics.add.image(660, 190, 'worker');
         this.playerBoxA = this.physics.add.image(660, 190, 'boxworkera');
-        this.playerBoxA.visible = false
+        this.playerBoxA.visible = false;
         this.playerBoxB = this.physics.add.image(660, 190, 'boxworkerb');
-        this.playerBoxB.visible = false
+        this.playerBoxB.visible = false;
         this.playerBoxC = this.physics.add.image(660, 190, 'boxworkerc');
-        this.playerBoxC.visible = false
+        this.playerBoxC.visible = false;
         this.playerBoxD = this.physics.add.image(660, 190, 'boxworkerd');
-        this.playerBoxD.visible = false
-        this.boxB = this.physics.add.image(135, 265, 'boxb');
+        this.playerBoxD.visible = false;
+        this.boxB = this.physics.add.image(135, 190, 'boxb');
+        this.boxB.visible = false;
         this.boxB.body.setSize(300, 15);
-        this.boxC = this.physics.add.image(135, 265, 'boxc');
+        this.boxC = this.physics.add.image(135, 190, 'boxc');
+        this.boxC.visible = false;
         this.boxC.body.setSize(300, 15);
-        this.boxD = this.physics.add.image(135, 265, 'boxd');
+        this.boxD = this.physics.add.image(135, 190, 'boxd');
+        this.boxD.visible = false;
         this.boxD.body.setSize(300, 15);
-        this.boxA = this.physics.add.image(135, 265, 'boxa');
+        this.boxA = this.physics.add.image(135, 190, 'boxa');
+        this.boxA.visible = false;
         this.boxA.body.setSize(300, 15);
         this.placeholderA = this.physics.add.image(800, 190, 'place');
         this.placeholderA.body.setSize(200, 15);
@@ -110,7 +117,7 @@ export default class GameScene extends Phaser.Scene {
         this.placeholderC.body.setSize(200, 15);
         this.placeholderD = this.physics.add.image(800, 640, 'place');
         this.placeholderD.body.setSize(200, 15);
-        this.cursors = this.input.keyboard.createCursorKeys();
+        // this.cursors = this.input.keyboard.createCursorKeys();
         this.moveBeep = this.sound.add('move');
         this.pickUpBeep = this.sound.add('pickup');
         this.scoreBeep = this.sound.add('score');
@@ -160,8 +167,12 @@ export default class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.placeholderD, this.playerBoxA, this.gameOver, null, this);
         this.physics.add.overlap(this.placeholderD, this.playerBoxB, this.gameOver, null, this);
         this.physics.add.overlap(this.placeholderD, this.playerBoxC, this.gameOver, null, this);
+        this.scene.pause();
+        this.homeScreen = this.add.image(540, 360, 'homescreen')
     }
+
     update(time, delta) {
+
         this.t += delta
         if (this.t >= 750) {
             this.beltBeep.play({
@@ -180,7 +191,6 @@ export default class GameScene extends Phaser.Scene {
             this.game.loop;
             this.t = 0;
         }
-        this.movePlayer();
         if (this.boxA.y >= 795) {
             this.boxA.y = 265
         }
@@ -192,6 +202,24 @@ export default class GameScene extends Phaser.Scene {
         }
         if (this.boxD.y >= 795) {
             this.boxD.y = 265
+        }
+        if (this.boxA.y === 265) {
+            this.boxA.visible = true;
+        }
+        if (this.boxB.y === 265) {
+            this.boxB.visible = true;
+        }
+        if (this.boxC.y === 265) {
+            this.boxC.visible = true;
+        }
+        if (this.boxD.y === 265) {
+            this.boxD.visible = true;
+        }
+        this.movePlayer();
+        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+            this.homeScreen.visible = false;
+            this.scene.resume();
+            console.log('start');
         }
     }
     onPlayerMoveRight() {
@@ -651,13 +679,13 @@ export default class GameScene extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.space)) {
             this.add.image(540, 360, 'lose');
             this.loseBeep.play();
-            this.scene.pause;
+            this.scene.pause();
         }
     }
     gameWin() {
         if (this.scoreA <= 0 && this.scoreB <= 0 && this.scoreC <= 0 && this.scoreD <= 0) {
             this.add.image(540, 360, 'win');
-            this.scene.pause;
+            this.scene.pause();
         }
     }
 }

@@ -91,11 +91,11 @@ export default class GameScene extends Phaser.Scene {
         this.player = this.physics.add.image(660, 190, 'worker');
         this.playerBoxA = this.physics.add.image(660, 190, 'boxworkera');
         this.playerBoxA.visible = false;
-        this.playerBoxB = this.physics.add.image(660, 190, 'boxworkerb');
+        this.playerBoxB = this.physics.add.image(660, 340, 'boxworkerb');
         this.playerBoxB.visible = false;
-        this.playerBoxC = this.physics.add.image(660, 190, 'boxworkerc');
+        this.playerBoxC = this.physics.add.image(660, 490, 'boxworkerc');
         this.playerBoxC.visible = false;
-        this.playerBoxD = this.physics.add.image(660, 190, 'boxworkerd');
+        this.playerBoxD = this.physics.add.image(660, 640, 'boxworkerd');
         this.playerBoxD.visible = false;
         this.boxB = this.physics.add.image(135, 190, 'boxb');
         this.boxB.visible = false;
@@ -117,7 +117,7 @@ export default class GameScene extends Phaser.Scene {
         this.placeholderC.body.setSize(200, 15);
         this.placeholderD = this.physics.add.image(800, 640, 'place');
         this.placeholderD.body.setSize(200, 15);
-        // this.cursors = this.input.keyboard.createCursorKeys();
+        this.cursors = this.input.keyboard.createCursorKeys();
         this.moveBeep = this.sound.add('move');
         this.pickUpBeep = this.sound.add('pickup');
         this.scoreBeep = this.sound.add('score');
@@ -152,27 +152,25 @@ export default class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.boxD, this.player, this.onPickUpBox5D, null, this);
         this.physics.add.overlap(this.boxD, this.player, this.onPickUpBox4D, null, this);
         this.physics.add.overlap(this.placeholderA, this.playerBoxA, this.onDepositA, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOver, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxC, this.gameOver, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxD, this.gameOver, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOverB, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxC, this.gameOverC, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxD, this.gameOverD, null, this);
         this.physics.add.overlap(this.placeholderB, this.playerBoxB, this.onDepositB, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxA, this.gameOver, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxC, this.gameOver, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxD, this.gameOver, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxA, this.gameOverA, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxC, this.gameOverC, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxD, this.gameOverD, null, this);
         this.physics.add.overlap(this.placeholderC, this.playerBoxC, this.onDepositC, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxA, this.gameOver, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxB, this.gameOver, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxD, this.gameOver, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxA, this.gameOverA, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxB, this.gameOverB, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxD, this.gameOverD, null, this);
         this.physics.add.overlap(this.placeholderD, this.playerBoxD, this.onDepositD, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxA, this.gameOver, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxB, this.gameOver, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxC, this.gameOver, null, this);
-        this.scene.pause();
-        this.homeScreen = this.add.image(540, 360, 'homescreen')
+        this.physics.add.overlap(this.placeholderD, this.playerBoxA, this.gameOverA, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxB, this.gameOverB, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxC, this.gameOverC, null, this);
+        // this.scene.pause();
+        // this.homeScreen = this.add.image(540, 360, 'homescreen');
     }
-
     update(time, delta) {
-
         this.t += delta
         if (this.t >= 750) {
             this.beltBeep.play({
@@ -216,47 +214,60 @@ export default class GameScene extends Phaser.Scene {
             this.boxD.visible = true;
         }
         this.movePlayer();
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
-            this.homeScreen.visible = false;
-            this.scene.resume();
-            console.log('start');
-        }
+        // if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        //     this.homeScreen.visible = false;
+        //     this.scene.resume();
+        //     console.log('start');
+        // }
     }
     onPlayerMoveRight() {
         if (this.player.y === 340) {
             this.player.x = 660;
         }
-        if (this.playerBoxA.y === 340) {
+        if (this.playerBoxA.y === 340 && this.playerBoxA.visible) {
             this.playerBoxA.x = 660;
         }
-        if (this.playerBoxB.y === 340) {
+        if (this.playerBoxB.y === 340 && this.playerBoxB.visible) {
             this.playerBoxB.x = 660;
         }
-        if (this.playerBoxC.y === 340) {
+        if (this.playerBoxC.y === 340 && this.playerBoxC.visible) {
             this.playerBoxC.x = 660;
         }
-        if (this.playerBoxD.y === 340) {
+        if (this.playerBoxD.y === 340 && this.playerBoxD.visible) {
             this.playerBoxD.x = 660;
         }
         this.player.body.setSize(4, 4);
+        if (this.playerBoxA.visible) {
+            this.playerBoxA.body.setSize(120, 120);
+        } else if (this.playerBoxB.visible) {
+            this.playerBoxB.body.setSize(120, 120);
+        } else if (this.playerBoxC.visible) {
+            this.playerBoxC.body.setSize(120, 120);
+        } else if (this.playerBoxD.visible) {
+            this.playerBoxD.body.setSize(120, 120);
+        }
     }
     onPlayerMoveLeft() {
         if (this.player.y === 340) {
             this.player.x = 315;
         }
-        if (this.playerBoxA.y === 340) {
+        if (this.playerBoxA.y === 340 && this.playerBoxA.visible) {
             this.playerBoxA.x = 315;
         }
-        if (this.playerBoxB.y === 340) {
+        if (this.playerBoxB.y === 340 && this.playerBoxB.visible) {
             this.playerBoxB.x = 315;
         }
-        if (this.playerBoxC.y === 340) {
+        if (this.playerBoxC.y === 340 && this.playerBoxC.visible) {
             this.playerBoxC.x = 315;
         }
-        if (this.playerBoxD.y === 340) {
+        if (this.playerBoxD.y === 340 && this.playerBoxD.visible) {
             this.playerBoxD.x = 315;
         }
         this.player.body.setSize(120, 120);
+        this.playerBoxA.body.setSize(4, 4);
+        this.playerBoxB.body.setSize(4, 4);
+        this.playerBoxC.body.setSize(4, 4);
+        this.playerBoxD.body.setSize(4, 4);
     }
     onPlayerMoveUp() {
         if (this.player.y === 490) {
@@ -266,35 +277,39 @@ export default class GameScene extends Phaser.Scene {
         } else if (this.player.y === 340 && this.player.x === 660) {
             this.player.y = 190;
         }
-        if (this.playerBoxA.y === 490) {
+        if (this.playerBoxA.y === 490 && this.playerBoxA.visible) {
             this.playerBoxA.y = 340;
-        } else if (this.playerBoxA.y === 640) {
+        } else if (this.playerBoxA.y === 640 && this.playerBoxA.visible) {
             this.playerBoxA.y = 490;
-        } else if (this.playerBoxA.y === 340 && this.playerBoxA.x === 660) {
+        } else if (this.playerBoxA.y === 340 && this.playerBoxA.x === 660 && this.playerBoxA.visible) {
             this.playerBoxA.y = 190;
         }
-        if (this.playerBoxB.y === 490) {
+        if (this.playerBoxB.y === 490 && this.playerBoxB.visible) {
             this.playerBoxB.y = 340;
-        } else if (this.playerBoxB.y === 640) {
+        } else if (this.playerBoxB.y === 640 && this.playerBoxB.visible) {
             this.playerBoxB.y = 490;
-        } else if (this.playerBoxB.y === 340 && this.playerBoxB.x === 660) {
+        } else if (this.playerBoxB.y === 340 && this.playerBoxB.x === 660 && this.playerBoxB.visible) {
             this.playerBoxB.y = 190;
         }
-        if (this.playerBoxC.y === 490) {
+        if (this.playerBoxC.y === 490 && this.playerBoxC.visible) {
             this.playerBoxC.y = 340;
-        } else if (this.playerBoxC.y === 640) {
+        } else if (this.playerBoxC.y === 640 && this.playerBoxC.visible) {
             this.playerBoxC.y = 490;
-        } else if (this.playerBoxC.y === 340 && this.playerBoxC.x === 660) {
+        } else if (this.playerBoxC.y === 340 && this.playerBoxC.x === 660 && this.playerBoxC.visible) {
             this.playerBoxC.y = 190;
         }
-        if (this.playerBoxD.y === 490) {
+        if (this.playerBoxD.y === 490 && this.playerBoxD.visible) {
             this.playerBoxD.y = 340;
-        } else if (this.playerBoxD.y === 640) {
+        } else if (this.playerBoxD.y === 640 && this.playerBoxD.visible) {
             this.playerBoxD.y = 490;
-        } else if (this.playerBoxD.y === 340 && this.playerBoxD.x === 660) {
+        } else if (this.playerBoxD.y === 340 && this.playerBoxD.x === 660 && this.playerBoxD.visible) {
             this.playerBoxD.y = 190;
         }
         this.player.body.setSize(4, 4);
+        this.playerBoxA.body.setSize(4, 4);
+        this.playerBoxB.body.setSize(4, 4);
+        this.playerBoxC.body.setSize(4, 4);
+        this.playerBoxD.body.setSize(4, 4);
     }
     onPlayerMoveDown() {
         if (this.player.y === 490) {
@@ -304,35 +319,39 @@ export default class GameScene extends Phaser.Scene {
         } else if (this.player.y === 190) {
             this.player.y = 340;
         }
-        if (this.playerBoxA.y === 490) {
+        if (this.playerBoxA.y === 490 && this.playerBoxA.visible) {
             this.playerBoxA.y = 640;
-        } else if (this.playerBoxA.y === 340) {
+        } else if (this.playerBoxA.y === 340 && this.playerBoxA.visible) {
             this.playerBoxA.y = 490;
-        } else if (this.playerBoxA.y === 190) {
+        } else if (this.playerBoxA.y === 190 && this.playerBoxA.visible) {
             this.playerBoxA.y = 340;
         }
-        if (this.playerBoxB.y === 490) {
+        if (this.playerBoxB.y === 490 && this.playerBoxB.visible) {
             this.playerBoxB.y = 640;
-        } else if (this.playerBoxB.y === 340) {
+        } else if (this.playerBoxB.y === 340 && this.playerBoxB.visible) {
             this.playerBoxB.y = 490;
-        } else if (this.playerBoxB.y === 190) {
+        } else if (this.playerBoxB.y === 190 && this.playerBoxB.visible) {
             this.playerBoxB.y = 340;
         }
-        if (this.playerBoxC.y === 490) {
+        if (this.playerBoxC.y === 490 && this.playerBoxC.visible) {
             this.playerBoxC.y = 640;
-        } else if (this.playerBoxC.y === 340) {
+        } else if (this.playerBoxC.y === 340 && this.playerBoxC.visible) {
             this.playerBoxC.y = 490;
-        } else if (this.playerBoxC.y === 190) {
+        } else if (this.playerBoxC.y === 190 && this.playerBoxC.visible) {
             this.playerBoxC.y = 340;
         }
-        if (this.playerBoxD.y === 490) {
+        if (this.playerBoxD.y === 490 && this.playerBoxD.visible) {
             this.playerBoxD.y = 640;
-        } else if (this.playerBoxD.y === 340) {
+        } else if (this.playerBoxD.y === 340 && this.playerBoxD.visible) {
             this.playerBoxD.y = 490;
-        } else if (this.playerBoxD.y === 190) {
+        } else if (this.playerBoxD.y === 190 && this.playerBoxD.visible) {
             this.playerBoxD.y = 340;
         }
         this.player.body.setSize(4, 4);
+        this.playerBoxA.body.setSize(4, 4);
+        this.playerBoxB.body.setSize(4, 4);
+        this.playerBoxC.body.setSize(4, 4);
+        this.playerBoxD.body.setSize(4, 4);
     }
     movePlayer() {
         if (Phaser.Input.Keyboard.JustDown(this.left)) {
@@ -375,9 +394,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox6A() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 340) {
-                this.pickUpBoxA();
                 this.playerBoxA.y = 340;
                 this.playerBoxA.x = 315;
+                this.pickUpBoxA();
                 this.time.delayedCall(6000, () => {
                     this.boxA.visible = true;
                     this.boxA.body.setSize(300, 15);
@@ -388,9 +407,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox5A() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 490) {
-                this.pickUpBoxA();
                 this.playerBoxA.y = 490;
                 this.playerBoxA.x = 315;
+                this.pickUpBoxA();
                 this.time.delayedCall(4000, () => {
                     this.boxA.visible = true;
                     this.boxA.body.setSize(300, 15);
@@ -401,9 +420,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox4A() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 640) {
-                this.pickUpBoxA();
                 this.playerBoxA.y = 640;
                 this.playerBoxA.x = 315;
+                this.pickUpBoxA();
                 this.time.delayedCall(2000, () => {
                     this.boxA.visible = true;
                     this.boxA.body.setSize(300, 15);
@@ -414,9 +433,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox6B() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 340) {
-                this.pickUpBoxB();
                 this.playerBoxB.y = 340;
                 this.playerBoxB.x = 315;
+                this.pickUpBoxB();
                 this.time.delayedCall(6000, () => {
                     this.boxB.visible = true;
                     this.boxB.body.setSize(300, 15);
@@ -427,9 +446,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox5B() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 490) {
-                this.pickUpBoxB();
                 this.playerBoxB.y = 490;
                 this.playerBoxB.x = 315;
+                this.pickUpBoxB();
                 this.time.delayedCall(4000, () => {
                     this.boxB.visible = true;
                     this.boxB.body.setSize(300, 15);
@@ -440,9 +459,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox4B() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 640) {
-                this.pickUpBoxB();
                 this.playerBoxB.y = 640;
                 this.playerBoxB.x = 315;
+                this.pickUpBoxB();
                 this.time.delayedCall(2000, () => {
                     this.boxB.visible = true;
                     this.boxB.body.setSize(300, 15);
@@ -453,9 +472,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox6C() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 340) {
-                this.pickUpBoxC();
                 this.playerBoxC.y = 340;
                 this.playerBoxC.x = 315;
+                this.pickUpBoxC();
                 this.time.delayedCall(6000, () => {
                     this.boxC.visible = true;
                     this.boxC.body.setSize(300, 15);
@@ -466,9 +485,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox5C() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 490) {
-                this.pickUpBoxC();
                 this.playerBoxC.y = 490;
                 this.playerBoxC.x = 315;
+                this.pickUpBoxC();
                 this.time.delayedCall(4000, () => {
                     this.boxC.visible = true;
                     this.boxC.body.setSize(300, 15);
@@ -479,9 +498,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox4C() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 640) {
-                this.pickUpBoxC();
                 this.playerBoxC.y = 640;
                 this.playerBoxC.x = 315;
+                this.pickUpBoxC();
                 this.time.delayedCall(2000, () => {
                     this.boxC.visible = true;
                     this.boxC.body.setSize(300, 15);
@@ -492,9 +511,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox6D() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 340) {
-                this.pickUpBoxD();
                 this.playerBoxD.y = 340;
                 this.playerBoxD.x = 315;
+                this.pickUpBoxD();
                 this.time.delayedCall(6000, () => {
                     this.boxD.visible = true;
                     this.boxD.body.setSize(300, 15);
@@ -505,9 +524,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox5D() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 490) {
-                this.pickUpBoxD();
                 this.playerBoxD.y = 490;
                 this.playerBoxD.x = 315;
+                this.pickUpBoxD();
                 this.time.delayedCall(4000, () => {
                     this.boxD.visible = true;
                     this.boxD.body.setSize(300, 15);
@@ -518,9 +537,9 @@ export default class GameScene extends Phaser.Scene {
     onPickUpBox4D() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 640) {
-                this.pickUpBoxD();
                 this.playerBoxD.y = 640;
                 this.playerBoxD.x = 315;
+                this.pickUpBoxD();
                 this.time.delayedCall(2000, () => {
                     this.boxD.visible = true;
                     this.boxD.body.setSize(300, 15);
@@ -637,7 +656,6 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxD.body.setSize(120, 120);
     }
     depositSize() {
-        this.player.body.setSize(4, 4);
         this.playerBoxA.body.setSize(4, 4);
         this.playerBoxB.body.setSize(4, 4);
         this.playerBoxC.body.setSize(4, 4);
@@ -675,11 +693,40 @@ export default class GameScene extends Phaser.Scene {
         this.boxD.visible = false;
         this.boxD.body.setSize(4, 4);
     }
-    gameOver() {
+    gameOverA() {
         if (Phaser.Input.Keyboard.JustDown(this.space)) {
-            this.add.image(540, 360, 'lose');
-            this.loseBeep.play();
-            this.scene.pause();
+            if (this.playerBoxA.visible) {
+                this.add.image(540, 360, 'lose');
+                this.loseBeep.play();
+                this.scene.pause();
+            }
+        }
+    }
+    gameOverB() {
+        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+            if (this.playerBoxB.visible) {
+                this.add.image(540, 360, 'lose');
+                this.loseBeep.play();
+                this.scene.pause();
+            }
+        }
+    }
+    gameOverC() {
+        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+            if (this.playerBoxC.visible) {
+                this.add.image(540, 360, 'lose');
+                this.loseBeep.play();
+                this.scene.pause();
+            }
+        }
+    }
+    gameOverD() {
+        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+            if (this.playerBoxD.visible) {
+                this.add.image(540, 360, 'lose');
+                this.loseBeep.play();
+                this.scene.pause();
+            }
         }
     }
     gameWin() {

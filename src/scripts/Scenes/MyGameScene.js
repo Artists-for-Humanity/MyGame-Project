@@ -84,11 +84,91 @@ export default class GameScene extends Phaser.Scene {
             import.meta.url).href);
     }
     create() {
-        this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-        this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-        this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-        this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        this.userInput();
+        this.addImages();
+        this.addOverlap();
+
+        this.cursors = this.input.keyboard.createCursorKeys();
+
+        this.moveBeep = this.sound.add('move');
+        this.pickUpBeep = this.sound.add('pickup');
+        this.scoreBeep = this.sound.add('score');
+        this.loseBeep = this.sound.add('lose');
+        this.beltBeep = this.sound.add('belt');
+
+        this.scoreTextA = this.add.text(827, 140, 4, {
+            fontSize: '20px',
+            fill: '#000',
+        })
+        this.scoreTextB = this.add.text(827, 290, 4, {
+            fontSize: '20px',
+            fill: '#000',
+        })
+        this.scoreTextC = this.add.text(827, 442, 4, {
+            fontSize: '20px',
+            fill: '#000',
+        })
+        this.scoreTextD = this.add.text(827, 591, 4, {
+            fontSize: '20px',
+            fill: '#000',
+        })
+
+        this.homeScreen = this.add.image(540, 360, 'homescreen');
+        this.homeScreen.setInteractive();
+    }
+    update(time, delta) {
+        this.t += delta;
+        this.timer += delta;
+        if (this.cursors.space.isDown || this.gameStart) {
+            this.homeScreen.setVisible(false);
+            this.moveBoxes(this.t);
+            this.movePlayer();
+            this.timeRun(this.timer);
+            this.gameStart = true;
+        }
+    }
+
+    addOverlap() {
+        this.physics.add.overlap(this.boxA, this.player, () => {
+            this.onPickUpBoxA(340, 6000);
+        });
+        this.physics.add.overlap(this.boxA, this.player, () => {
+            this.onPickUpBoxA(490, 4000);
+        });
+        this.physics.add.overlap(this.boxA, this.player, () => {
+            this.onPickUpBoxA(640, 2000);
+        });
+        // this.physics.add.overlap(this.boxA, this.player, this.onPickUpBox5A, null, this);
+        // this.physics.add.overlap(this.boxA, this.player, this.onPickUpBox4A, null, this);
+        this.physics.add.overlap(this.boxB, this.player, this.onPickUpBox6B, null, this);
+        this.physics.add.overlap(this.boxB, this.player, this.onPickUpBox5B, null, this);
+        this.physics.add.overlap(this.boxB, this.player, this.onPickUpBox4B, null, this);
+        this.physics.add.overlap(this.boxC, this.player, this.onPickUpBox6C, null, this);
+        this.physics.add.overlap(this.boxC, this.player, this.onPickUpBox5C, null, this);
+        this.physics.add.overlap(this.boxC, this.player, this.onPickUpBox4C, null, this);
+        this.physics.add.overlap(this.boxD, this.player, this.onPickUpBox6D, null, this);
+        this.physics.add.overlap(this.boxD, this.player, this.onPickUpBox5D, null, this);
+        this.physics.add.overlap(this.boxD, this.player, this.onPickUpBox4D, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxA, this.onDepositA, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOverB, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxC, this.gameOverC, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxD, this.gameOverD, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxB, this.onDepositB, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxA, this.gameOverA, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxC, this.gameOverC, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxD, this.gameOverD, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxC, this.onDepositC, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxA, this.gameOverA, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxB, this.gameOverB, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxD, this.gameOverD, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxD, this.onDepositD, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxA, this.gameOverA, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxB, this.gameOverB, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxC, this.gameOverC, null, this);
+    }
+
+    addImages() {
         this.add.image(540, 360, 'background');
         this.player = this.physics.add.image(660, 190, 'worker');
         this.playerBoxA = this.physics.add.image(660, 190, 'boxworkera');
@@ -119,69 +199,14 @@ export default class GameScene extends Phaser.Scene {
         this.placeholderC.body.setSize(200, 15);
         this.placeholderD = this.physics.add.image(800, 640, 'place');
         this.placeholderD.body.setSize(200, 15);
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.moveBeep = this.sound.add('move');
-        this.pickUpBeep = this.sound.add('pickup');
-        this.scoreBeep = this.sound.add('score');
-        this.loseBeep = this.sound.add('lose');
-        this.beltBeep = this.sound.add('belt');
-        this.scoreTextA = this.add.text(827, 140, 4, {
-            fontSize: '20px',
-            fill: '#000',
-        })
-        this.scoreTextB = this.add.text(827, 290, 4, {
-            fontSize: '20px',
-            fill: '#000',
-        })
-        this.scoreTextC = this.add.text(827, 442, 4, {
-            fontSize: '20px',
-            fill: '#000',
-        })
-        this.scoreTextD = this.add.text(827, 591, 4, {
-            fontSize: '20px',
-            fill: '#000',
-        })
-        this.physics.add.overlap(this.boxA, this.player, this.onPickUpBox6A, null, this);
-        this.physics.add.overlap(this.boxA, this.player, this.onPickUpBox5A, null, this);
-        this.physics.add.overlap(this.boxA, this.player, this.onPickUpBox4A, null, this);
-        this.physics.add.overlap(this.boxB, this.player, this.onPickUpBox6B, null, this);
-        this.physics.add.overlap(this.boxB, this.player, this.onPickUpBox5B, null, this);
-        this.physics.add.overlap(this.boxB, this.player, this.onPickUpBox4B, null, this);
-        this.physics.add.overlap(this.boxC, this.player, this.onPickUpBox6C, null, this);
-        this.physics.add.overlap(this.boxC, this.player, this.onPickUpBox5C, null, this);
-        this.physics.add.overlap(this.boxC, this.player, this.onPickUpBox4C, null, this);
-        this.physics.add.overlap(this.boxD, this.player, this.onPickUpBox6D, null, this);
-        this.physics.add.overlap(this.boxD, this.player, this.onPickUpBox5D, null, this);
-        this.physics.add.overlap(this.boxD, this.player, this.onPickUpBox4D, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxA, this.onDepositA, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOverB, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxC, this.gameOverC, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxD, this.gameOverD, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxB, this.onDepositB, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxA, this.gameOverA, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxC, this.gameOverC, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxD, this.gameOverD, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxC, this.onDepositC, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxA, this.gameOverA, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxB, this.gameOverB, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxD, this.gameOverD, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxD, this.onDepositD, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxA, this.gameOverA, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxB, this.gameOverB, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxC, this.gameOverC, null, this);
-        this.homeScreen = this.add.image(540, 360, 'homescreen');
-        this.homeScreen.setInteractive();
     }
-    update(time, delta) {
-        this.t += delta;
-        this.timer += delta;
-        if (this.cursors.space.isDown || this.gameStart) {
-            this.homeScreen.setVisible(false);
-            this.moveBoxes(this.t);
-            this.movePlayer();
-            this.timeRun(this.timer);
-            this.gameStart = true;
-        }
+
+    userInput() {
+        this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
     timeRun(timer) {
         if (this.timer >= 60000) {
@@ -252,6 +277,7 @@ export default class GameScene extends Phaser.Scene {
             this.playerBoxD.body.setSize(120, 120);
         }
     }
+
     onPlayerMoveLeft() {
         if (this.player.y === 340) {
             this.player.x = 315;
@@ -274,6 +300,7 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxC.body.setSize(4, 4);
         this.playerBoxD.body.setSize(4, 4);
     }
+
     onPlayerMoveUp() {
         if (this.player.y === 490) {
             this.player.y = 340;
@@ -400,45 +427,46 @@ export default class GameScene extends Phaser.Scene {
             console.log('Moved Down!');
         }
     }
-    onPickUpBox6A() {
+    onPickUpBoxA(yPosition, timeDelay) {
+        console.log('yPosition:' + yPosition);
         if (this.cursors.space.isDown) {
-            if (this.player.visible && this.player.y === 340) {
-                this.playerBoxA.y = 340;
+            if (this.player.visible && this.player.y === yPosition) {
+                this.playerBoxA.y = yPosition;
                 this.playerBoxA.x = 315;
                 this.pickUpBoxA();
-                this.time.delayedCall(6000, () => {
+                this.time.delayedCall(timeDelay, () => {
                     this.boxA.visible = true;
                     this.boxA.body.setSize(300, 15);
                 }, [], this);
             }
         }
     }
-    onPickUpBox5A() {
-        if (this.cursors.space.isDown) {
-            if (this.player.visible && this.player.y === 490) {
-                this.playerBoxA.y = 490;
-                this.playerBoxA.x = 315;
-                this.pickUpBoxA();
-                this.time.delayedCall(4000, () => {
-                    this.boxA.visible = true;
-                    this.boxA.body.setSize(300, 15);
-                }, [], this);
-            }
-        }
-    }
-    onPickUpBox4A() {
-        if (this.cursors.space.isDown) {
-            if (this.player.visible && this.player.y === 640) {
-                this.playerBoxA.y = 640;
-                this.playerBoxA.x = 315;
-                this.pickUpBoxA();
-                this.time.delayedCall(2000, () => {
-                    this.boxA.visible = true;
-                    this.boxA.body.setSize(300, 15);
-                }, [], this);
-            }
-        }
-    }
+    // onPickUpBox5A() {
+    //     if (this.cursors.space.isDown) {
+    //         if (this.player.visible && this.player.y === 490) {
+    //             this.playerBoxA.y = 490;
+    //             this.playerBoxA.x = 315;
+    //             this.pickUpBoxA();
+    //             this.time.delayedCall(4000, () => {
+    //                 this.boxA.visible = true;
+    //                 this.boxA.body.setSize(300, 15);
+    //             }, [], this);
+    //         }
+    //     }
+    // }
+    // onPickUpBox4A() {
+    //     if (this.cursors.space.isDown) {
+    //         if (this.player.visible && this.player.y === 640) {
+    //             this.playerBoxA.y = 640;
+    //             this.playerBoxA.x = 315;
+    //             this.pickUpBoxA();
+    //             this.time.delayedCall(2000, () => {
+    //                 this.boxA.visible = true;
+    //                 this.boxA.body.setSize(300, 15);
+    //             }, [], this);
+    //         }
+    //     }
+    // }
     onPickUpBox6B() {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === 340) {

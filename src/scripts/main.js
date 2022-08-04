@@ -1,4 +1,3 @@
-// Add imports for phaser library, scenes, and plugins
 import Phaser from 'phaser';
 import GlobalState from './GlobalState';
 import MyGameScene from './Scenes/MyGameScene';

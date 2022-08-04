@@ -41,6 +41,7 @@ export default class GameScene extends Phaser.Scene {
         this.placeholderD;
         this.homeScreen;
         this.gameStart = false;
+        this.timer = 0;
     }
     preload() {
         this.load.image('background', new URL('/assets/factoryBackground.png',
@@ -172,12 +173,19 @@ export default class GameScene extends Phaser.Scene {
         this.homeScreen.setInteractive();
     }
     update(time, delta) {
-        this.t += delta
+        this.t += delta;
+        this.timer += delta;
         if (this.cursors.space.isDown || this.gameStart) {
             this.homeScreen.setVisible(false);
             this.moveBoxes(this.t);
             this.movePlayer();
+            this.timeRun(this.timer);
             this.gameStart = true;
+        }
+    }
+    timeRun(timer) {
+        if (this.timer >= 60000) {
+            this.gameOverTime();
         }
     }
     moveBoxes(t) {
@@ -199,13 +207,13 @@ export default class GameScene extends Phaser.Scene {
             this.t = 0;
         }
         if (this.boxA.y >= 795) {
-            this.boxA.y = 265
+            this.boxA.y = 265;
         } else if (this.boxB.y >= 795) {
-            this.boxB.y = 265
+            this.boxB.y = 265;
         } else if (this.boxC.y >= 795) {
-            this.boxC.y = 265
+            this.boxC.y = 265;
         } else if (this.boxD.y >= 795) {
-            this.boxD.y = 265
+            this.boxD.y = 265;
         }
         if (this.boxA.y === 265) {
             this.boxA.visible = true;
@@ -359,7 +367,7 @@ export default class GameScene extends Phaser.Scene {
             this.playerBoxB.rotation = 0;
             this.playerBoxC.rotation = 0;
             this.playerBoxD.rotation = 0;
-            console.log('Moved Left!')
+            console.log('Moved Left!');
         }
         if (Phaser.Input.Keyboard.JustDown(this.right)) {
             this.onPlayerMoveRight();
@@ -369,7 +377,7 @@ export default class GameScene extends Phaser.Scene {
             this.playerBoxB.rotation = 3.13;
             this.playerBoxC.rotation = 3.13;
             this.playerBoxD.rotation = 3.13;
-            console.log('Moved Right!')
+            console.log('Moved Right!');
         }
         if (Phaser.Input.Keyboard.JustDown(this.up)) {
             this.onPlayerMoveUp();
@@ -379,7 +387,7 @@ export default class GameScene extends Phaser.Scene {
             this.playerBoxB.rotation = 1.58;
             this.playerBoxC.rotation = 1.58;
             this.playerBoxD.rotation = 1.58;
-            console.log('Moved Up!')
+            console.log('Moved Up!');
         }
         if (Phaser.Input.Keyboard.JustDown(this.down)) {
             this.onPlayerMoveDown();
@@ -389,7 +397,7 @@ export default class GameScene extends Phaser.Scene {
             this.playerBoxB.rotation = 4.73;
             this.playerBoxC.rotation = 4.73;
             this.playerBoxD.rotation = 4.73;
-            console.log('Moved Down!')
+            console.log('Moved Down!');
         }
     }
     onPickUpBox6A() {
@@ -559,7 +567,7 @@ export default class GameScene extends Phaser.Scene {
                 this.depositSize();
                 this.scoreA -= 1;
                 this.scoreTextA.setText(`${this.scoreA}`);
-                console.log('Deposited Box A!')
+                console.log('Deposited Box A!');
                 this.scoreMaxA();
                 this.gameWin();
             }
@@ -576,7 +584,7 @@ export default class GameScene extends Phaser.Scene {
                 this.depositSize();
                 this.scoreB -= 1;
                 this.scoreTextB.setText(`${this.scoreB}`);
-                console.log('Deposited Box B!')
+                console.log('Deposited Box B!');
                 this.scoreMaxB();
                 this.gameWin();
             }
@@ -593,7 +601,7 @@ export default class GameScene extends Phaser.Scene {
                 this.depositSize();
                 this.scoreC -= 1;
                 this.scoreTextC.setText(`${this.scoreC}`);
-                console.log('Deposited Box C!')
+                console.log('Deposited Box C!');
                 this.scoreMaxC();
                 this.gameWin();
             }
@@ -610,7 +618,7 @@ export default class GameScene extends Phaser.Scene {
                 this.depositSize();
                 this.scoreD -= 1;
                 this.scoreTextD.setText(`${this.scoreD}`);
-                console.log('Deposited Box D!')
+                console.log('Deposited Box D!');
                 this.scoreMaxD();
                 this.gameWin();
             }
@@ -618,26 +626,26 @@ export default class GameScene extends Phaser.Scene {
     }
     scoreMaxA() {
         if (this.scoreA <= 0) {
-            this.scoreTextA.setText('✓')
-            console.log('All 4 A-Boxes Deposited!')
+            this.scoreTextA.setText('✓');
+            console.log('All 4 A-Boxes Deposited!');
         }
     }
     scoreMaxB() {
         if (this.scoreB <= 0) {
-            this.scoreTextB.setText('✓')
-            console.log('All 4 B-Boxes Deposited!')
+            this.scoreTextB.setText('✓');
+            console.log('All 4 B-Boxes Deposited!');
         }
     }
     scoreMaxC() {
         if (this.scoreC <= 0) {
-            this.scoreTextC.setText('✓')
-            console.log('All 4 C-Boxes Deposited!')
+            this.scoreTextC.setText('✓');
+            console.log('All 4 C-Boxes Deposited!');
         }
     }
     scoreMaxD() {
         if (this.scoreD <= 0) {
-            this.scoreTextD.setText('✓')
-            console.log('All 4 D-Boxes Deposited!')
+            this.scoreTextD.setText('✓');
+            console.log('All 4 D-Boxes Deposited!');
         }
     }
     pickUpBoxSizeA() {
@@ -712,7 +720,7 @@ export default class GameScene extends Phaser.Scene {
                 this.add.image(540, 360, 'lose');
                 this.loseBeep.play();
                 this.scene.pause();
-                console.log('You Lost!')
+                console.log('You Lost!');
             }
         }
     }
@@ -722,7 +730,7 @@ export default class GameScene extends Phaser.Scene {
                 this.add.image(540, 360, 'lose');
                 this.loseBeep.play();
                 this.scene.pause();
-                console.log('You Lost!')
+                console.log('You Lost!');
             }
         }
     }
@@ -732,7 +740,7 @@ export default class GameScene extends Phaser.Scene {
                 this.add.image(540, 360, 'lose');
                 this.loseBeep.play();
                 this.scene.pause();
-                console.log('You Lost!')
+                console.log('You Lost!');
             }
         }
     }
@@ -742,15 +750,21 @@ export default class GameScene extends Phaser.Scene {
                 this.add.image(540, 360, 'lose');
                 this.loseBeep.play();
                 this.scene.pause();
-                console.log('You Lost!')
+                console.log('You Lost!');
             }
         }
+    }
+    gameOverTime() {
+        this.add.image(540, 360, 'lose');
+        this.loseBeep.play();
+        this.scene.pause();
+        console.log('You Lost!');
     }
     gameWin() {
         if (this.scoreA <= 0 && this.scoreB <= 0 && this.scoreC <= 0 && this.scoreD <= 0) {
             this.add.image(540, 360, 'win');
             this.scene.pause();
-            console.log('You Won!')
+            console.log('You Won!');
         }
     }
 }

@@ -130,7 +130,6 @@ export default class GameScene extends Phaser.Scene {
             this.gameStart = true;
         }
     }
-
     addOverlap() {
         this.physics.add.overlap(this.boxA, this.player, () => {
             this.onPickUpBoxA(340, 6000);
@@ -184,10 +183,10 @@ export default class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.placeholderD, this.playerBoxA, this.gameOverA, null, this);
         this.physics.add.overlap(this.placeholderD, this.playerBoxB, this.gameOverB, null, this);
         this.physics.add.overlap(this.placeholderD, this.playerBoxC, this.gameOverC, null, this);
-        this.physics.add.overlap(this.trash, this.playerBoxA, this.onDiscard, null, this);
-        this.physics.add.overlap(this.trash, this.playerBoxB, this.onDiscard, null, this);
-        this.physics.add.overlap(this.trash, this.playerBoxC, this.onDiscard, null, this);
-        this.physics.add.overlap(this.trash, this.playerBoxD, this.onDiscard, null, this);
+        this.physics.add.overlap(this.trash, this.playerBoxA, this.onDiscardA, null, this);
+        this.physics.add.overlap(this.trash, this.playerBoxB, this.onDiscardB, null, this);
+        this.physics.add.overlap(this.trash, this.playerBoxC, this.onDiscardC, null, this);
+        this.physics.add.overlap(this.trash, this.playerBoxD, this.onDiscardD, null, this);
     }
     addImages() {
         this.add.image(540, 360, 'background');
@@ -300,7 +299,6 @@ export default class GameScene extends Phaser.Scene {
         }
         this.trash.body.setSize(4, 4);
     }
-
     onPlayerMoveLeft() {
         if (this.player.y === 340) {
             this.player.x = 315;
@@ -324,7 +322,6 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxD.body.setSize(4, 4);
         this.trash.body.setSize(4, 4);
     }
-
     onPlayerMoveUp() {
         if (this.player.y === 490) {
             this.player.y = 340;
@@ -366,7 +363,11 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxB.body.setSize(4, 4);
         this.playerBoxC.body.setSize(4, 4);
         this.playerBoxD.body.setSize(4, 4);
-        this.trash.body.setSize(40, 400);
+        if (this.playerBoxA.visible || this.playerBoxB.visible || this.playerBoxC.visible || this.playerBoxD.visible) {
+            this.trash.body.setSize(40, 400);
+        } else {
+            this.trash.body.setSize(4, 4);
+        }
     }
     onPlayerMoveDown() {
         if (this.player.y === 490) {
@@ -643,20 +644,57 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxC.body.setSize(4, 4);
         this.playerBoxD.body.setSize(4, 4);
     }
-    onDiscard() {
+    onDiscardA() {
         if (Phaser.Input.Keyboard.JustDown(this.space)) {
-            this.discardBeep.play({
-                volume: 0.4
-            });
-            this.playerBoxA.visible = false;
-            this.playerBoxB.visible = false;
-            this.playerBoxC.visible = false;
-            this.playerBoxD.visible = false;
-            this.player.visible = true;
-            this.player.x = 315;
-            this.player.y = 340;
-            console.log('Discarded Box!');
+            if (this.playerBoxA.visible && this.playerBoxA.x === 315 && this.playerBoxA.y === 340) {
+                this.playerBoxA.visible = false;
+                this.playerBoxA.x = 660;
+                this.playerBoxA.y = 190;
+                this.discardValues();
+                console.log('Discarded Box A!');
+            }
         }
+    }
+    onDiscardB() {
+        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+            if (this.playerBoxB.visible && this.playerBoxB.x === 315 && this.playerBoxB.y === 340) {
+                this.playerBoxB.visible = false;
+                this.playerBoxB.x = 660;
+                this.playerBoxB.y = 340;
+                this.discardValues();
+                console.log('Discarded Box B!');
+            }
+        }
+    }
+    onDiscardC() {
+        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+            if (this.playerBoxC.visible && this.playerBoxC.x === 315 && this.playerBoxC.y === 340) {
+                this.playerBoxC.visible = false;
+                this.playerBoxC.x = 660;
+                this.playerBoxC.y = 490;
+                this.discardValues();
+                console.log('Discarded Box C!');
+            }
+        }
+    }
+    onDiscardD() {
+        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+            if (this.playerBoxD.visible && this.playerBoxD.x === 315 && this.playerBoxD.y === 340) {
+                this.playerBoxD.visible = false;
+                this.playerBoxD.x = 660;
+                this.playerBoxD.y = 640;
+                this.discardValues();
+                console.log('Discarded Box D!');
+            }
+        }
+    }
+    discardValues() {
+        this.discardBeep.play({
+            volume: 0.4
+        });
+        this.player.visible = true;
+        this.player.x = 315;
+        this.player.y = 340;
     }
     gameOverA() {
         if (Phaser.Input.Keyboard.JustDown(this.space)) {

@@ -199,6 +199,11 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxC.visible = false;
         this.playerBoxD = this.physics.add.image(660, 640, 'boxworkerd');
         this.playerBoxD.visible = false;
+
+
+        this.boxA = this.physics.add.image(135, 190, 'boxa');
+        this.boxA.visible = false;
+        this.boxA.body.setSize(300, 15);
         this.boxB = this.physics.add.image(135, 190, 'boxb');
         this.boxB.visible = false;
         this.boxB.body.setSize(300, 15);
@@ -208,9 +213,7 @@ export default class GameScene extends Phaser.Scene {
         this.boxD = this.physics.add.image(135, 190, 'boxd');
         this.boxD.visible = false;
         this.boxD.body.setSize(300, 15);
-        this.boxA = this.physics.add.image(135, 190, 'boxa');
-        this.boxA.visible = false;
-        this.boxA.body.setSize(300, 15);
+
         this.placeholderA = this.physics.add.image(800, 190, 'place');
         this.placeholderA.body.setSize(200, 15);
         this.placeholderB = this.physics.add.image(800, 340, 'place');
@@ -237,7 +240,7 @@ export default class GameScene extends Phaser.Scene {
     moveBoxes(t) {
         if (this.t >= 750) {
             this.beltBeep.play({
-                volume: 0.2
+                volume: 0.0
             });
             this.boxA.y += 75;
             this.time.delayedCall(1500, () => {

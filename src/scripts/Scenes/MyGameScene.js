@@ -132,40 +132,40 @@ export default class GameScene extends Phaser.Scene {
     }
     addOverlap() {
         this.physics.add.overlap(this.boxA, this.player, () => {
-            this.onPickUpBoxA(340, 6000);
+            this.onPickUpBoxA(340);
         });
         this.physics.add.overlap(this.boxA, this.player, () => {
-            this.onPickUpBoxA(490, 4000);
+            this.onPickUpBoxA(490);
         });
         this.physics.add.overlap(this.boxA, this.player, () => {
-            this.onPickUpBoxA(640, 2000);
+            this.onPickUpBoxA(640);
         });
         this.physics.add.overlap(this.boxB, this.player, () => {
-            this.onPickUpBoxB(340, 6000);
+            this.onPickUpBoxB(340);
         });
         this.physics.add.overlap(this.boxB, this.player, () => {
-            this.onPickUpBoxB(490, 4000);
+            this.onPickUpBoxB(490);
         });
         this.physics.add.overlap(this.boxB, this.player, () => {
-            this.onPickUpBoxB(640, 2000);
+            this.onPickUpBoxB(640);
         });
         this.physics.add.overlap(this.boxC, this.player, () => {
-            this.onPickUpBoxC(340, 6000);
+            this.onPickUpBoxC(340);
         });
         this.physics.add.overlap(this.boxC, this.player, () => {
-            this.onPickUpBoxC(490, 4000);
+            this.onPickUpBoxC(490);
         });
         this.physics.add.overlap(this.boxC, this.player, () => {
-            this.onPickUpBoxC(640, 2000);
+            this.onPickUpBoxC(640);
         });
         this.physics.add.overlap(this.boxD, this.player, () => {
-            this.onPickUpBoxD(340, 6000);
+            this.onPickUpBoxD(340);
         })
         this.physics.add.overlap(this.boxD, this.player, () => {
-            this.onPickUpBoxD(490, 4000);
+            this.onPickUpBoxD(490);
         })
         this.physics.add.overlap(this.boxD, this.player, () => {
-            this.onPickUpBoxD(640, 2000);
+            this.onPickUpBoxD(640);
         })
         this.physics.add.overlap(this.placeholderA, this.playerBoxA, this.onDepositA, null, this);
         this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOverB, null, this);
@@ -231,7 +231,7 @@ export default class GameScene extends Phaser.Scene {
     }
     timeRun(timer) {
         if (this.timer >= 60000) {
-            this.gameOverTime();
+            this.gameOverValues();
         }
     }
     moveBoxes(t) {
@@ -263,12 +263,16 @@ export default class GameScene extends Phaser.Scene {
         }
         if (this.boxA.y === 265) {
             this.boxA.visible = true;
+            this.boxA.body.setSize(300, 15);
         } else if (this.boxB.y === 265) {
             this.boxB.visible = true;
+            this.boxB.body.setSize(300, 15);
         } else if (this.boxC.y === 265) {
             this.boxC.visible = true;
+            this.boxC.body.setSize(300, 15);
         } else if (this.boxD.y === 265) {
             this.boxD.visible = true;
+            this.boxD.body.setSize(300, 15);
         }
     }
     onPlayerMoveRight() {
@@ -454,7 +458,7 @@ export default class GameScene extends Phaser.Scene {
             console.log('Moved Down!');
         }
     }
-    onPickUpBoxA(yPosition, timeDelay) {
+    onPickUpBoxA(yPosition) {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === yPosition) {
                 this.playerBoxA.y = yPosition;
@@ -469,14 +473,10 @@ export default class GameScene extends Phaser.Scene {
                 this.boxA.visible = false;
                 this.boxA.body.setSize(4, 4);
                 console.log('Picked Up Box A!');
-                this.time.delayedCall(timeDelay, () => {
-                    this.boxA.visible = true;
-                    this.boxA.body.setSize(300, 15);
-                }, [], this);
             }
         }
     }
-    onPickUpBoxB(yPosition, timeDelay) {
+    onPickUpBoxB(yPosition) {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === yPosition) {
                 this.playerBoxB.y = yPosition;
@@ -491,14 +491,10 @@ export default class GameScene extends Phaser.Scene {
                 this.boxB.visible = false;
                 this.boxB.body.setSize(4, 4);
                 console.log('Picked Up Box B!');
-                this.time.delayedCall(timeDelay, () => {
-                    this.boxB.visible = true;
-                    this.boxB.body.setSize(300, 15);
-                }, [], this);
             }
         }
     }
-    onPickUpBoxC(yPosition, timeDelay) {
+    onPickUpBoxC(yPosition) {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === yPosition) {
                 this.playerBoxC.y = yPosition;
@@ -513,14 +509,10 @@ export default class GameScene extends Phaser.Scene {
                 this.boxC.visible = false;
                 this.boxC.body.setSize(4, 4);
                 console.log('Picked Up Box C!');
-                this.time.delayedCall(timeDelay, () => {
-                    this.boxC.visible = true;
-                    this.boxC.body.setSize(300, 15);
-                }, [], this);
             }
         }
     }
-    onPickUpBoxD(yPosition, timeDelay) {
+    onPickUpBoxD(yPosition) {
         if (this.cursors.space.isDown) {
             if (this.player.visible && this.player.y === yPosition) {
                 this.playerBoxD.y = yPosition;
@@ -535,10 +527,6 @@ export default class GameScene extends Phaser.Scene {
                 this.boxD.visible = false;
                 this.boxD.body.setSize(4, 4);
                 console.log('Picked Up Box D!');
-                this.time.delayedCall(timeDelay, () => {
-                    this.boxD.visible = true;
-                    this.boxD.body.setSize(300, 15);
-                }, [], this);
             }
         }
     }
@@ -699,44 +687,32 @@ export default class GameScene extends Phaser.Scene {
     gameOverA() {
         if (Phaser.Input.Keyboard.JustDown(this.space)) {
             if (this.playerBoxA.visible) {
-                this.add.image(540, 360, 'lose');
-                this.loseBeep.play();
-                this.scene.pause();
-                console.log('You Lost!');
+                this.gameOverValues();
             }
         }
     }
     gameOverB() {
         if (Phaser.Input.Keyboard.JustDown(this.space)) {
             if (this.playerBoxB.visible) {
-                this.add.image(540, 360, 'lose');
-                this.loseBeep.play();
-                this.scene.pause();
-                console.log('You Lost!');
+                this.gameOverValues();
             }
         }
     }
     gameOverC() {
         if (Phaser.Input.Keyboard.JustDown(this.space)) {
             if (this.playerBoxC.visible) {
-                this.add.image(540, 360, 'lose');
-                this.loseBeep.play();
-                this.scene.pause();
-                console.log('You Lost!');
+                this.gameOverValues();
             }
         }
     }
     gameOverD() {
         if (Phaser.Input.Keyboard.JustDown(this.space)) {
             if (this.playerBoxD.visible) {
-                this.add.image(540, 360, 'lose');
-                this.loseBeep.play();
-                this.scene.pause();
-                console.log('You Lost!');
+                this.gameOverValues();
             }
         }
     }
-    gameOverTime() {
+    gameOverValues() {
         this.add.image(540, 360, 'lose');
         this.loseBeep.play();
         this.scene.pause();

@@ -12,6 +12,7 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxC;
         this.playerBoxD;
         this.t = 0;
+        this.currBoxIdx = 0;
         this.cursors;
         this.scoreA = 4;
         this.scoreB = 4;
@@ -36,6 +37,7 @@ export default class GameScene extends Phaser.Scene {
         this.boxB;
         this.boxC;
         this.boxD;
+        this.conveBelt;
         this.placeholderA;
         this.placeholderB;
         this.placeholderC;
@@ -44,6 +46,7 @@ export default class GameScene extends Phaser.Scene {
         this.gameStart = false;
         this.timer = 0;
         this.trash;
+        this.canMove = true;
     }
     preload() {
         this.load.image('background', new URL('/assets/factoryBackground.png',
@@ -90,8 +93,11 @@ export default class GameScene extends Phaser.Scene {
             import.meta.url).href);
     }
     create() {
+        this.canMove = true;
+        this.conveBelt = []
         this.userInput();
         this.addImages();
+        this.boxList = [this.boxA, this.boxB, this.boxC, this.boxD]
         this.addOverlap();
         this.cursors = this.input.keyboard.createCursorKeys();
         this.moveBeep = this.sound.add('move');
@@ -118,18 +124,32 @@ export default class GameScene extends Phaser.Scene {
         })
         this.homeScreen = this.add.image(540, 360, 'homescreen');
         this.homeScreen.setInteractive();
+        console.log("box llist:", this.boxList)
+        this.populateConveBelt()
     }
     update(time, delta) {
         this.t += delta;
-        this.timer += delta;
+        //this.timer += delta;
+        this.timer++
+
         if (this.cursors.space.isDown || this.gameStart) {
             this.homeScreen.setVisible(false);
-            this.moveBoxes(this.t);
+
+            if (this.timer >= 75 && this.canMove) {
+                console.log(this.currBoxIdx)
+                this.moveBoxes(this.timer, this.conveBelt[this.currBoxIdx])
+                this.currBoxIdx === this.boxList.length - 1 ? this.currBoxIdx = 0 : this.currBoxIdx += 1;
+                this.timer = 0
+            }
+            // if (this.timer >= 200) {
+
+            // }
             this.movePlayer();
-            this.timeRun(this.timer);
+            this.timeRun(this.t);
             this.gameStart = true;
         }
     }
+
     addOverlap() {
         this.physics.add.overlap(this.boxA, this.player, () => {
             this.onPickUpBoxA(340);
@@ -199,8 +219,6 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxC.visible = false;
         this.playerBoxD = this.physics.add.image(660, 640, 'boxworkerd');
         this.playerBoxD.visible = false;
-
-
         this.boxA = this.physics.add.image(135, 190, 'boxa');
         this.boxA.visible = false;
         this.boxA.body.setSize(300, 15);
@@ -213,7 +231,6 @@ export default class GameScene extends Phaser.Scene {
         this.boxD = this.physics.add.image(135, 190, 'boxd');
         this.boxD.visible = false;
         this.boxD.body.setSize(300, 15);
-
         this.placeholderA = this.physics.add.image(800, 190, 'place');
         this.placeholderA.body.setSize(200, 15);
         this.placeholderB = this.physics.add.image(800, 340, 'place');
@@ -232,52 +249,130 @@ export default class GameScene extends Phaser.Scene {
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
-    timeRun(timer) {
-        if (this.timer >= 60000) {
+    timeRun(t) {
+        if (this.t >= 60000) {
             this.gameOverValues();
         }
     }
-    moveBoxes(t) {
-        if (this.t >= 750) {
-            this.beltBeep.play({
-                volume: 0.0
-            });
-            this.boxA.y += 75;
-            this.time.delayedCall(1500, () => {
-                this.boxB.y += 75;
-            }, [], this)
-            this.time.delayedCall(3000, () => {
-                this.boxC.y += 75;
-            }, [], this)
-            this.time.delayedCall(4500, () => {
-                this.boxD.y += 75;
-            }, [], this)
-            this.game.loop;
-            this.t = 0;
+    moveBoxes(timer, box) {
+        //TODO: find a
+        //function that prints out each second '
+        box.y += 75;
+        if (box.y === 265) {
+            box.setVisible(true)
+            box.body.setSize(300, 15)
         }
-        if (this.boxA.y >= 795) {
-            this.boxA.y = 265;
-        } else if (this.boxB.y >= 795) {
-            this.boxB.y = 265;
-        } else if (this.boxC.y >= 795) {
-            this.boxC.y = 265;
-        } else if (this.boxD.y >= 795) {
-            this.boxD.y = 265;
+        if (box.y >= 795) {
+            this.conveBelt.pop()
+            const randomNewBox = this.boxList[Phaser.Math.Between(0, this.boxList.length - 1)]
+            this.conveBelt.push(randomNewBox)
         }
-        if (this.boxA.y === 265) {
-            this.boxA.visible = true;
-            this.boxA.body.setSize(300, 15);
-        } else if (this.boxB.y === 265) {
-            this.boxB.visible = true;
-            this.boxB.body.setSize(300, 15);
-        } else if (this.boxC.y === 265) {
-            this.boxC.visible = true;
-            this.boxC.body.setSize(300, 15);
-        } else if (this.boxD.y === 265) {
-            this.boxD.visible = true;
-            this.boxD.body.setSize(300, 15);
+
+        // for (let i = 0; i < 4; i++) {
+        //     distanceMoved += distanceMoved
+        //     this.conveBelt[i].y += distanceMoved
+        //     this.conveBelt[i].visible = true;
+        // }
+
+
+    }
+    // if (elapsedSec % 2 === 0) {
+    //     this.beltBeep.play({
+    //         volume: 0.2
+    //     });
+    //     console.log("Every two seconds")
+    //     // let delayTime = 0
+    //     // // Generate a random index to pick a random box from a list [boxA, boxB, boxC, boxD]
+    //     // // set an arry for a conveBelt = [] initially empty
+    //     // let distanceMoved = 5
+    //     // console.log(this.conveBelt.length)
+
+    //     // for (let i = 0; i < 4; i++) {
+    //     //     distanceMoved += distanceMoved
+    //     //     this.conveBelt[i].y += distanceMoved
+    //     //     this.conveBelt[i].visible = true;
+    //     // }
+    //     // this.game.loop;
+    //     // this.t = 0;
+    // }
+    // }
+
+    // moveBoxes(timer) {
+    //     if (this.t >= 750) {
+    //         this.beltBeep.play({
+    //             volume: 0.2
+    //         });
+    //         //         //     let delayTime = 0
+    //         //         //     // Generate a random index to pick a random box from a list [boxA, boxB, boxC, boxD]
+    //         //         //     // set an arry for a conveBelt = [] initially empty
+    //         //         //     for (let i = 0; i < 4; i++) {
+
+    //         //         //         delayTime += 1500;
+    //         //         //         this.time.delayedCall(delayTime, () => {
+    //         //         //             this.conveBelt[i].y += 75
+    //         //         //             this.conveBelt[i].visible = true;
+    //         //         //             this.conveBelt[i].body.setSize(300, 15)
+    //         //         //         }, [], this)
+
+    //         //         //     }
+    //         this.boxA.y += 75;
+    //         this.time.delayedCall(1500, () => {
+    //             this.boxB.y += 75;
+    //         }, [], this)
+    //         this.time.delayedCall(3000, () => {
+    //             this.boxC.y += 75;
+    //         }, [], this)
+    //         this.time.delayedCall(4500, () => {
+    //             this.boxD.y += 75;
+    //         }, [], this)
+    //         this.game.loop;
+    //         this.t = 0;
+    //         //}
+    //         //     // if (this.conveBelt[this.conveBelt.length - 1].y >= 795) {
+    //         //     //     this.conveBelt.pop() // [b1, b2, b3, b4] => [b1, b2, b3]
+    //         //     //     console.log(this.conveBelt)
+    //         //     //     this.conveBelt.push(this.boxList[Phaser.Math.Between(0, 3)])
+    //         //     //     this.conveBelt[0].y = 265;
+    //         //     //     this.conveBelt[0].x = 135;
+    //         //     // }
+    //         if (this.boxA.y >= 795) {
+    //             this.boxA.y = 265;
+    //         } else if (this.boxB.y >= 795) {
+    //             this.boxB.y = 265;
+    //         } else if (this.boxC.y >= 795) {
+    //             this.boxC.y = 265;
+    //         } else if (this.boxD.y >= 795) {
+    //             this.boxD.y = 265;
+    //         }
+    //         if (this.boxA.y === 265) {
+    //             this.boxA.visible = true;
+    //             this.boxA.body.setSize(300, 15);
+    //         } else if (this.boxB.y === 265) {
+    //             this.boxB.visible = true;
+    //             this.boxB.body.setSize(300, 15);
+    //         } else if (this.boxC.y === 265) {
+    //             this.boxC.visible = true;
+    //             this.boxC.body.setSize(300, 15);
+    //         } else if (this.boxD.y === 265) {
+    //             this.boxD.visible = true;
+    //             this.boxD.body.setSize(300, 15);
+    //         }
+    //     }
+    // }
+    intitalizeConveBelt(conveBeltLen) {
+        if (conveBeltLen <= 3) {
+            this.conveBelt.push(this.boxList[Phaser.Math.Between(0, 3)])
+            return this.intitalizeConveBelt(this.conveBelt.length)
+        }
+        return;
+    }
+
+    populateConveBelt() {
+        if (this.conveBelt.length === 0) {
+            this.intitalizeConveBelt(this.conveBelt.length)
         }
     }
+
     onPlayerMoveRight() {
         if (this.player.y === 340) {
             this.player.x = 660;

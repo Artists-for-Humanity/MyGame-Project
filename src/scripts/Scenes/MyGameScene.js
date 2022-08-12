@@ -94,10 +94,10 @@ export default class GameScene extends Phaser.Scene {
     }
     create() {
         this.canMove = true;
-        this.conveBelt = []
+        this.conveBelt = [];
         this.userInput();
         this.addImages();
-        this.boxList = [this.boxA, this.boxB, this.boxC, this.boxD]
+        this.boxList = [this.boxA, this.boxB, this.boxC, this.boxD];
         this.addOverlap();
         this.cursors = this.input.keyboard.createCursorKeys();
         this.moveBeep = this.sound.add('move');
@@ -124,69 +124,24 @@ export default class GameScene extends Phaser.Scene {
         })
         this.homeScreen = this.add.image(540, 360, 'homescreen');
         this.homeScreen.setInteractive();
-        console.log("box llist:", this.boxList)
-        this.populateConveBelt()
+        this.populateConveBelt();
     }
     update(time, delta) {
         this.t += delta;
-        //this.timer += delta;
-        this.timer++
-
+        this.timer++;
         if (this.cursors.space.isDown || this.gameStart) {
             this.homeScreen.setVisible(false);
-
-            if (this.timer >= 75 && this.canMove) {
-                console.log(this.currBoxIdx)
-                this.moveBoxes(this.timer, this.conveBelt[this.currBoxIdx])
+            if (this.timer >= 50 && this.canMove) {
+                this.moveBoxes(this.currBoxIdx);
                 this.currBoxIdx === this.boxList.length - 1 ? this.currBoxIdx = 0 : this.currBoxIdx += 1;
-                this.timer = 0
+                this.timer = 0;
             }
-            // if (this.timer >= 200) {
-
-            // }
             this.movePlayer();
             this.timeRun(this.t);
             this.gameStart = true;
         }
     }
-
     addOverlap() {
-        this.physics.add.overlap(this.boxA, this.player, () => {
-            this.onPickUpBoxA(340);
-        });
-        this.physics.add.overlap(this.boxA, this.player, () => {
-            this.onPickUpBoxA(490);
-        });
-        this.physics.add.overlap(this.boxA, this.player, () => {
-            this.onPickUpBoxA(640);
-        });
-        this.physics.add.overlap(this.boxB, this.player, () => {
-            this.onPickUpBoxB(340);
-        });
-        this.physics.add.overlap(this.boxB, this.player, () => {
-            this.onPickUpBoxB(490);
-        });
-        this.physics.add.overlap(this.boxB, this.player, () => {
-            this.onPickUpBoxB(640);
-        });
-        this.physics.add.overlap(this.boxC, this.player, () => {
-            this.onPickUpBoxC(340);
-        });
-        this.physics.add.overlap(this.boxC, this.player, () => {
-            this.onPickUpBoxC(490);
-        });
-        this.physics.add.overlap(this.boxC, this.player, () => {
-            this.onPickUpBoxC(640);
-        });
-        this.physics.add.overlap(this.boxD, this.player, () => {
-            this.onPickUpBoxD(340);
-        })
-        this.physics.add.overlap(this.boxD, this.player, () => {
-            this.onPickUpBoxD(490);
-        })
-        this.physics.add.overlap(this.boxD, this.player, () => {
-            this.onPickUpBoxD(640);
-        })
         this.physics.add.overlap(this.placeholderA, this.playerBoxA, this.onDepositA, null, this);
         this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOverB, null, this);
         this.physics.add.overlap(this.placeholderA, this.playerBoxC, this.gameOverC, null, this);
@@ -254,125 +209,50 @@ export default class GameScene extends Phaser.Scene {
             this.gameOverValues();
         }
     }
-    moveBoxes(timer, box) {
-        //TODO: find a
-        //function that prints out each second '
-        box.y += 75;
-        if (box.y === 265) {
-            box.setVisible(true)
-            box.body.setSize(300, 15)
+    moveBoxes() {
+        for (let i = 0; i < this.conveBelt.length; i++) {
+            let curBox = this.conveBelt[i];
+            this.beltBeep.play({
+                volume: 0.2
+            })
+            curBox.y += 75;
+            if (curBox.y === 265) {
+                this.conveBelt[i].setVisible(true);
+            }
         }
-        if (box.y >= 795) {
-            this.conveBelt.pop()
-            const randomNewBox = this.boxList[Phaser.Math.Between(0, this.boxList.length - 1)]
-            this.conveBelt.push(randomNewBox)
+        if (this.conveBelt[this.conveBelt.length - 1].y >= 865) {
+            const randomIdx = Phaser.Math.Between(0, this.boxList.length - 1);
+            const boxListCopy = [...this.boxList];
+            const boxStrs = ['boxa', 'boxb', 'boxc', 'boxd'];
+            const newBox = this.physics.add.image(135, 190, boxStrs[randomIdx]);
+            this.addCollision(newBox);
+            newBox.y = 265;
+            newBox.visible = true;
+            newBox.body.setSize(300, 15);
+            this.conveBelt.pop();
+            this.conveBelt.unshift(newBox);
         }
-
-        // for (let i = 0; i < 4; i++) {
-        //     distanceMoved += distanceMoved
-        //     this.conveBelt[i].y += distanceMoved
-        //     this.conveBelt[i].visible = true;
-        // }
-
-
     }
-    // if (elapsedSec % 2 === 0) {
-    //     this.beltBeep.play({
-    //         volume: 0.2
-    //     });
-    //     console.log("Every two seconds")
-    //     // let delayTime = 0
-    //     // // Generate a random index to pick a random box from a list [boxA, boxB, boxC, boxD]
-    //     // // set an arry for a conveBelt = [] initially empty
-    //     // let distanceMoved = 5
-    //     // console.log(this.conveBelt.length)
-
-    //     // for (let i = 0; i < 4; i++) {
-    //     //     distanceMoved += distanceMoved
-    //     //     this.conveBelt[i].y += distanceMoved
-    //     //     this.conveBelt[i].visible = true;
-    //     // }
-    //     // this.game.loop;
-    //     // this.t = 0;
-    // }
-    // }
-
-    // moveBoxes(timer) {
-    //     if (this.t >= 750) {
-    //         this.beltBeep.play({
-    //             volume: 0.2
-    //         });
-    //         //         //     let delayTime = 0
-    //         //         //     // Generate a random index to pick a random box from a list [boxA, boxB, boxC, boxD]
-    //         //         //     // set an arry for a conveBelt = [] initially empty
-    //         //         //     for (let i = 0; i < 4; i++) {
-
-    //         //         //         delayTime += 1500;
-    //         //         //         this.time.delayedCall(delayTime, () => {
-    //         //         //             this.conveBelt[i].y += 75
-    //         //         //             this.conveBelt[i].visible = true;
-    //         //         //             this.conveBelt[i].body.setSize(300, 15)
-    //         //         //         }, [], this)
-
-    //         //         //     }
-    //         this.boxA.y += 75;
-    //         this.time.delayedCall(1500, () => {
-    //             this.boxB.y += 75;
-    //         }, [], this)
-    //         this.time.delayedCall(3000, () => {
-    //             this.boxC.y += 75;
-    //         }, [], this)
-    //         this.time.delayedCall(4500, () => {
-    //             this.boxD.y += 75;
-    //         }, [], this)
-    //         this.game.loop;
-    //         this.t = 0;
-    //         //}
-    //         //     // if (this.conveBelt[this.conveBelt.length - 1].y >= 795) {
-    //         //     //     this.conveBelt.pop() // [b1, b2, b3, b4] => [b1, b2, b3]
-    //         //     //     console.log(this.conveBelt)
-    //         //     //     this.conveBelt.push(this.boxList[Phaser.Math.Between(0, 3)])
-    //         //     //     this.conveBelt[0].y = 265;
-    //         //     //     this.conveBelt[0].x = 135;
-    //         //     // }
-    //         if (this.boxA.y >= 795) {
-    //             this.boxA.y = 265;
-    //         } else if (this.boxB.y >= 795) {
-    //             this.boxB.y = 265;
-    //         } else if (this.boxC.y >= 795) {
-    //             this.boxC.y = 265;
-    //         } else if (this.boxD.y >= 795) {
-    //             this.boxD.y = 265;
-    //         }
-    //         if (this.boxA.y === 265) {
-    //             this.boxA.visible = true;
-    //             this.boxA.body.setSize(300, 15);
-    //         } else if (this.boxB.y === 265) {
-    //             this.boxB.visible = true;
-    //             this.boxB.body.setSize(300, 15);
-    //         } else if (this.boxC.y === 265) {
-    //             this.boxC.visible = true;
-    //             this.boxC.body.setSize(300, 15);
-    //         } else if (this.boxD.y === 265) {
-    //             this.boxD.visible = true;
-    //             this.boxD.body.setSize(300, 15);
-    //         }
-    //     }
-    // }
-    intitalizeConveBelt(conveBeltLen) {
-        if (conveBeltLen <= 3) {
-            this.conveBelt.push(this.boxList[Phaser.Math.Between(0, 3)])
-            return this.intitalizeConveBelt(this.conveBelt.length)
+    intitalizeConveBelt() {
+        const listOfBoxesCopy = [...this.boxList];
+        for (let i = 0; i < this.boxList.length; i++) {
+            let randomIdx = Phaser.Math.Between(0, listOfBoxesCopy.length - 1);
+            this.conveBelt[i] = listOfBoxesCopy[randomIdx];
+            this.addCollision(this.conveBelt[i]);
+            listOfBoxesCopy.splice(randomIdx, 1);
         }
-        return;
     }
-
     populateConveBelt() {
         if (this.conveBelt.length === 0) {
-            this.intitalizeConveBelt(this.conveBelt.length)
+            this.intitalizeConveBelt();
+        }
+        let startingYPos = -260;
+        for (let i = 0; i < this.conveBelt.length; i++) {
+            let curBox = this.conveBelt[i];
+            curBox.y = startingYPos;
+            startingYPos += 75 * 2;
         }
     }
-
     onPlayerMoveRight() {
         if (this.player.y === 340) {
             this.player.x = 660;
@@ -556,76 +436,41 @@ export default class GameScene extends Phaser.Scene {
             console.log('Moved Down!');
         }
     }
-    onPickUpBoxA(yPosition) {
-        if (this.cursors.space.isDown) {
-            if (this.player.visible && this.player.y === yPosition) {
-                this.playerBoxA.y = yPosition;
-                this.playerBoxA.x = 315;
-                this.pickUpBeep.play();
-                this.player.visible = false;
+    addCollision(box) {
+        this.physics.add.collider(box, this.player, () => {
+            this.onColidPickup(box);
+        })
+    }
+    onColidPickup(box) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) && this.player.visible) {
+            if (box.texture.key === 'boxa' && this.player.visible) {
                 this.playerBoxA.visible = true;
-                this.playerBoxA.body.setSize(120, 120);
-                this.playerBoxB.body.setSize(4, 4);
-                this.playerBoxC.body.setSize(4, 4);
-                this.playerBoxD.body.setSize(4, 4);
-                this.boxA.visible = false;
-                this.boxA.body.setSize(4, 4);
+                this.playerBoxA.x = this.player.x;
+                this.playerBoxA.y = this.player.y;
                 console.log('Picked Up Box A!');
             }
-        }
-    }
-    onPickUpBoxB(yPosition) {
-        if (this.cursors.space.isDown) {
-            if (this.player.visible && this.player.y === yPosition) {
-                this.playerBoxB.y = yPosition;
-                this.playerBoxB.x = 315;
-                this.pickUpBeep.play();
-                this.player.visible = false;
+            if (box.texture.key === 'boxb' && this.player.visible) {
                 this.playerBoxB.visible = true;
-                this.playerBoxA.body.setSize(4, 4);
-                this.playerBoxB.body.setSize(120, 120);
-                this.playerBoxC.body.setSize(4, 4);
-                this.playerBoxD.body.setSize(4, 4);
-                this.boxB.visible = false;
-                this.boxB.body.setSize(4, 4);
+                this.playerBoxB.x = this.player.x;
+                this.playerBoxB.y = this.player.y;
                 console.log('Picked Up Box B!');
             }
-        }
-    }
-    onPickUpBoxC(yPosition) {
-        if (this.cursors.space.isDown) {
-            if (this.player.visible && this.player.y === yPosition) {
-                this.playerBoxC.y = yPosition;
-                this.playerBoxC.x = 315;
-                this.pickUpBeep.play();
-                this.player.visible = false;
+            if (box.texture.key === 'boxc' && this.player.visible) {
                 this.playerBoxC.visible = true;
-                this.playerBoxA.body.setSize(4, 4);
-                this.playerBoxB.body.setSize(4, 4);
-                this.playerBoxC.body.setSize(120, 120);
-                this.playerBoxD.body.setSize(4, 4);
-                this.boxC.visible = false;
-                this.boxC.body.setSize(4, 4);
+                this.playerBoxC.x = this.player.x;
+                this.playerBoxC.y = this.player.y;
                 console.log('Picked Up Box C!');
             }
-        }
-    }
-    onPickUpBoxD(yPosition) {
-        if (this.cursors.space.isDown) {
-            if (this.player.visible && this.player.y === yPosition) {
-                this.playerBoxD.y = yPosition;
-                this.playerBoxD.x = 315;
-                this.pickUpBeep.play();
-                this.player.visible = false;
+            if (box.texture.key === 'boxd' && this.player.visible) {
                 this.playerBoxD.visible = true;
-                this.playerBoxA.body.setSize(4, 4);
-                this.playerBoxB.body.setSize(4, 4);
-                this.playerBoxC.body.setSize(4, 4);
-                this.playerBoxD.body.setSize(120, 120);
-                this.boxD.visible = false;
-                this.boxD.body.setSize(4, 4);
+                this.playerBoxD.x = this.player.x;
+                this.playerBoxD.y = this.player.y;
                 console.log('Picked Up Box D!');
             }
+            box.visible = false;
+            box.body.setSize(4, 4);
+            this.player.visible = false;
+            this.pickUpBeep.play();
         }
     }
     onDepositA() {

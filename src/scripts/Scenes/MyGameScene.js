@@ -47,6 +47,11 @@ export default class GameScene extends Phaser.Scene {
         this.timer = 0;
         this.trash;
         this.canMove = true;
+
+        // gamepad input objects
+        this.gamePad = null;
+        this.pad;
+
     }
     preload() {
         this.load.image('background', new URL('/assets/factoryBackground.png',
@@ -123,7 +128,6 @@ export default class GameScene extends Phaser.Scene {
             fill: '#000',
         })
         this.homeScreen = this.add.image(540, 360, 'homescreen');
-        this.homeScreen.setInteractive();
         this.populateConveBelt();
     }
     update(time, delta) {
@@ -137,6 +141,7 @@ export default class GameScene extends Phaser.Scene {
                 this.timer = 0;
             }
             this.movePlayer();
+            this.addJoyStick();
             this.timeRun(this.t);
             this.gameStart = true;
         }
@@ -203,6 +208,14 @@ export default class GameScene extends Phaser.Scene {
         this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        // this.input.gamepad.start();
+        this.gamePad = this.input.gamepad.gamepads;
+        this.pad = this.gamePad.buttons;
+        console.log(this.gamePad[0]);
+        console.log(this.pad);
+
+
+        // game.input.onDown.add(dump, this)
     }
     timeRun(t) {
         if (this.t >= 60000) {
@@ -436,6 +449,9 @@ export default class GameScene extends Phaser.Scene {
             console.log('Moved Down!');
         }
     }
+    addJoyStick() {
+
+    }
     addCollision(box) {
         this.physics.add.collider(box, this.player, () => {
             this.onColidPickup(box);
@@ -658,6 +674,10 @@ export default class GameScene extends Phaser.Scene {
     gameOverValues() {
         this.add.image(540, 360, 'lose');
         this.loseBeep.play();
+        this.boxA.visible = false;
+        this.boxB.visible = false;
+        this.boxC.visible = false;
+        this.boxD.visible = false;
         this.scene.pause();
         console.log('You Lost!');
     }

@@ -156,17 +156,37 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
+    onLeftInput() {
+        this.onPlayerMoveLeft();
+        this.moveBeep.play();
+        this.player.rotation = 0;
+        this.playerBoxA.rotation = 0;
+        this.playerBoxB.rotation = 0;
+        this.playerBoxC.rotation = 0;
+        this.playerBoxD.rotation = 0;
+        console.log('Moved Left!');
+    }
+    onConfirmInput() {
+        console.log('hello')
+    }
+
     initGamePad() {
-        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === 1, () => this.onDownInput());
-        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === -1, () => this.onUpInput());
-        this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === 1, () => this.onRightInput());
+        // this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === 1, () => this.onDownInput());
+        // this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === -1, () => this.onUpInput());
+        // this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === 1, () => this.onRightInput());
         this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === -1, () => this.onLeftInput());
+        this.buttonHandlers.addPad(() => this.gamePad.buttons[0].pressed, () => this.onConfirmInput());
+
     }
 
     startGamePad() {
         if (this.input.gamepad.total) {
             this.gamePad = this.input.gamepad.pad1;
             this.initGamePad();
+            console.log('reachme 00');
+            console.log(this.gamePad);
+            console.log('reachme 01');
+
         }
     }
 
@@ -234,10 +254,10 @@ export default class GameScene extends Phaser.Scene {
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         // this.input.gamepad.start();
-        this.gamePad = this.input.gamepad.pad1;
+        // this.gamePad = this.input.gamepad.pad1;
         // this.pad = this.gamePad.buttons;
-        console.log(this.gamePad);
-        console.log(this.pad);
+        // console.log(this.gamePad);
+        // console.log(this.pad);
 
 
         // game.input.onDown.add(dump, this)
@@ -431,6 +451,10 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxC.body.setSize(4, 4);
         this.playerBoxD.body.setSize(4, 4);
         this.trash.body.setSize(4, 4);
+    }
+
+    movePlayerGamePad() {
+
     }
     movePlayer() {
         if (Phaser.Input.Keyboard.JustDown(this.left)) {

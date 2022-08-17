@@ -1,4 +1,3 @@
-import ButtonPressHandler from './ButtonPressHandler';
 import PadInputHandler from './PadInputHandler';
 
 class ButtonPressHandlers {

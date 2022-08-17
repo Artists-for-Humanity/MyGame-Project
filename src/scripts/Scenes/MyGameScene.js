@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import ButtonPressHandlers from '../ButtonPressHandlers';
+
 export default class GameScene extends Phaser.Scene {
     constructor() {
         super({
@@ -50,6 +52,7 @@ export default class GameScene extends Phaser.Scene {
 
         // gamepad input objects
         this.gamePad = null;
+        this.buttonHandlers = new ButtonPressHandlers();
         this.pad;
 
     }
@@ -130,6 +133,7 @@ export default class GameScene extends Phaser.Scene {
         this.homeScreen = this.add.image(540, 360, 'homescreen');
         this.populateConveBelt();
     }
+
     update(time, delta) {
         this.t += delta;
         this.timer++;
@@ -145,7 +149,28 @@ export default class GameScene extends Phaser.Scene {
             this.timeRun(this.t);
             this.gameStart = true;
         }
+
+        this.buttonHandlers.update();
+        if (!this.gamePad) {
+            this.startGamePad();
+        }
     }
+
+    initGamePad() {
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === 1, () => this.onDownInput());
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === -1, () => this.onUpInput());
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === 1, () => this.onRightInput());
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === -1, () => this.onLeftInput());
+    }
+
+    startGamePad() {
+        if (this.input.gamepad.total) {
+            this.gamePad = this.input.gamepad.pad1;
+            this.initGamePad();
+        }
+    }
+
+
     addOverlap() {
         this.physics.add.overlap(this.placeholderA, this.playerBoxA, this.onDepositA, null, this);
         this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOverB, null, this);
@@ -209,9 +234,9 @@ export default class GameScene extends Phaser.Scene {
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         // this.input.gamepad.start();
-        this.gamePad = this.input.gamepad.gamepads;
-        this.pad = this.gamePad.buttons;
-        console.log(this.gamePad[0]);
+        this.gamePad = this.input.gamepad.pad1;
+        // this.pad = this.gamePad.buttons;
+        console.log(this.gamePad);
         console.log(this.pad);
 
 

@@ -130,109 +130,6 @@ export default class GameScene extends Phaser.Scene {
         this.homeScreen = this.add.image(540, 360, 'homescreen');
         this.populateConveBelt();
     }
-    update(time, delta) {
-        this.t += delta;
-        this.timer++;
-        if (this.spaceDown || this.gameStart) {
-            this.homeScreen.setVisible(false);
-            if (this.timer >= 50 && this.canMove) {
-                this.moveBoxes(this.currBoxIdx);
-                this.currBoxIdx === this.boxList.length - 1 ? this.currBoxIdx = 0 : this.currBoxIdx += 1;
-                this.timer = 0;
-            }
-            this.spaceDown = false;
-            this.movePlayer();
-            this.timeRun(this.t);
-            this.gameStart = true;
-        }
-        this.buttonHandlers.update();
-        if (!this.gamePad) {
-            this.startGamePad();
-        }
-    }
-    onLeftInput() {
-        this.onPlayerMoveLeft();
-        this.moveBeep.play();
-        this.player.rotation = 0;
-        this.playerBoxA.rotation = 0;
-        this.playerBoxB.rotation = 0;
-        this.playerBoxC.rotation = 0;
-        this.playerBoxD.rotation = 0;
-        console.log('Moved Left!');
-    }
-    onRightInput() {
-        this.onPlayerMoveRight();
-        this.moveBeep.play();
-        this.player.rotation = 3.13;
-        this.playerBoxA.rotation = 3.13;
-        this.playerBoxB.rotation = 3.13;
-        this.playerBoxC.rotation = 3.13;
-        this.playerBoxD.rotation = 3.13;
-        console.log('Moved Right!');
-    }
-    onUpInput() {
-        this.onPlayerMoveUp();
-        this.moveBeep.play();
-        this.player.rotation = 1.58;
-        this.playerBoxA.rotation = 1.58;
-        this.playerBoxB.rotation = 1.58;
-        this.playerBoxC.rotation = 1.58;
-        this.playerBoxD.rotation = 1.58;
-        console.log('Moved Up!');
-    }
-    onDownInput() {
-        this.onPlayerMoveDown();
-        this.moveBeep.play();
-        this.player.rotation = 4.73;
-        this.playerBoxA.rotation = 4.73;
-        this.playerBoxB.rotation = 4.73;
-        this.playerBoxC.rotation = 4.73;
-        this.playerBoxD.rotation = 4.73;
-        console.log('Moved Down!');
-    }
-
-    initGamePad() {
-        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === 1, () => this.onDownInput());
-        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === -1, () => this.onUpInput());
-        this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === 1, () => this.onRightInput());
-        this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === -1, () => this.onLeftInput());
-        this.buttonHandlers.addPad(() => this.gamePad.buttons[0].pressed, () => {
-            this.spaceDown = true;
-            console.log('isDown')
-        });
-
-    }
-    startGamePad() {
-        if (this.input.gamepad.total) {
-            this.gamePad = this.input.gamepad.pad1;
-            this.initGamePad();
-            console.log('reachme 00');
-            console.log(this.gamePad);
-            console.log('reachme 01');
-        }
-    }
-    addOverlap() {
-        this.physics.add.overlap(this.placeholderA, this.playerBoxA, this.onDepositA, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOverB, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxC, this.gameOverC, null, this);
-        this.physics.add.overlap(this.placeholderA, this.playerBoxD, this.gameOverD, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxB, this.onDepositB, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxA, this.gameOverA, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxC, this.gameOverC, null, this);
-        this.physics.add.overlap(this.placeholderB, this.playerBoxD, this.gameOverD, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxC, this.onDepositC, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxA, this.gameOverA, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxB, this.gameOverB, null, this);
-        this.physics.add.overlap(this.placeholderC, this.playerBoxD, this.gameOverD, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxD, this.onDepositD, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxA, this.gameOverA, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxB, this.gameOverB, null, this);
-        this.physics.add.overlap(this.placeholderD, this.playerBoxC, this.gameOverC, null, this);
-        this.physics.add.overlap(this.trash, this.playerBoxA, this.onDiscardA, null, this);
-        this.physics.add.overlap(this.trash, this.playerBoxB, this.onDiscardB, null, this);
-        this.physics.add.overlap(this.trash, this.playerBoxC, this.onDiscardC, null, this);
-        this.physics.add.overlap(this.trash, this.playerBoxD, this.onDiscardD, null, this);
-    }
     addImages() {
         this.add.image(540, 360, 'background');
         this.player = this.physics.add.image(660, 190, 'worker');
@@ -267,12 +164,73 @@ export default class GameScene extends Phaser.Scene {
         this.trash = this.physics.add.image(330, 161, 'trash');
         this.trash.body.setSize(40, 400);
     }
+    addOverlap() {
+        this.physics.add.overlap(this.placeholderA, this.playerBoxA, this.onDepositA, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOverB, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxC, this.gameOverC, null, this);
+        this.physics.add.overlap(this.placeholderA, this.playerBoxD, this.gameOverD, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxB, this.onDepositB, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxA, this.gameOverA, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxC, this.gameOverC, null, this);
+        this.physics.add.overlap(this.placeholderB, this.playerBoxD, this.gameOverD, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxC, this.onDepositC, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxA, this.gameOverA, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxB, this.gameOverB, null, this);
+        this.physics.add.overlap(this.placeholderC, this.playerBoxD, this.gameOverD, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxD, this.onDepositD, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxA, this.gameOverA, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxB, this.gameOverB, null, this);
+        this.physics.add.overlap(this.placeholderD, this.playerBoxC, this.gameOverC, null, this);
+        this.physics.add.overlap(this.trash, this.playerBoxA, this.onDiscardA, null, this);
+        this.physics.add.overlap(this.trash, this.playerBoxB, this.onDiscardB, null, this);
+        this.physics.add.overlap(this.trash, this.playerBoxC, this.onDiscardC, null, this);
+        this.physics.add.overlap(this.trash, this.playerBoxD, this.onDiscardD, null, this);
+    }
     userInput() {
         this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    }
+    update(time, delta) {
+        this.t += delta;
+        this.timer++;
+        if (this.spaceDown || this.cursors.space.isDown || this.gameStart) {
+            this.homeScreen.setVisible(false);
+            if (this.timer >= 50 && this.canMove) {
+                this.moveBoxes(this.currBoxIdx);
+                this.currBoxIdx === this.boxList.length - 1 ? this.currBoxIdx = 0 : this.currBoxIdx += 1;
+                this.timer = 0;
+            }
+            this.spaceDown = false;
+            this.movePlayer();
+            this.timeRun(this.t);
+            this.gameStart = true;
+        }
+        this.buttonHandlers.update();
+        if (!this.gamePad) {
+            this.startGamePad();
+        }
+    }
+    initGamePad() {
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === 1, () => this.onDownInput());
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === -1, () => this.onUpInput());
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === 1, () => this.onRightInput());
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === -1, () => this.onLeftInput());
+        this.buttonHandlers.addPad(() => this.gamePad.buttons[0].pressed, () => {
+            this.spaceDown = true;
+            console.log('isDown')
+        });
+    }
+    startGamePad() {
+        if (this.input.gamepad.total) {
+            this.gamePad = this.input.gamepad.pad1;
+            this.initGamePad();
+            console.log('reachme 00');
+            console.log(this.gamePad);
+            console.log('reachme 01');
+        }
     }
     timeRun(t) {
         if (this.t >= 30000) {
@@ -509,6 +467,46 @@ export default class GameScene extends Phaser.Scene {
             this.playerBoxD.rotation = 4.73;
             console.log('Moved Down!');
         }
+    }
+    onLeftInput() {
+        this.onPlayerMoveLeft();
+        this.moveBeep.play();
+        this.player.rotation = 0;
+        this.playerBoxA.rotation = 0;
+        this.playerBoxB.rotation = 0;
+        this.playerBoxC.rotation = 0;
+        this.playerBoxD.rotation = 0;
+        console.log('Moved Left!');
+    }
+    onRightInput() {
+        this.onPlayerMoveRight();
+        this.moveBeep.play();
+        this.player.rotation = 3.13;
+        this.playerBoxA.rotation = 3.13;
+        this.playerBoxB.rotation = 3.13;
+        this.playerBoxC.rotation = 3.13;
+        this.playerBoxD.rotation = 3.13;
+        console.log('Moved Right!');
+    }
+    onUpInput() {
+        this.onPlayerMoveUp();
+        this.moveBeep.play();
+        this.player.rotation = 1.58;
+        this.playerBoxA.rotation = 1.58;
+        this.playerBoxB.rotation = 1.58;
+        this.playerBoxC.rotation = 1.58;
+        this.playerBoxD.rotation = 1.58;
+        console.log('Moved Up!');
+    }
+    onDownInput() {
+        this.onPlayerMoveDown();
+        this.moveBeep.play();
+        this.player.rotation = 4.73;
+        this.playerBoxA.rotation = 4.73;
+        this.playerBoxB.rotation = 4.73;
+        this.playerBoxC.rotation = 4.73;
+        this.playerBoxD.rotation = 4.73;
+        console.log('Moved Down!');
     }
     addCollision(box) {
         this.physics.add.collider(box, this.player, () => {

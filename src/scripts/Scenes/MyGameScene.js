@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import ButtonPressHandlers from '../ButtonPressHandlers';
-
 export default class GameScene extends Phaser.Scene {
     constructor() {
         super({
@@ -16,10 +15,10 @@ export default class GameScene extends Phaser.Scene {
         this.t = 0;
         this.currBoxIdx = 0;
         this.cursors;
-        this.scoreA = 4;
-        this.scoreB = 4;
-        this.scoreC = 4;
-        this.scoreD = 4;
+        this.scoreA = 2;
+        this.scoreB = 2;
+        this.scoreC = 2;
+        this.scoreD = 2;
         this.scoreTextA;
         this.scoreTextB;
         this.scoreTextC;
@@ -49,12 +48,10 @@ export default class GameScene extends Phaser.Scene {
         this.timer = 0;
         this.trash;
         this.canMove = true;
-
-        // gamepad input objects
+        this.spaceDown = false;
         this.gamePad = null;
         this.buttonHandlers = new ButtonPressHandlers();
         this.pad;
-
     }
     preload() {
         this.load.image('background', new URL('/assets/factoryBackground.png',
@@ -114,48 +111,45 @@ export default class GameScene extends Phaser.Scene {
         this.loseBeep = this.sound.add('lose');
         this.beltBeep = this.sound.add('belt');
         this.discardBeep = this.sound.add('discard');
-        this.scoreTextA = this.add.text(827, 140, 4, {
+        this.scoreTextA = this.add.text(827, 140, 2, {
             fontSize: '20px',
             fill: '#000',
         })
-        this.scoreTextB = this.add.text(827, 290, 4, {
+        this.scoreTextB = this.add.text(827, 290, 2, {
             fontSize: '20px',
             fill: '#000',
         })
-        this.scoreTextC = this.add.text(827, 442, 4, {
+        this.scoreTextC = this.add.text(827, 442, 2, {
             fontSize: '20px',
             fill: '#000',
         })
-        this.scoreTextD = this.add.text(827, 591, 4, {
+        this.scoreTextD = this.add.text(827, 591, 2, {
             fontSize: '20px',
             fill: '#000',
         })
         this.homeScreen = this.add.image(540, 360, 'homescreen');
         this.populateConveBelt();
     }
-
     update(time, delta) {
         this.t += delta;
         this.timer++;
-        if (this.cursors.space.isDown || this.gameStart) {
+        if (this.spaceDown || this.gameStart) {
             this.homeScreen.setVisible(false);
             if (this.timer >= 50 && this.canMove) {
                 this.moveBoxes(this.currBoxIdx);
                 this.currBoxIdx === this.boxList.length - 1 ? this.currBoxIdx = 0 : this.currBoxIdx += 1;
                 this.timer = 0;
             }
+            this.spaceDown = false;
             this.movePlayer();
-            this.addJoyStick();
             this.timeRun(this.t);
             this.gameStart = true;
         }
-
         this.buttonHandlers.update();
         if (!this.gamePad) {
             this.startGamePad();
         }
     }
-
     onLeftInput() {
         this.onPlayerMoveLeft();
         this.moveBeep.play();
@@ -166,19 +160,48 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxD.rotation = 0;
         console.log('Moved Left!');
     }
-    onConfirmInput() {
-        console.log('hello')
+    onRightInput() {
+        this.onPlayerMoveRight();
+        this.moveBeep.play();
+        this.player.rotation = 3.13;
+        this.playerBoxA.rotation = 3.13;
+        this.playerBoxB.rotation = 3.13;
+        this.playerBoxC.rotation = 3.13;
+        this.playerBoxD.rotation = 3.13;
+        console.log('Moved Right!');
+    }
+    onUpInput() {
+        this.onPlayerMoveUp();
+        this.moveBeep.play();
+        this.player.rotation = 1.58;
+        this.playerBoxA.rotation = 1.58;
+        this.playerBoxB.rotation = 1.58;
+        this.playerBoxC.rotation = 1.58;
+        this.playerBoxD.rotation = 1.58;
+        console.log('Moved Up!');
+    }
+    onDownInput() {
+        this.onPlayerMoveDown();
+        this.moveBeep.play();
+        this.player.rotation = 4.73;
+        this.playerBoxA.rotation = 4.73;
+        this.playerBoxB.rotation = 4.73;
+        this.playerBoxC.rotation = 4.73;
+        this.playerBoxD.rotation = 4.73;
+        console.log('Moved Down!');
     }
 
     initGamePad() {
-        // this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === 1, () => this.onDownInput());
-        // this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === -1, () => this.onUpInput());
-        // this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === 1, () => this.onRightInput());
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === 1, () => this.onDownInput());
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.y === -1, () => this.onUpInput());
+        this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === 1, () => this.onRightInput());
         this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === -1, () => this.onLeftInput());
-        this.buttonHandlers.addPad(() => this.gamePad.buttons[0].pressed, () => this.onConfirmInput());
+        this.buttonHandlers.addPad(() => this.gamePad.buttons[0].pressed, () => {
+            this.spaceDown = true;
+            console.log('isDown')
+        });
 
     }
-
     startGamePad() {
         if (this.input.gamepad.total) {
             this.gamePad = this.input.gamepad.pad1;
@@ -186,11 +209,8 @@ export default class GameScene extends Phaser.Scene {
             console.log('reachme 00');
             console.log(this.gamePad);
             console.log('reachme 01');
-
         }
     }
-
-
     addOverlap() {
         this.physics.add.overlap(this.placeholderA, this.playerBoxA, this.onDepositA, null, this);
         this.physics.add.overlap(this.placeholderA, this.playerBoxB, this.gameOverB, null, this);
@@ -253,17 +273,9 @@ export default class GameScene extends Phaser.Scene {
         this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        // this.input.gamepad.start();
-        // this.gamePad = this.input.gamepad.pad1;
-        // this.pad = this.gamePad.buttons;
-        // console.log(this.gamePad);
-        // console.log(this.pad);
-
-
-        // game.input.onDown.add(dump, this)
     }
     timeRun(t) {
-        if (this.t >= 60000) {
+        if (this.t >= 30000) {
             this.gameOverValues();
         }
     }
@@ -498,16 +510,13 @@ export default class GameScene extends Phaser.Scene {
             console.log('Moved Down!');
         }
     }
-    addJoyStick() {
-
-    }
     addCollision(box) {
         this.physics.add.collider(box, this.player, () => {
             this.onColidPickup(box);
         })
     }
     onColidPickup(box) {
-        if (Phaser.Input.Keyboard.JustDown(this.space) && this.player.visible) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown && this.player.visible) {
             if (box.texture.key === 'boxa' && this.player.visible) {
                 this.playerBoxA.visible = true;
                 this.playerBoxA.x = this.player.x;
@@ -536,10 +545,11 @@ export default class GameScene extends Phaser.Scene {
             box.body.setSize(4, 4);
             this.player.visible = false;
             this.pickUpBeep.play();
+            this.spaceDown = false;
         }
     }
     onDepositA() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxA.visible && this.playerBoxA.y === 190) {
                 this.scoreBeep.play();
                 this.playerBoxA.visible = false;
@@ -552,11 +562,12 @@ export default class GameScene extends Phaser.Scene {
                 console.log('Deposited Box A!');
                 this.scoreMaxA();
                 this.gameWin();
+                this.spaceDown = false;
             }
         }
     }
     onDepositB() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxB.visible && this.playerBoxB.y === 340 && this.playerBoxB.x === 660) {
                 this.scoreBeep.play();
                 this.playerBoxB.visible = false;
@@ -569,11 +580,12 @@ export default class GameScene extends Phaser.Scene {
                 console.log('Deposited Box B!');
                 this.scoreMaxB();
                 this.gameWin();
+                this.spaceDown = false;
             }
         }
     }
     onDepositC() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxC.visible && this.playerBoxC.y === 490 && this.playerBoxC.x === 660) {
                 this.scoreBeep.play();
                 this.playerBoxC.visible = false;
@@ -586,11 +598,12 @@ export default class GameScene extends Phaser.Scene {
                 console.log('Deposited Box C!');
                 this.scoreMaxC();
                 this.gameWin();
+                this.spaceDown = false;
             }
         }
     }
     onDepositD() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxD.visible && this.playerBoxD.y === 640 && this.playerBoxD.x === 660) {
                 this.scoreBeep.play();
                 this.playerBoxD.visible = false;
@@ -603,6 +616,7 @@ export default class GameScene extends Phaser.Scene {
                 console.log('Deposited Box D!');
                 this.scoreMaxD();
                 this.gameWin();
+                this.spaceDown = false;
             }
         }
     }
@@ -641,46 +655,50 @@ export default class GameScene extends Phaser.Scene {
         this.playerBoxD.body.setSize(4, 4);
     }
     onDiscardA() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxA.visible && this.playerBoxA.x === 315 && this.playerBoxA.y === 340) {
                 this.playerBoxA.visible = false;
                 this.playerBoxA.x = 660;
                 this.playerBoxA.y = 190;
                 this.discardValues();
                 console.log('Discarded Box A!');
+                this.spaceDown = false;
             }
         }
     }
     onDiscardB() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxB.visible && this.playerBoxB.x === 315 && this.playerBoxB.y === 340) {
                 this.playerBoxB.visible = false;
                 this.playerBoxB.x = 660;
                 this.playerBoxB.y = 340;
                 this.discardValues();
                 console.log('Discarded Box B!');
+                this.spaceDown = false;
             }
         }
     }
     onDiscardC() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxC.visible && this.playerBoxC.x === 315 && this.playerBoxC.y === 340) {
                 this.playerBoxC.visible = false;
                 this.playerBoxC.x = 660;
                 this.playerBoxC.y = 490;
                 this.discardValues();
                 console.log('Discarded Box C!');
+                this.spaceDown = false;
             }
         }
     }
     onDiscardD() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxD.visible && this.playerBoxD.x === 315 && this.playerBoxD.y === 340) {
                 this.playerBoxD.visible = false;
                 this.playerBoxD.x = 660;
                 this.playerBoxD.y = 640;
                 this.discardValues();
                 console.log('Discarded Box D!');
+                this.spaceDown = false;
             }
         }
     }
@@ -693,28 +711,28 @@ export default class GameScene extends Phaser.Scene {
         this.player.y = 340;
     }
     gameOverA() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxA.visible) {
                 this.gameOverValues();
             }
         }
     }
     gameOverB() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxB.visible) {
                 this.gameOverValues();
             }
         }
     }
     gameOverC() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxC.visible) {
                 this.gameOverValues();
             }
         }
     }
     gameOverD() {
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+        if (Phaser.Input.Keyboard.JustDown(this.space) || this.spaceDown) {
             if (this.playerBoxD.visible) {
                 this.gameOverValues();
             }

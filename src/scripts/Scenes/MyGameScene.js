@@ -220,16 +220,13 @@ export default class GameScene extends Phaser.Scene {
         this.buttonHandlers.addPad(() => this.gamePad.leftStick.x === -1, () => this.onLeftInput());
         this.buttonHandlers.addPad(() => this.gamePad.buttons[0].pressed, () => {
             this.spaceDown = true;
-            console.log('isDown')
         });
     }
     startGamePad() {
         if (this.input.gamepad.total) {
             this.gamePad = this.input.gamepad.pad1;
             this.initGamePad();
-            console.log('reachme 00');
             console.log(this.gamePad);
-            console.log('reachme 01');
         }
     }
     timeRun(t) {

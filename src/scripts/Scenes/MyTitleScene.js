@@ -9,18 +9,13 @@ export default class MicroGame31 extends Phaser.Scene {
 
         // Game Object Declarations
         this.myText;
-        this.player;
     }
 
     preload() {
-        console.log('heloooo')
-        this.load.image('player', new URL('../assets/swissguy_test.png', import.meta.url).href);
     }
 
     create() {
-        console.log('helo agan')
         this.setText();
-        this.add.image(180,600, 'player')
     }
 
     update() {

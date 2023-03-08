@@ -9,28 +9,55 @@ export default class MicroGame31 extends Phaser.Scene {
 
         // Game Object Declarations
         this.myText;
-        this.player;
+        this.pick_player;
+        this.cursors;
+        this.pos = 0;
     }
 
     preload() {
-        console.log('heloooo')
-        this.load.image('player', new URL('../assets/swissguy_test.png', import.meta.url).href);
+        this.load.image('frets', new URL('../assets/frets.png', import.meta.url).href);
+        this.load.image('pick_player', new URL('../assets/pick_player.png', import.meta.url).href);
     }
 
     create() {
-        console.log('helo agan')
         this.setText();
-        this.add.image(180,600, 'player')
+        //background
+        this.add.image(540,360,'frets');
+        //player
+        this.pick_player = this.physics.add.sprite(393,670,'pick_player');
+        this.pick_player.setCollideWorldBounds(true);
+        //keyboard
+        this.cursors = this.input.keyboard.createCursorKeys();
     }
 
     update() {
+        if (this.cursors.left.justDown) {
+            // this.pos --;
+            this.pick_player.x = 393;
+            // console.log(this.pick_player.x)
+            console.log(this.pos)
+        }
+        if (this.cursors.right.justDown) {
+            this.pick_player.x += 60;
+        }
+        this.setPosition(0);
+
+    }
+
+    setPosition(pos){
+        while (pos >= 0 && pos <=5) {
+            console.log("hello")
+            break
+            
+        }
+
     }
 
     setText() {
-        this.myText = this.add.text(250, 275, '')
+        this.myText = this.add.text(30, 50, 'myText')
         this.myText.setStyle({
-            fontSize: '100px',
-            fill: '#000000',
+            fontSize: '50px',
+            fill: '#FFFFFF',
             align: 'center',
         });
         this.myText.setText('DETHAGEDDON');

@@ -10,7 +10,7 @@ const config = {
   type: Phaser.AUTO,
   width: 1080,
   height: 720,
-  backgroundColor: '#808080',
+  backgroundColor: '#911A00',
 
   // Add physics, arcade, scene, and audio
   physics: {

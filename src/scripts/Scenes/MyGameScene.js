@@ -31,22 +31,27 @@ export default class MicroGame31 extends Phaser.Scene {
     }
 
     update() {
-        if (this.cursors.left.justDown) {
+        if (this.cursors.left.isDown) {
             // this.pos --;
             this.pick_player.x = 393;
-            // console.log(this.pick_player.x)
+            //console.log(this.pick_player.x)
             console.log(this.pos)
+            this.pos = 0;
+            this.setPosition(0);
         }
-        if (this.cursors.right.justDown) {
-            this.pick_player.x += 60;
+        if (this.cursors.right.isDown) {
+            this.pick_player.x = 451;
+            console.log(this.pos);
+            this.pos = 1; 
+            this.setPosition(1);
+            
         }
-        this.setPosition(0);
+        
 
     }
 
     setPosition(pos){
         while (pos >= 0 && pos <=5) {
-            console.log("hello")
             break
             
         }

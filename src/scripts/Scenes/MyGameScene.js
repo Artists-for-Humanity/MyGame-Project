@@ -1,5 +1,3 @@
-// import { LEFT } from "phaser";
-
 export default class MicroGame31 extends Phaser.Scene {
     // Game Class Constructor
     constructor() {
@@ -71,19 +69,20 @@ export default class MicroGame31 extends Phaser.Scene {
         }
 
         if(this.noteone.y === 695){
-            this.resetNote();
+            this.spawnNote();
         }
     }
 
-    resetNote(){
-        this.noteone.y = 25
+    spawnNote(){
+        this.noteone.y = 25;
+        //this.noteone.x +=60
         this.noteone.setVelocityY(500);
     }
 
     onPlayerHitNote(player) {
         //player.setTint(0xff0000);
         console.log("player hit")
-        this.resetNote();
+        this.spawnNote();
     }
 
     setText() {

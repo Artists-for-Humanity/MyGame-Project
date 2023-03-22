@@ -9,11 +9,20 @@ export default class MicroGame31 extends Phaser.Scene {
 
         // Game Object Declarations
         this.myText;
+
+        //sprites 
         this.pick_player;
         this.noteone;
+        this.posVal = [393, 451, 510, 568, 627, 685]
+        this.pickIndex = 0;
+        this.notePos = 0;
+        this.numNotes = 2;
+        this.noteSpeed = 250;
+
+        //movement
         this.cursors;
-        this.pos = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX"]
-        this.posIndex = 0;
+
+
         
     }
 
@@ -33,7 +42,7 @@ export default class MicroGame31 extends Phaser.Scene {
         //notes
         this.noteone = this.physics.add.sprite(393,25, 'noteone');
         this.noteone.setCollideWorldBounds(true);
-        this.noteone.setVelocityY(500)
+        this.noteone.setVelocityY(this.noteSpeed)
         //keyboard
         this.cursors = this.input.keyboard.createCursorKeys();
         //colliding
@@ -42,46 +51,35 @@ export default class MicroGame31 extends Phaser.Scene {
     }
 
     update() {
-
+        //movement
          if (Phaser.Input.Keyboard.JustDown(this.cursors.left)) {
-            this.posIndex--;
+            this.pickIndex--;
 
         }
         if (Phaser.Input.Keyboard.JustDown(this.cursors.right)) {
-            this.posIndex++; 
+            this.pickIndex++; 
 
         }
-        if (this.posIndex < 0) {this.posIndex = 0;}
-        else if (this.posIndex > 5) {this.posIndex = 5;}
+        if (this.pickIndex < 0) {this.pickIndex = 0;}
+        else if (this.pickIndex > 5) {this.pickIndex = 5;}
 
-        if (this.pos[this.posIndex] === "ONE"){
-            this.pick_player.x = 393;
-        }else if(this.pos[this.posIndex] === "TWO"){
-            this.pick_player.x = 451;
-        }else if(this.pos[this.posIndex] === "THREE"){
-            this.pick_player.x = 510;
-        }else if(this.pos[this.posIndex] === "FOUR"){
-            this.pick_player.x = 568;
-        }else if(this.pos[this.posIndex] === "FIVE"){
-            this.pick_player.x = 627;
-        }else if(this.pos[this.posIndex] === "SIX"){
-            this.pick_player.x = 685;
-        }
+        this.pick_player.x = this.posVal[this.pickIndex];
 
-        if(this.noteone.y === 695){
-            this.spawnNote();
-        }
+        //colliding
+        if(this.noteone.y === 695){this.spawnNote()};
     }
 
     spawnNote(){
         this.noteone.y = 25;
-        //this.noteone.x +=60
-        this.noteone.setVelocityY(500);
+        // this.noteone.x = (Phaser.Math.Between(393, 685));
+        //this.noteone.x = this.posVal[0]
+        this.noteone.x = this.posVal[(Phaser.Math.Between(0,5))]
+        this.noteone.setVelocityY(this.noteSpeed);
     }
 
     onPlayerHitNote(player) {
         //player.setTint(0xff0000);
-        console.log("player hit")
+        console.log("player hit 0000")
         this.spawnNote();
     }
 

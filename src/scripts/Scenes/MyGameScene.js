@@ -17,12 +17,10 @@ export default class MicroGame31 extends Phaser.Scene {
         this.pickIndex = 0;
         this.notePos = 0;
         this.numNotes = 2;
-        this.noteSpeed = 250;
+        this.noteSpeed = 500;
 
         //movement
         this.cursors;
-
-
         
     }
 
@@ -39,15 +37,14 @@ export default class MicroGame31 extends Phaser.Scene {
         //player
         this.pick_player = this.physics.add.sprite(393,670,'pick_player');
         this.pick_player.setCollideWorldBounds(true);
-        //notes
-        this.noteone = this.physics.add.sprite(393,25, 'noteone');
-        this.noteone.setCollideWorldBounds(true);
-        this.noteone.setVelocityY(this.noteSpeed)
         //keyboard
         this.cursors = this.input.keyboard.createCursorKeys();
         //colliding
         this.physics.add.collider(this.pick_player, this.noteone, this.onPlayerHitNote, null, this);
-
+        //notes
+        for (let i = 0; i < this.numNotes; i++){
+            this.createNotes();
+        }
     }
 
     update() {
@@ -71,10 +68,15 @@ export default class MicroGame31 extends Phaser.Scene {
 
     spawnNote(){
         this.noteone.y = 25;
-        // this.noteone.x = (Phaser.Math.Between(393, 685));
-        //this.noteone.x = this.posVal[0]
         this.noteone.x = this.posVal[(Phaser.Math.Between(0,5))]
         this.noteone.setVelocityY(this.noteSpeed);
+    }
+
+    createNotes(){
+        this.noteone = this.physics.add.sprite(this.posVal[(Phaser.Math.Between(0,5))],25, 'noteone');
+        this.noteone.setCollideWorldBounds(true);
+        this.noteone.setVelocityY(this.noteSpeed)
+        this.physics.add.collider(this.pick_player, this.noteone, this.onPlayerHitNote, null, this);
     }
 
     onPlayerHitNote(player) {

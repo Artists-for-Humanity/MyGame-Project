@@ -16,8 +16,9 @@ export default class MicroGame31 extends Phaser.Scene {
         this.posVal = [393, 451, 510, 568, 627, 685]
         this.pickIndex = 0;
         this.notePos = 0;
-        this.numNotes = 2;
+        this.numNotes = 6;
         this.noteSpeed = 500;
+        this.notes;
 
         //movement
         this.cursors;
@@ -31,7 +32,7 @@ export default class MicroGame31 extends Phaser.Scene {
     }
 
     create() {
-        this.setText();
+        //this.setText();
         //background
         this.add.image(540,360,'frets');
         //player
@@ -42,9 +43,8 @@ export default class MicroGame31 extends Phaser.Scene {
         //colliding
         this.physics.add.collider(this.pick_player, this.noteone, this.onPlayerHitNote, null, this);
         //notes
-        for (let i = 0; i < this.numNotes; i++){
-            this.createNotes();
-        }
+        this.notes = this.physics.add.group();
+        this.createNotes();
     }
 
     update() {
@@ -63,7 +63,12 @@ export default class MicroGame31 extends Phaser.Scene {
         this.pick_player.x = this.posVal[this.pickIndex];
 
         //colliding
-        if(this.noteone.y === 695){this.spawnNote()};
+        this.notes.children.iterate((child) => {
+            const body = child.body;
+            if (body.y === 695){
+                body.y = 25
+            }
+        })
     }
 
     spawnNote(){
@@ -73,9 +78,11 @@ export default class MicroGame31 extends Phaser.Scene {
     }
 
     createNotes(){
-        this.noteone = this.physics.add.sprite(this.posVal[(Phaser.Math.Between(0,5))],25, 'noteone');
-        this.noteone.setCollideWorldBounds(true);
-        this.noteone.setVelocityY(this.noteSpeed)
+        for(let i = 0; i < this.numNotes; i++){
+            this.notes.create((this.posVal[(Phaser.Math.Between(0,5))],25, 'noteone'))
+        };
+        this.notes.setCollideWorldBounds(true);
+        this.notes.setVelocityY(this.noteSpeed)
         this.physics.add.collider(this.pick_player, this.noteone, this.onPlayerHitNote, null, this);
     }
 
@@ -85,7 +92,7 @@ export default class MicroGame31 extends Phaser.Scene {
         this.spawnNote();
     }
 
-    setText() {
+    /* setText() {
         this.myText = this.add.text(30, 50, 'myText')
         this.myText.setStyle({
             fontSize: '50px',
@@ -93,5 +100,5 @@ export default class MicroGame31 extends Phaser.Scene {
             align: 'center',
         });
         this.myText.setText('DETHAGEDDON');
-    }
+    } */
 }

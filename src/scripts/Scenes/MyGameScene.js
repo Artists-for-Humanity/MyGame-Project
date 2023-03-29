@@ -12,11 +12,10 @@ export default class MicroGame31 extends Phaser.Scene {
 
         //sprites 
         this.pick_player;
-        this.noteone;
         this.posVal = [393, 451, 510, 568, 627, 685]
         this.pickIndex = 0;
         this.notePos = 0;
-        this.numNotes = 6;
+        this.numNotes = 2;
         this.noteSpeed = 500;
         this.notes;
 
@@ -41,9 +40,9 @@ export default class MicroGame31 extends Phaser.Scene {
         //keyboard
         this.cursors = this.input.keyboard.createCursorKeys();
         //colliding
-        this.physics.add.collider(this.pick_player, this.noteone, this.onPlayerHitNote, null, this);
+        this.physics.add.collider(this.pick_player, this.notes, this.onPlayerHitNote, null, this);
         //notes
-        this.notes = this.physics.add.group();
+        this.notes = this.physics.add.group({collideWorldBounds: true});
         this.createNotes();
     }
 
@@ -62,34 +61,34 @@ export default class MicroGame31 extends Phaser.Scene {
 
         this.pick_player.x = this.posVal[this.pickIndex];
 
-        //colliding
-        this.notes.children.iterate((child) => {
-            const body = child.body;
-            if (body.y === 695){
-                body.y = 25
-            }
-        })
+        //colliding **FIX THIS**
+        this.notes.children.iterate((notes) => {
+            const body = notes.body;
+            if (notes.body.y === 620){
+                this.respawnNote()
+            };
+        });
     }
 
-    spawnNote(){
-        this.noteone.y = 25;
-        this.noteone.x = this.posVal[(Phaser.Math.Between(0,5))]
-        this.noteone.setVelocityY(this.noteSpeed);
+    respawnNote(){
+        this.notes.setY(25);
+        this.notes.x = this.posVal[(Phaser.Math.Between(0,5))]
+        this.notes.setVelocityY(this.noteSpeed);
     }
 
     createNotes(){
         for(let i = 0; i < this.numNotes; i++){
-            this.notes.create((this.posVal[(Phaser.Math.Between(0,5))],25, 'noteone'))
+            this.notes.create(this.posVal[(Phaser.Math.Between(0,5))],25, 'noteone')
         };
-        this.notes.setCollideWorldBounds(true);
+        //this.notes.setCollideWorldBounds(true);
         this.notes.setVelocityY(this.noteSpeed)
-        this.physics.add.collider(this.pick_player, this.noteone, this.onPlayerHitNote, null, this);
+        this.physics.add.collider(this.pick_player, this.notes, this.onPlayerHitNote, null, this);
     }
 
     onPlayerHitNote(player) {
         //player.setTint(0xff0000);
         console.log("player hit 0000")
-        this.spawnNote();
+        this.respawnNote();
     }
 
     /* setText() {

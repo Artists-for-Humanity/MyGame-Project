@@ -15,11 +15,15 @@ export default class MicroGame31 extends Phaser.Scene {
         this.posVal = [393, 451, 510, 568, 627, 685]
         this.pickPosVal = [393, 451, 510, 568, 627, 685]
         this.pickIndex = 0;
-        this.notePos = 0;
         this.numNotes = 5;
         this.noteSpeed = 500;
         this.notes;
-
+        //health
+        this.health = 3;
+        this.healthText;
+        //score
+        this.score = 0
+        this.scoreText;
         //movement
         this.cursors;
         
@@ -32,7 +36,6 @@ export default class MicroGame31 extends Phaser.Scene {
     }
 
     create() {
-        //this.setText();
         //background
         this.add.image(540,360,'frets');
         //player
@@ -40,8 +43,16 @@ export default class MicroGame31 extends Phaser.Scene {
         this.pick_player.setCollideWorldBounds(true);
         //keyboard
         this.cursors = this.input.keyboard.createCursorKeys();
-        //colliding
-        // this.physics.add.collider(this.pick_player, this.notes, this.onPlayerHitNote, null, this);
+        //score
+        this.scoreText = this.add.text(16, 65, 'Score: 0', {
+            fontSize: '45px',
+            fill: '#FFFFFF',
+        });
+        //health
+        this.healthText = this.add.text(16,16,'Health: 3',{
+            fontSize: '45px',
+            fill: '#FFFFFF'
+        })
         //notes
         this.notes = this.physics.add.group({collideWorldBounds: true});
         this.createNotes();
@@ -69,20 +80,21 @@ export default class MicroGame31 extends Phaser.Scene {
 
             if (notes.body.y === 670){
                 this.respawnNote();
+                this.score++
+                this.scoreText.setText(`Score: ${this.score}`)
             };
         });
+        //health
+        if (this.health===0){
+            this.gameOver();
+        }
     }
 
     respawnNote(){
-        console.log('reachme 02');
-
         this.posVal = [393, 451, 510, 568, 627, 685]
         this.notes.setY(25);
         this.notes.children.iterate((notes) => {
             const body = notes.body;
-            
-            
-
             
             if(this.posVal.length === 6){
                 let temp = (Phaser.Math.Between(0,5));
@@ -110,46 +122,41 @@ export default class MicroGame31 extends Phaser.Scene {
                 this.posVal.splice(temp, 1);
             }
 
-
         });
         this.notes.setVelocityY(this.noteSpeed);
     }
 
     createNotes(){
-        for(let i = 0; i < this.numNotes; i++){
-            this.notes.create(this.posVal[(Phaser.Math.Between(0,5))],25, 'noteone')
+        let nums = [0, 1, 2, 3, 4, 5]
+        for(let i = 0; i < 5; i++){
+            var x = nums.splice(Phaser.Math.Between(0, nums.length - 1), 1);
+            this.notes.create(this.posVal[x[0]],25, 'noteone')
         };
-
-
-        console.log('reachme 00');
-
-        this.respawnNote();
-        this.notes.children.iterate((notes) => {
-            console.log(notes.x)
-        });
-
-        console.log('reachme 01');
-
-
-        //this.notes.setCollideWorldBounds(true);
         this.notes.setVelocityY(this.noteSpeed)
         this.physics.add.collider(this.pick_player, this.notes, this.onPlayerHitNote, null, this);
     }
 
     onPlayerHitNote(player) {
-        //player.setTint(0xff0000);
-        // console.log("player hit 0000")
         this.respawnNote();
-        // this.physics.pause();
+        this.health--;
+        this.healthText.setText(`Health: ${this.health}`)
     }
 
-    /* setText() {
-        this.myText = this.add.text(30, 50, 'myText')
+    gameOver(){
+        this.physics.pause();
+        this.dethText();
+        this.pick_player.setTint(0xff0000);
+        //despawning sprites
+        this.pick_player.disableBody(true,true)
+        
+    }
+    dethText() {
+        this.myText = this.add.text(250, 330, 'myText')
         this.myText.setStyle({
-            fontSize: '50px',
-            fill: '#FFFFFF',
+            fontSize: '100px',
+            fill: '#A20000',
             align: 'center',
         });
-        this.myText.setText('DETHAGEDDON');
-    } */
+        this.myText.setText('DESECRATED');
+    } 
 }

@@ -17,6 +17,7 @@ export default class MicroGame31 extends Phaser.Scene {
         this.pickIndex = 0;
         this.numNotes = 5;
         this.noteSpeed = 600;
+            //at  600 it takes about 1:50s to get a score of 500
         this.notes;
         //health
         this.health = 3;

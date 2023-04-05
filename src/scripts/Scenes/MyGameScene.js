@@ -16,7 +16,7 @@ export default class MicroGame31 extends Phaser.Scene {
         this.pickPosVal = [393, 451, 510, 568, 627, 685]
         this.pickIndex = 0;
         this.numNotes = 5;
-        this.noteSpeed = 500;
+        this.noteSpeed = 600;
         this.notes;
         //health
         this.health = 3;
@@ -92,7 +92,7 @@ export default class MicroGame31 extends Phaser.Scene {
 
     respawnNote(){
         this.posVal = [393, 451, 510, 568, 627, 685]
-        this.notes.setY(25);
+        this.notes.setY(30);
         this.notes.children.iterate((notes) => {
             const body = notes.body;
             
@@ -130,7 +130,7 @@ export default class MicroGame31 extends Phaser.Scene {
         let nums = [0, 1, 2, 3, 4, 5]
         for(let i = 0; i < 5; i++){
             var x = nums.splice(Phaser.Math.Between(0, nums.length - 1), 1);
-            this.notes.create(this.posVal[x[0]],25, 'noteone')
+            this.notes.create(this.posVal[x[0]],30, 'noteone')
         };
         this.notes.setVelocityY(this.noteSpeed)
         this.physics.add.collider(this.pick_player, this.notes, this.onPlayerHitNote, null, this);

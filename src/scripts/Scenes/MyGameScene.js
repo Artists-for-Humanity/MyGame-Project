@@ -89,6 +89,11 @@ export default class MicroGame31 extends Phaser.Scene {
         if (this.health===0){
             this.gameOver();
         }
+        //win
+        if (this.score === 200){
+            this.gameOver();
+            this.score = 0
+        }
     }
 
     respawnNote(){

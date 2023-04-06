@@ -9,7 +9,7 @@ export default class MicroGame31 extends Phaser.Scene {
 
         // Game Object Declarations
         this.myText;
-
+        this.fretspic;
         //sprites 
         this.pick_player;
         this.posVal = [393, 451, 510, 568, 627, 685]
@@ -25,6 +25,7 @@ export default class MicroGame31 extends Phaser.Scene {
         //score
         this.score = 0
         this.scoreText;
+        
         //movement
         this.cursors;
         
@@ -38,7 +39,7 @@ export default class MicroGame31 extends Phaser.Scene {
 
     create() {
         //background
-        this.add.image(540,360,'frets');
+        this.fretspic = this.add.image(540,360,'frets');
         //player
         this.pick_player = this.physics.add.sprite(393,670,'pick_player');
         this.pick_player.setCollideWorldBounds(true);
@@ -49,14 +50,17 @@ export default class MicroGame31 extends Phaser.Scene {
             fontSize: '45px',
             fill: '#FFFFFF',
         });
+        this.scoreText.visible = true;
         //health
         this.healthText = this.add.text(16,16,'Health: 3',{
             fontSize: '45px',
             fill: '#FFFFFF'
         })
+        this.healthText.visible = true;
         //notes
         this.notes = this.physics.add.group({collideWorldBounds: true});
         this.createNotes();
+        this.notes.visible = true;
     }
 
     update() {
@@ -90,7 +94,7 @@ export default class MicroGame31 extends Phaser.Scene {
             this.gameOver();
         }
         //win
-        if (this.score === 200){
+        if (this.score === 50){
             this.gameOver();
             this.score = 0
         }
@@ -154,6 +158,10 @@ export default class MicroGame31 extends Phaser.Scene {
         this.pick_player.setTint(0xff0000);
         //despawning sprites
         this.pick_player.disableBody(true,true)
+        this.scoreText.visible = false;
+        this.healthText.visible = false;
+        this.fretspic.destroy();
+        //find a way to remove the notes
         
     }
     dethText() {

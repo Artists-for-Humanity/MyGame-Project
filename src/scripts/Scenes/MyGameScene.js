@@ -94,7 +94,7 @@ export default class MicroGame31 extends Phaser.Scene {
             this.gameOver();
         }
         //win
-        if (this.score === 5){
+        if (this.score === 500){
             this.gameWin();
             this.score = 0
         }

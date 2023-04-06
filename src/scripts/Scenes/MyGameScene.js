@@ -94,8 +94,8 @@ export default class MicroGame31 extends Phaser.Scene {
             this.gameOver();
         }
         //win
-        if (this.score === 50){
-            this.gameOver();
+        if (this.score === 5){
+            this.gameWin();
             this.score = 0
         }
     }
@@ -155,7 +155,6 @@ export default class MicroGame31 extends Phaser.Scene {
     gameOver(){
         this.physics.pause();
         this.dethText();
-        this.pick_player.setTint(0xff0000);
         //despawning sprites
         this.pick_player.disableBody(true,true)
         this.scoreText.visible = false;
@@ -164,6 +163,18 @@ export default class MicroGame31 extends Phaser.Scene {
         //find a way to remove the notes
         
     }
+    
+    gameWin(){
+        this.physics.pause();
+        this.lyfText();
+        //despawning sprites
+        this.pick_player.disableBody(true,true)
+        this.scoreText.visible = false;
+        this.healthText.visible = false;
+        this.fretspic.destroy();
+        //find a way to remove the notes
+    }
+
     dethText() {
         this.myText = this.add.text(250, 330, 'myText')
         this.myText.setStyle({
@@ -173,4 +184,13 @@ export default class MicroGame31 extends Phaser.Scene {
         });
         this.myText.setText('DESECRATED');
     } 
+    lyfText(){
+        this.myText = this.add.text(350, 330, 'myText')
+        this.myText.setStyle({
+            fontSize: '100px',
+            fill: '#FFF200',
+            align: 'center',
+        });
+        this.myText.setText('YOU WIN');
+    }
 }

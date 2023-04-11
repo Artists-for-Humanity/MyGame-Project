@@ -35,6 +35,7 @@ export default class MicroGame31 extends Phaser.Scene {
         this.load.image('frets', new URL('../assets/frets.png', import.meta.url).href);
         this.load.image('pick_player', new URL('../assets/pick_player.png', import.meta.url).href);
         this.load.image('noteone', new URL('../assets/noteone.png', import.meta.url).href);
+        this.load.image('heart', new URL('../assets/heart.png', import.meta.url).href);
     }
 
     create() {
@@ -46,16 +47,19 @@ export default class MicroGame31 extends Phaser.Scene {
         //keyboard
         this.cursors = this.input.keyboard.createCursorKeys();
         //score
-        this.scoreText = this.add.text(16, 65, 'Score: 0', {
-            fontSize: '45px',
+        this.scoreText = this.add.text(16, 16, 'Score: 0', {
+            fontSize: '35px',
             fill: '#FFFFFF',
         });
         this.scoreText.visible = true;
         //health
-        this.healthText = this.add.text(16,16,'Health: 3',{
-            fontSize: '45px',
+        this.healthText = this.add.text(913 ,16,' Health',{
+            fontSize: '35px',
             fill: '#FFFFFF'
         })
+        this.heart1 = this.add.image(877,31,'heart')
+        this.heart2 = this.add.image(822,31,'heart')
+        this.heart3 = this.add.image(767,31,'heart')
         this.healthText.visible = true;
         //notes
         this.notes = this.physics.add.group({collideWorldBounds: true});
@@ -94,7 +98,7 @@ export default class MicroGame31 extends Phaser.Scene {
             this.gameOver();
         }
         //win
-        if (this.score === 500){
+        if (this.score === 300){
             this.gameWin();
             this.score = 0
         }
@@ -140,16 +144,24 @@ export default class MicroGame31 extends Phaser.Scene {
         let nums = [0, 1, 2, 3, 4, 5]
         for(let i = 0; i < 5; i++){
             var x = nums.splice(Phaser.Math.Between(0, nums.length - 1), 1);
-            this.notes.create(this.posVal[x[0]],30, 'noteone')
+            this.notes.create(this.posVal[x],30, 'noteone')
         };
         this.notes.setVelocityY(this.noteSpeed)
         this.physics.add.collider(this.pick_player, this.notes, this.onPlayerHitNote, null, this);
     }
 
-    onPlayerHitNote(player) {
+    onPlayerHitNote() {
         this.respawnNote();
         this.health--;
-        this.healthText.setText(`Health: ${this.health}`)
+        console.log(this.health)
+        //this.healthText.setText(`${this.health}: Health`)
+        if(this.health === 2){
+            this.heart3.destroy();
+        }else if(this.health === 1){
+            this.heart2.destroy();
+        }else if(this.health === 0){
+            this.heart1.destroy();
+        }
     }
 
     gameOver(){
@@ -160,6 +172,7 @@ export default class MicroGame31 extends Phaser.Scene {
         this.scoreText.visible = false;
         this.healthText.visible = false;
         this.fretspic.destroy();
+        this.notes.clear(true);
         //find a way to remove the notes
         
     }
@@ -172,6 +185,10 @@ export default class MicroGame31 extends Phaser.Scene {
         this.scoreText.visible = false;
         this.healthText.visible = false;
         this.fretspic.destroy();
+        this.heart1.destroy();
+        this.heart2.destroy();
+        this.heart3.destroy();
+        this.notes.clear(true);
         //find a way to remove the notes
     }
 
@@ -179,7 +196,7 @@ export default class MicroGame31 extends Phaser.Scene {
         this.myText = this.add.text(250, 330, 'myText')
         this.myText.setStyle({
             fontSize: '100px',
-            fill: '#A20000',
+            fill: '#FF1100',
             align: 'center',
         });
         this.myText.setText('DESECRATED');

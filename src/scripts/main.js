@@ -2,7 +2,8 @@
 import Phaser from 'phaser';
 import GlobalState from './GlobalState';
 import MyGameScene from './Scenes/MyGameScene';
-
+import GameOverScene from './Scenes/GameOverScene';
+import MainMenuScene from './Scenes/MainMenuScene';
 
 
 // Set configuration for phaser game instance
@@ -22,7 +23,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [MyGameScene],
+  scene: [ MainMenuScene,  MyGameScene, GameOverScene ],
   audio: {
     disableWebAudio: true,
   },

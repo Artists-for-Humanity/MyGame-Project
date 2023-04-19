@@ -1,4 +1,4 @@
-export default class MicroGame31 extends Phaser.Scene {
+export default class MyGameScene extends Phaser.Scene {
     // Game Class Constructor
     constructor() {
         super({
@@ -12,8 +12,8 @@ export default class MicroGame31 extends Phaser.Scene {
         this.fretspic;
         //sprites 
         this.pick_player;
-        this.posVal = [393, 451, 510, 568, 627, 685]
-        this.pickPosVal = [393, 451, 510, 568, 627, 685]
+        this.posVal;
+        this.pickPosVal = [393, 451, 510, 568, 627, 685];
         this.pickIndex = 0;
         this.numNotes = 5;
         this.noteSpeed = 600;
@@ -23,7 +23,6 @@ export default class MicroGame31 extends Phaser.Scene {
         this.health = 3;
         this.healthText;
         //score
-        this.score = 0
         this.scoreText;
         
         //movement
@@ -39,6 +38,9 @@ export default class MicroGame31 extends Phaser.Scene {
     }
 
     create() {
+        console.log(this.globalState.score);
+        console.log('reachme00');
+
         //background
         this.fretspic = this.add.image(540,360,'frets');
         //player
@@ -89,8 +91,10 @@ export default class MicroGame31 extends Phaser.Scene {
 
             if (notes.body.y === 670){
                 this.respawnNote();
-                this.score++
-                this.scoreText.setText(`Score: ${this.score}`)
+                this.globalState.score++
+                // this.score++
+
+                this.scoreText.setText(`Score: ${this.globalState.score}`)
             };
         });
         //health
@@ -98,9 +102,9 @@ export default class MicroGame31 extends Phaser.Scene {
             this.gameOver();
         }
         //win
-        if (this.score === 300){
+        if (this.globalState.score === 300){
             this.gameWin();
-            this.score = 0
+            this.globalState.score = 0
         }
     }
 
@@ -141,7 +145,11 @@ export default class MicroGame31 extends Phaser.Scene {
     }
 
     createNotes(){
+        this.globalState.score = 0;
+
+        this.posVal = [393, 451, 510, 568, 627, 685]
         let nums = [0, 1, 2, 3, 4, 5]
+
         for(let i = 0; i < 5; i++){
             var x = nums.splice(Phaser.Math.Between(0, nums.length - 1), 1);
             this.notes.create(this.posVal[x],30, 'noteone')
@@ -153,8 +161,6 @@ export default class MicroGame31 extends Phaser.Scene {
     onPlayerHitNote() {
         this.respawnNote();
         this.health--;
-        console.log(this.health)
-        //this.healthText.setText(`${this.health}: Health`)
         if(this.health === 2){
             this.heart3.destroy();
         }else if(this.health === 1){
@@ -165,16 +171,9 @@ export default class MicroGame31 extends Phaser.Scene {
     }
 
     gameOver(){
-        this.physics.pause();
-        this.dethText();
-        //despawning sprites
-        this.pick_player.disableBody(true,true)
-        this.scoreText.visible = false;
-        this.healthText.visible = false;
-        this.fretspic.destroy();
-        this.notes.clear(true);
-        //find a way to remove the notes
-        
+        this.health = 3;
+        this.scene.start('GameOverScene');
+
     }
     
     gameWin(){
@@ -189,18 +188,8 @@ export default class MicroGame31 extends Phaser.Scene {
         this.heart2.destroy();
         this.heart3.destroy();
         this.notes.clear(true);
-        //find a way to remove the notes
     }
 
-    dethText() {
-        this.myText = this.add.text(250, 330, 'myText')
-        this.myText.setStyle({
-            fontSize: '100px',
-            fill: '#FF1100',
-            align: 'center',
-        });
-        this.myText.setText('DESECRATED');
-    } 
     lyfText(){
         this.myText = this.add.text(350, 330, 'myText')
         this.myText.setStyle({

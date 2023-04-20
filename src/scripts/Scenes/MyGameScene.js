@@ -9,7 +9,10 @@ export default class MyGameScene extends Phaser.Scene {
 
         // Game Object Declarations
         this.myText;
+        this.text
         this.fretspic;
+        this.timer;
+        this.start;
         //sprites 
         this.pick_player;
         this.posVal;
@@ -38,9 +41,10 @@ export default class MyGameScene extends Phaser.Scene {
     }
 
     create() {
-        console.log(this.globalState.score);
-        console.log('reachme00');
 
+        this.start = 0;
+
+        
         //background
         this.fretspic = this.add.image(540,360,'frets');
         //player
@@ -49,7 +53,7 @@ export default class MyGameScene extends Phaser.Scene {
         //keyboard
         this.cursors = this.input.keyboard.createCursorKeys();
         //score
-        this.scoreText = this.add.text(16, 16, 'Score: 0', {
+        this.scoreText = this.add.text(16, 16, 'Score: 0pts', {
             fontSize: '35px',
             fill: '#FFFFFF',
         });
@@ -65,12 +69,56 @@ export default class MyGameScene extends Phaser.Scene {
         this.healthText.visible = true;
         //notes
         this.notes = this.physics.add.group({collideWorldBounds: true});
-        this.createNotes();
+
+        // this.countDown();
+        // }
+
+        // this.initialTime = 150;
+
+        // let text = this.add.text(32, 32, 'Countdown: ' + this.formatTime(this.initialTime));
+    
+        // // Each 1000 ms call onEvent
+        // timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
+
+        // let t = 0;
+        // console.log('reachme04');
+
+        //     this.time.delayedCall(5000, () => {
+        //         console.log(t);
+        //         t++;
+
+        this.timer = this.time.addEvent({
+            delay: 3000,
+            paused: false
+          });
+          
+        //   this.input.on('pointerdown', function () {
+        //     timer.paused = !timer.paused;
+        //   });
+            
+          this.text = this.add.text(20, 30, '5', { font: 'bold 72px system-ui' })
+        
+
+
+
         this.notes.visible = true;
+
     }
 
     update() {
-        //movement
+
+        this.text.setText(this.timer.getRemainingSeconds().toFixed(1));
+        // console.log(this.timer);
+
+
+        if(this.timer.elapsed === 3000){
+
+            if (this.start === 0){
+                this.createNotes();
+                this.start++
+            }
+
+            //movement
          if (Phaser.Input.Keyboard.JustDown(this.cursors.left)) {
             this.pickIndex--;
 
@@ -94,7 +142,7 @@ export default class MyGameScene extends Phaser.Scene {
                 this.globalState.score++
                 // this.score++
 
-                this.scoreText.setText(`Score: ${this.globalState.score}`)
+                this.scoreText.setText(`Score: ${this.globalState.score}pts`)
             };
         });
         //health
@@ -106,7 +154,45 @@ export default class MyGameScene extends Phaser.Scene {
             this.gameWin();
             this.globalState.score = 0
         }
+
+        }
+        
     }
+
+    // formatTime(seconds){
+    //     // Minutes
+    //     var minutes = Math.floor(seconds/60);
+    //     // Seconds
+    //     var partInSeconds = seconds%60;
+    //     // Adds left zeros to seconds
+    //     partInSeconds = partInSeconds.toString().padStart(2,'0');
+    //     // Returns formated time
+    //     return `${minutes}:${partInSeconds}`;
+    // }
+
+    // onEvent (){
+    // this.initialTime -= 1; // One second
+    // text.setText('Countdown: ' + formatTime(this.initialTime));
+    // }
+
+    // countDown(){
+    //     console.log('reachme01');
+        // let x = 0;
+        // // this.scene.pause('MyGameScene');
+        // // this.physics.pause();
+        // for (let index = 0; index < 3; index++) {
+        //     this.time.delayedCall(1000, () => {
+        //         console.log(x);
+        //         x++;
+        //     }, [], this);            
+        // }
+        // this.scene.resume();
+        // this.physics.resume();
+        // this.createNotes();
+
+
+        
+    // }
 
     respawnNote(){
         this.posVal = [393, 451, 510, 568, 627, 685]
@@ -145,6 +231,11 @@ export default class MyGameScene extends Phaser.Scene {
     }
 
     createNotes(){
+
+        console.log('reachme02');
+
+
+       
         this.globalState.score = 0;
 
         this.posVal = [393, 451, 510, 568, 627, 685]

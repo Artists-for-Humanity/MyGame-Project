@@ -20,6 +20,7 @@ export default class GameOverScene extends Phaser.Scene {
         console.log(this.globalState.score);
         this.dethText();
         this.retry();
+        this.scoreText();
         //try again
         const startButton = this.add
         .image(this.game.config.width / 2, 500, 'start-button')
@@ -34,6 +35,16 @@ export default class GameOverScene extends Phaser.Scene {
     update() {
     }
 
+    scoreText(){
+        this.myText = this.add.text(233, 150, 'myText')
+        this.myText.setStyle({
+            fontSize: '50px',
+            fill: '#3EFF00',
+            align: 'center',
+        });
+        this.myText.setText(`Score: ${this.globalState.score}pts / 300pts`);
+        
+    }
     dethText() {
         this.myText = this.add.text(250, 200, 'myText')
         this.myText.setStyle({

@@ -20,7 +20,7 @@ export default class MyGameScene extends Phaser.Scene {
         this.pickIndex = 0;
         this.numNotes = 5;
         this.noteSpeed = 600;
-            //at  600 it takes about 1:50s to get a score of 500
+            //at 600 it takes about 1:50s to get a score of 500
         this.notes;
         //health
         this.health = 3;
@@ -43,8 +43,6 @@ export default class MyGameScene extends Phaser.Scene {
     create() {
 
         this.start = 0;
-
-        
         //background
         this.fretspic = this.add.image(540,360,'frets');
         //player
@@ -69,55 +67,29 @@ export default class MyGameScene extends Phaser.Scene {
         this.healthText.visible = true;
         //notes
         this.notes = this.physics.add.group({collideWorldBounds: true});
-
-        // this.countDown();
-        // }
-
-        // this.initialTime = 150;
-
-        // let text = this.add.text(32, 32, 'Countdown: ' + this.formatTime(this.initialTime));
-    
-        // // Each 1000 ms call onEvent
-        // timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
-
-        // let t = 0;
-        // console.log('reachme04');
-
-        //     this.time.delayedCall(5000, () => {
-        //         console.log(t);
-        //         t++;
-
+        this.notes.visible = true;
+        //timer
         this.timer = this.time.addEvent({
             delay: 3000,
             paused: false
           });
-          
-        //   this.input.on('pointerdown', function () {
-        //     timer.paused = !timer.paused;
-        //   });
-            
-          this.text = this.add.text(20, 30, '5', { font: 'bold 72px system-ui' })
+            const timY = this.game.config.height / 2;
+          this.text = this.add.text(435, 270, '5', { font: 'bold 150px system-ui', align: 'center', fill:'#FF0000' })
         
-
-
-
-        this.notes.visible = true;
-
     }
 
     update() {
 
         this.text.setText(this.timer.getRemainingSeconds().toFixed(1));
-        // console.log(this.timer);
 
 
         if(this.timer.elapsed === 3000){
-
             if (this.start === 0){
                 this.createNotes();
                 this.start++
+                this.text.visible = false;
             }
-
+        
             //movement
          if (Phaser.Input.Keyboard.JustDown(this.cursors.left)) {
             this.pickIndex--;
@@ -159,40 +131,6 @@ export default class MyGameScene extends Phaser.Scene {
         
     }
 
-    // formatTime(seconds){
-    //     // Minutes
-    //     var minutes = Math.floor(seconds/60);
-    //     // Seconds
-    //     var partInSeconds = seconds%60;
-    //     // Adds left zeros to seconds
-    //     partInSeconds = partInSeconds.toString().padStart(2,'0');
-    //     // Returns formated time
-    //     return `${minutes}:${partInSeconds}`;
-    // }
-
-    // onEvent (){
-    // this.initialTime -= 1; // One second
-    // text.setText('Countdown: ' + formatTime(this.initialTime));
-    // }
-
-    // countDown(){
-    //     console.log('reachme01');
-        // let x = 0;
-        // // this.scene.pause('MyGameScene');
-        // // this.physics.pause();
-        // for (let index = 0; index < 3; index++) {
-        //     this.time.delayedCall(1000, () => {
-        //         console.log(x);
-        //         x++;
-        //     }, [], this);            
-        // }
-        // this.scene.resume();
-        // this.physics.resume();
-        // this.createNotes();
-
-
-        
-    // }
 
     respawnNote(){
         this.posVal = [393, 451, 510, 568, 627, 685]

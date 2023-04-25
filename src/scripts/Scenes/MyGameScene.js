@@ -11,6 +11,7 @@ export default class MyGameScene extends Phaser.Scene {
         this.myText;
         this.text
         this.fretspic;
+        this.thumb;
         this.timer;
         this.start;
         //sprites 
@@ -38,6 +39,7 @@ export default class MyGameScene extends Phaser.Scene {
         this.load.image('pick_player', new URL('../assets/pick_player.png', import.meta.url).href);
         this.load.image('noteone', new URL('../assets/noteone.png', import.meta.url).href);
         this.load.image('heart', new URL('../assets/heart.png', import.meta.url).href);
+        this.load.image('thumb', new URL('../assets/thumb.png', import.meta.url).href)
     }
 
     create() {
@@ -217,10 +219,12 @@ export default class MyGameScene extends Phaser.Scene {
         this.heart2.destroy();
         this.heart3.destroy();
         this.notes.clear(true);
+        //thumb
+        this.thumb = this.add.image(590,500,'thumb')
     }
 
     lyfText(){
-        this.myText = this.add.text(350, 330, 'myText')
+        this.myText = this.add.text(350, 100, 'myText')
         this.myText.setStyle({
             fontSize: '100px',
             fill: '#FFF200',

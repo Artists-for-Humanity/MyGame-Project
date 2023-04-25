@@ -12,9 +12,8 @@ export default class MainMenuScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('start-button', new URL('../assets/start-button.png', import.meta.url).href);
-        // countdown image
-        this.load.image('count-down', new URL('../assets/count-down.png', import.meta.url).href);
+        this.load.image('start-button', new URL('../assets/start-button.png', import.meta.url).href);   
+        
     }
 
     create() {
@@ -35,13 +34,4 @@ export default class MainMenuScene extends Phaser.Scene {
     update() {
     }
 
-    /* setText() {
-        this.myText = this.add.text(250, 275, '')
-        this.myText.setStyle({
-            fontSize: '100px',
-            fill: '#000000',
-            align: 'center',
-        });
-        this.myText.setText('DETHAGEDDON');
-    } */
 }

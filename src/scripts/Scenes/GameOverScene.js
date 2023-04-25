@@ -17,7 +17,6 @@ export default class GameOverScene extends Phaser.Scene {
     }
 
     create() {
-        console.log(this.globalState.score);
         this.dethText();
         this.retry();
         this.scoreText();

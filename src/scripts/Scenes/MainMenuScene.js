@@ -13,6 +13,8 @@ export default class MainMenuScene extends Phaser.Scene {
 
     preload() {
         this.load.image('start-button', new URL('../assets/start-button.png', import.meta.url).href);
+        // countdown image
+        this.load.image('count-down', new URL('../assets/count-down.png', import.meta.url).href);
     }
 
     create() {

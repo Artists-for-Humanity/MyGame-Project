@@ -17,7 +17,7 @@ export default class Level1Scene extends Phaser.Scene {
     }
 
     create() {
-        console.log('hello')
+        
     }
   
     

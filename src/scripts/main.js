@@ -23,7 +23,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [ MainMenuScene,  MyGameScene, GameOverScene, Level1Scene],
+  scene: [ Level1Scene,  MyGameScene, GameOverScene, MainMenuScene],
   audio: {
     disableWebAudio: true,
   },

@@ -72,7 +72,7 @@ export default class MyGameScene extends Phaser.Scene {
         this.notes.visible = true;
         //timer
         this.timer = this.time.addEvent({
-            delay: 3000,
+            delay: 4000,
             paused: false
           });
             const timY = this.game.config.height / 2;
@@ -85,7 +85,7 @@ export default class MyGameScene extends Phaser.Scene {
         this.text.setText(this.timer.getRemainingSeconds().toFixed(1));
 
 
-        if(this.timer.elapsed === 3000){
+        if(this.timer.elapsed === 4000){
             if (this.start === 0){
                 this.createNotes();
                 this.start++

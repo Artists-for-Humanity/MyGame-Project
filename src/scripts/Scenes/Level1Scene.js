@@ -5,6 +5,12 @@ export default class Level1Scene extends Phaser.Scene {
             active: false,
             visible: false,
             key: 'Level1Scene',
+            physics: {
+                default: 'arcade',
+                arcade: { 
+                  gravity: { y: 600}
+                }
+              }
         });
 
         // Game Object Declarations
@@ -21,19 +27,19 @@ export default class Level1Scene extends Phaser.Scene {
         this.load.image('ground', new URL('../assets/platform.png', import.meta.url).href);
         this.load.image('star', new URL('../assets/star.png', import.meta.url).href);
         this.load.image('bomb', new URL('../assets/bomb.png', import.meta.url).href);
-        //this.load.spritesheet('dude', new URL('../assets/dude.png', import.meta.url).href), { frameWidth: 32, frameHeight: 48 };
+        this.load.spritesheet('dude', new URL('../assets/dude.png', import.meta.url).href), { frameWidth: 32, frameHeight: 48 };
     }
 
     create() {
-        this.add.image(400, 300, 'sky');
+        this.add.image(540, 360, 'sky');
 
         this.platforms = this.physics.add.staticGroup();
 
-        this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        this.platforms.create(540, 677, 'ground').setScale(2).refreshBody();
 
-        this.platforms.create(600, 400, 'ground');
-        this.platforms.create(50, 250, 'ground');
-        this.platforms.create(750, 220, 'ground');
+        this.platforms.create(810, 440, 'ground');
+        this.platforms.create(50, 270, 'ground');
+        this.platforms.create(940, 220, 'ground');
 
         //player = this.physics.add.sprite(100, 450, 'dude');
 

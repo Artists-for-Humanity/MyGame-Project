@@ -5,6 +5,7 @@ import MyGameScene from './Scenes/MyGameScene';
 import GameOverScene from './Scenes/GameOverScene';
 import MainMenuScene from './Scenes/MainMenuScene';
 import Level1Scene from './Scenes/Level1Scene';
+import WinScene from './Scenes/WinScene'
 
 // Set configuration for phaser game instance
 const config = {
@@ -23,7 +24,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [ Level1Scene, MainMenuScene, MyGameScene, GameOverScene],
+  scene: [MainMenuScene, MyGameScene, GameOverScene, Level1Scene, WinScene],
   audio: {
     disableWebAudio: true,
   },

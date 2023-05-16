@@ -124,8 +124,8 @@ export default class MyGameScene extends Phaser.Scene {
             this.gameOver();
         }
         //win
-        if (this.globalState.score === 300){
-            this.gameWin();
+        if (this.globalState.score === 10){
+            this.scene.start('WinScene');
             this.globalState.score = 0
         }
 

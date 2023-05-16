@@ -27,7 +27,7 @@ export default class GameOverScene extends Phaser.Scene {
           useHandCursor: true,
         })
         .on('pointerdown', () => {
-          this.scene.start('Level1Scene');
+          this.scene.start('MyGameScene');
         });
     }
 

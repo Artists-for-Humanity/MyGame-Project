@@ -21,6 +21,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.scoreText;
         this.player;
         this.lv1score;
+        this.bombs;
         //gameOver = false;
         
     }
@@ -85,13 +86,15 @@ export default class Level1Scene extends Phaser.Scene {
 
         });
 
+        this.bombs = this.physics.add.group()
         this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.stars, this.platforms);
+        this.physics.add.collider(this.bombs, this.platforms);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar(), null, this);
-        
+        this.physics.add.overlap(this.player, this.bombs, hitBomb(), null, this);
 
     }
   
@@ -147,10 +150,10 @@ export default class Level1Scene extends Phaser.Scene {
             var x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
     
             var bomb = bombs.create(x, 16, 'bomb');
-            bomb.setBounce(1);
-            bomb.setCollideWorldBounds(true);
-            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-            bomb.allowGravity = true;
+            this.bomb.setBounce(1);
+            this.bomb.setCollideWorldBounds(true);
+            this.bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            this.bomb.allowGravity = false;
     
         }
     }

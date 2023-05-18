@@ -22,7 +22,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.player;
         this.lv1score;
         this.bombs;
-        //gameOver = false;
+        this.gameOver = false;
         
     }
 
@@ -94,46 +94,47 @@ export default class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(this.bombs, this.platforms);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar(), null, this);
-        this.physics.add.overlap(this.player, this.bombs, hitBomb(), null, this);
+        this.physics.add.overlap(this.player, this.bombs, this.hitBomb(), null, this);
 
     }
   
     
 
     update() {
-      /*   if (this.gameOver)
-    {
-        return;
-    } */
+        if (this.gameOver){
+            return;
+        } 
 
-    if (this.cursors.left.isDown)
-    {
-        this.player.setVelocityX(-190);
+        if (this.cursors.left.isDown)
+        {
+            this.player.setVelocityX(-190);
 
-        this.player.anims.play('left', true);
-    }
-    else if (this.cursors.right.isDown)
-    {
-        this.player.setVelocityX(190);
+            this.player.anims.play('left', true);
+        }
+        else if (this.cursors.right.isDown)
+        {
+            this.player.setVelocityX(190);
 
-        this.player.anims.play('right', true);
-    }
-    else
-    {
-        this.player.setVelocityX(0);
+            this.player.anims.play('right', true);
+        }
+        else
+        {
+            this.player.setVelocityX(0);
 
-        this.player.anims.play('turn');
-    }
+            this.player.anims.play('turn');
+        }
 
-    if (this.cursors.up.isDown && this.player.body.touching.down)
-    {
-        this.player.setVelocityY(-360);
-    }
+        if (this.cursors.up.isDown && this.player.body.touching.down)
+        {
+            this.player.setVelocityY(-360);
+        }
+        
+        
     }
 
     collectStar(player, star){
         ///this.star.destroy();
-
+        console.log("howdy")
         //  Add and update the score
         this.lv1score += 10;
         this.scoreText.setText('Score: ' + this.lv1score);
@@ -149,24 +150,26 @@ export default class Level1Scene extends Phaser.Scene {
     
             var x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
     
-            var bomb = bombs.create(x, 16, 'bomb');
-            this.bomb.setBounce(1);
-            this.bomb.setCollideWorldBounds(true);
-            this.bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-            this.bomb.allowGravity = false;
+            var bomb = this.bombs.create(x, 16, 'bomb');
+            this.bombs.setBounce(1);
+            this.bombs.setCollideWorldBounds(true);
+            this.bombs.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            this.bombs.allowGravity = false;
     
         }
     }
-    hitBomb (player, bomb){
-    this.physics.pause();
+    hitBomb(player, bomb){
+            console.log('yooo')
+            this.physics.pause();
 
-    this.player.setTint(0xff0000);
+            this.player.setTint(0xff0000);
 
-    this.player.anims.play('turn');
+            this.player.anims.play('turn');
 
-    //this.gameOver = true;}
+            this.gameOver = true;
+        };
     
     
         
 
-}}
+}

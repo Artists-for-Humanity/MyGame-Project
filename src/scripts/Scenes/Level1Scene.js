@@ -94,7 +94,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(this.bombs, this.platforms);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar(), null, this);
-        this.physics.add.overlap(this.player, this.bombs, this.hitBomb(), null, this);
+        //this.physics.add.overlap(this.player, this.bombs, this.hitBomb(), null, this);
 
     }
   
@@ -134,7 +134,7 @@ export default class Level1Scene extends Phaser.Scene {
 
     collectStar(player, star){
         ///this.star.destroy();
-        console.log("howdy")
+        
         //  Add and update the score
         this.lv1score += 10;
         this.scoreText.setText('Score: ' + this.lv1score);
@@ -159,15 +159,15 @@ export default class Level1Scene extends Phaser.Scene {
         }
     }
     hitBomb(player, bomb){
-            console.log('yooo')
-            this.physics.pause();
+        
+        this.physics.pause();
 
-            this.player.setTint(0xff0000);
+        this.player.setTint(0xff0000);
 
-            this.player.anims.play('turn');
+        this.player.anims.play('turn');
 
-            this.gameOver = true;
-        };
+        this.gameOver = true;
+    };
     
     
         

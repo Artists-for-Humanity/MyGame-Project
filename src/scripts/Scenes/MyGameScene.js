@@ -171,11 +171,6 @@ export default class MyGameScene extends Phaser.Scene {
     }
 
     createNotes(){
-
-        console.log('reachme02');
-
-
-       
         this.globalState.score = 0;
 
         this.posVal = [393, 451, 510, 568, 627, 685]

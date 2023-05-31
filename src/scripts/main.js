@@ -24,7 +24,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [MainMenuScene, MyGameScene, GameOverScene, Level1Scene, WinScene],
+  scene: [Level1Scene, MainMenuScene, MyGameScene, GameOverScene, WinScene],
   audio: {
     disableWebAudio: true,
   },

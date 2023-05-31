@@ -20,9 +20,10 @@ export default class Level1Scene extends Phaser.Scene {
         this.cursors;
         this.scoreText;
         this.player;
-        this.lv1score;
+        this.lv1score = 0;
         this.bombs;
         this.gameOver = false;
+        
         
     }
 
@@ -130,11 +131,11 @@ export default class Level1Scene extends Phaser.Scene {
         }
         
         
-    }
+    };
 
     collectStar(player, star){
         ///this.star.destroy();
-        
+        console.log("woh")
         //  Add and update the score
         this.lv1score += 10;
         this.scoreText.setText('Score: ' + this.lv1score);
@@ -167,7 +168,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.player.anims.play('turn');
 
         this.gameOver = true;
-    };
+    }
     
     
         

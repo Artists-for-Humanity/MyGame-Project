@@ -16,6 +16,10 @@ export default class Level1Scene extends Phaser.Scene {
         // Game Object Declarations
         this.myText;
         this.platforms;
+        this.store1;
+        this.building1;
+        this.building2;
+        this.ad;
         this.cursors;
         this.scoreText;
         this.player;
@@ -31,6 +35,10 @@ export default class Level1Scene extends Phaser.Scene {
         this.load.image('ground', new URL('../assets/platform.png', import.meta.url).href);
         this.load.image('star', new URL('../assets/star.png', import.meta.url).href);
         this.load.image('bomb', new URL('../assets/bomb.png', import.meta.url).href);
+        this.load.image('store1', new URL('../assets/Store.png', import.meta.url).href);
+        this.load.image('building1', new URL('../assets/building1.png',import.meta.url).href);
+        this.load.image('building2', new URL('../assets/building2.png',import.meta.url).href);
+        this.load.image('ad', new URL('../assets/ad.png',import.meta.url).href);
         this.load.spritesheet('dude', new URL('../assets/dude.png', import.meta.url).href, { frameWidth: 32, frameHeight: 48 });
     }
 
@@ -38,16 +46,27 @@ export default class Level1Scene extends Phaser.Scene {
     create() {
 
         this.add.image(540, 360, 'sky');
+        //this.add.image(540,360, 'store1');
+        this.store1 = this.physics.add.staticGroup()
+        this.store1.create(150,535, 'store1').setScale(0.7).refreshBody();
 
+        this.building1 = this.physics.add.staticGroup();
+        this.building1.create(505,435,'building1').setScale(0.7).refreshBody();
+
+        this.building2 = this.physics.add.staticGroup();
+        this.building2.create(961,435,'building2').setScale(0.7).refreshBody();
+
+        this.ad = this.physics.add.staticGroup();
+        this.ad.create(625,163,'ad').setScale(0.7).refreshBody();
+        
         this.platforms = this.physics.add.staticGroup();
-
         this.platforms.create(540, 677, 'ground').setScale(2).refreshBody();
 
-        this.platforms.create(810, 440, 'ground');
+        /*this.platforms.create(810, 440, 'ground');
         this.platforms.create(50, 270, 'ground');
-        this.platforms.create(940, 220, 'ground');
+        this.platforms.create(940, 220, 'ground');*/
 
-        this.player = this.physics.add.sprite(100, 450, 'dude');
+        this.player = this.physics.add.sprite(10, 600, 'dude');
 
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
@@ -80,6 +99,9 @@ export default class Level1Scene extends Phaser.Scene {
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.bombs, this.platforms);
+        this.physics.add.collider(this.player, this.store1);
+        this.physics.add.collider(this.player, this.building1);
+        this.physics.add.collider(this.player, this.building2);
 
         //this.physics.add.overlap(this.player, this.bombs, this.hitBomb(), null, this);
 

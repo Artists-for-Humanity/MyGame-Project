@@ -1,6 +1,12 @@
 export default class Level1Scene extends Phaser.Scene {
     // Game Class Constructor
     constructor() {
+        const config = {
+            type: Phaser.AUTO,
+            width: 1280,
+            height: 720,
+            backgroundColor: '#1C2057',
+        }
         super({
             active: false,
             visible: false,

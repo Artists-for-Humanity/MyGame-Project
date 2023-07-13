@@ -1,12 +1,6 @@
 export default class Level1Scene extends Phaser.Scene {
     // Game Class Constructor
     constructor() {
-        const config = {
-            type: Phaser.AUTO,
-            width: 1280,
-            height: 720,
-            backgroundColor: '#1C2057',
-        }
         super({
             active: false,
             visible: false,
@@ -21,10 +15,16 @@ export default class Level1Scene extends Phaser.Scene {
 
         // Game Object Declarations
         this.myText;
+        this.ground;
+        this.bg;
         this.platforms;
         this.store1;
         this.building1;
         this.building2;
+        this.building3;
+        this.building4;
+        this.musicplace;
+        this.fire;
         this.ad;
         this.cursors;
         this.scoreText;
@@ -44,38 +44,61 @@ export default class Level1Scene extends Phaser.Scene {
         this.load.image('store1', new URL('../assets/Store.png', import.meta.url).href);
         this.load.image('building1', new URL('../assets/building1.png',import.meta.url).href);
         this.load.image('building2', new URL('../assets/building2.png',import.meta.url).href);
+        this.load.image('building3', new URL('../assets/building3.png',import.meta.url).href);
+        this.load.image('building4', new URL('../assets/building4.png',import.meta.url).href);
+        this.load.image('musicplace', new URL('../assets/musicplace.png',import.meta.url).href);
         this.load.image('ad', new URL('../assets/ad.png',import.meta.url).href);
+        this.load.image('fire', new URL('../assets/fire.png',import.meta.url).href);
         this.load.spritesheet('dude', new URL('../assets/dude.png', import.meta.url).href, { frameWidth: 32, frameHeight: 48 });
     }
 
 
     create() {
 
-        this.add.image(540, 360, 'sky');
+        this.bg = this.add.image(540, 360, 'sky').setScale(6,2);
         //this.add.image(540,360, 'store1');
         this.store1 = this.physics.add.staticGroup()
         this.store1.create(150,535, 'store1').setScale(0.7).refreshBody();
 
         this.building1 = this.physics.add.staticGroup();
         this.building1.create(505,435,'building1').setScale(0.7).refreshBody();
+        this.building1.create(-240,435,'building1').setScale(0.7).refreshBody();
 
         this.building2 = this.physics.add.staticGroup();
         this.building2.create(961,435,'building2').setScale(0.7).refreshBody();
 
+        this.building3 = this.physics.add.staticGroup();
+        this.building3.create(1315,350,'building3').setScale(0.7).refreshBody();
+
+        this.building4 = this.physics.add.staticGroup();
+        this.building4.create(2000,298,'building4').setScale(0.7).refreshBody();
+
+        this.musicplace = this.physics.add.staticGroup();
+        this.musicplace.create(3400,398,'musicplace').setScale(0.5).refreshBody();
+
         this.ad = this.physics.add.staticGroup();
         this.ad.create(625,163,'ad').setScale(0.7).refreshBody();
+
+        this.fire = this.physics.add.staticGroup();
+        this.fire.create(1686,355,'fire').setScale(0.7).refreshBody();
         
         this.platforms = this.physics.add.staticGroup();
-        this.platforms.create(540, 677, 'ground').setScale(2).refreshBody();
+        this.platforms.create(540, 677, 'ground').setScale(12, 2).refreshBody();
+        // this.ground = this.physics.add.image(540, 677, 'ground').setScale(4, 2).refreshBody();
 
         /*this.platforms.create(810, 440, 'ground');
         this.platforms.create(50, 270, 'ground');
         this.platforms.create(940, 220, 'ground');*/
 
-        this.player = this.physics.add.sprite(10, 600, 'dude');
+        this.player = this.physics.add.sprite(15, 600, 'dude');
+        this.cameras.main.setBounds(-55, -200, 5000, 1000, this.player);
+        this.cameras.main.startFollow(this.player);
+        console.log(this.bg.displayWidth)
+
 
         this.player.setBounce(0.2);
-        this.player.setCollideWorldBounds(true);
+        // this.player.setCollideWorldBounds(true);
+        // this.ground.setCollideWorldBounds(true);
 
         this.anims.create({
             key: 'left',
@@ -103,11 +126,15 @@ export default class Level1Scene extends Phaser.Scene {
         this.bombs = this.physics.add.group()
         this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
+        this.physics.add.collider(this.player, this.ground);
         this.physics.add.collider(this.player, this.platforms);
-        this.physics.add.collider(this.bombs, this.platforms);
         this.physics.add.collider(this.player, this.store1);
         this.physics.add.collider(this.player, this.building1);
         this.physics.add.collider(this.player, this.building2);
+        this.physics.add.collider(this.player, this.building3);
+        this.physics.add.collider(this.player, this.building4);
+        this.physics.add.collider(this.player, this.musicplace);
+        this.physics.add.collider(this.player, this.fire);
 
         //this.physics.add.overlap(this.player, this.bombs, this.hitBomb(), null, this);
 

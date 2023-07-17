@@ -69,6 +69,7 @@ export default class Level1Scene extends Phaser.Scene {
 
         this.building3 = this.physics.add.staticGroup();
         this.building3.create(1315,350,'building3').setScale(0.7).refreshBody();
+        this.building3.create(3867,350,'building3').setScale(0.7).refreshBody();
 
         this.building4 = this.physics.add.staticGroup();
         this.building4.create(2000,298,'building4').setScale(0.7).refreshBody();
@@ -91,7 +92,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.platforms.create(940, 220, 'ground');*/
 
         this.player = this.physics.add.sprite(15, 600, 'dude');
-        this.cameras.main.setBounds(-55, -200, 5000, 1000, this.player);
+        this.cameras.main.setBounds(0, -280, 5000, 1000, this.player);
         this.cameras.main.startFollow(this.player);
         console.log(this.bg.displayWidth)
 

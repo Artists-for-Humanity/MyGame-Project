@@ -15,6 +15,7 @@ export default class Level1Scene extends Phaser.Scene {
 
         // Game Object Declarations
         this.myText;
+        this.score = 0;
         this.ground;
         this.bg;
         this.platforms;
@@ -29,6 +30,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.cursors;
         this.scoreText;
         this.player;
+        this.stars;
         this.lv1score = 0;
         this.bombs;
         this.gameOver = false;
@@ -94,7 +96,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.player = this.physics.add.sprite(15, 600, 'dude');
         this.cameras.main.setBounds(0, -280, 5000, 1000, this.player);
         this.cameras.main.startFollow(this.player);
-        console.log(this.bg.displayWidth)
+        
 
 
         this.player.setBounce(0.2);
@@ -123,6 +125,16 @@ export default class Level1Scene extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
+        this.stars =  this.physics.add.group({
+            key: 'star',
+            repeat: 9,
+            setXY: {x: 40, y: 0, stepX: 70}
+        });
+        console.log(this.stars);
+        this.stars.children.iterate(function(child){
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        })
+
         
         this.bombs = this.physics.add.group()
         this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
@@ -136,8 +148,20 @@ export default class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.building4);
         this.physics.add.collider(this.player, this.musicplace);
         this.physics.add.collider(this.player, this.fire);
+        
+        this.physics.add.collider(this.stars, this.platforms);
+        this.physics.add.collider(this.stars, this.store1);
+        this.physics.add.collider(this.stars, this.building1);
+        this.physics.add.collider(this.stars, this.building2);
+        this.physics.add.collider(this.stars, this.building3);
+        this.physics.add.collider(this.stars, this.building4);
+        console.log("ayoooo");
 
-        //this.physics.add.overlap(this.player, this.bombs, this.hitBomb(), null, this);
+
+        // this.physics.add.overlap(this.player, this.stars, this.collectStar(), null, this);
+        this.physics.add.collider(this.player, this.stars, this.collectStar(), null, this);
+        console.log("reachme 00");
+
 
     }
   
@@ -173,20 +197,24 @@ export default class Level1Scene extends Phaser.Scene {
         }
         
         
-    }
-
-    
-    
-    hitBomb(player, bomb){
         
-        this.physics.pause();
-
-        this.player.setTint(0xff0000);
-
-        this.player.anims.play('turn');
-
-        this.gameOver = true;
     }
+
+    
+    
+    collectStar(player, star){
+        console.log("ay");
+        console.log(star);
+        star.disableBody(true,true);
+        this.score += 10;
+        this.scoreText.setText('Score: '+ this.score);
+        if (this.stars.countActive(true) === 0)
+        {
+            this.stars.children.iterate(function (child) {
+                child.enableBody(true, child.x, 0 , true, true);
+        });
+        var x = player.x;
+    }}
     
     
         

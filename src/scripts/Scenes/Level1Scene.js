@@ -31,9 +31,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.scoreText;
         this.player;
         this.stars;
-        this.lv1score = 0;
         this.bombs;
-        this.gameOver = false;
         
         
     }
@@ -158,8 +156,8 @@ export default class Level1Scene extends Phaser.Scene {
         console.log("ayoooo");
 
 
-        // this.physics.add.overlap(this.player, this.stars, this.collectStar(), null, this);
-        this.physics.add.collider(this.player, this.stars, this.collectStar(), null, this);
+        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+        //this.physics.add.collider(this.player, this.stars, this.collectStar(), null, this);
         console.log("reachme 00");
 
 
@@ -202,9 +200,7 @@ export default class Level1Scene extends Phaser.Scene {
 
     
     
-    collectStar(player, star){
-        console.log("ay");
-        console.log(star);
+    collectStar(player,star){
         star.disableBody(true,true);
         this.score += 10;
         this.scoreText.setText('Score: '+ this.score);
@@ -213,7 +209,6 @@ export default class Level1Scene extends Phaser.Scene {
             this.stars.children.iterate(function (child) {
                 child.enableBody(true, child.x, 0 , true, true);
         });
-        var x = player.x;
     }}
     
     

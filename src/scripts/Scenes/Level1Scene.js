@@ -8,7 +8,7 @@ export default class Level1Scene extends Phaser.Scene {
             physics: {
                 default: 'arcade',
                 arcade: { 
-                  gravity: { y: 300}
+                  gravity: { y: 330}
                 }
               }
         });
@@ -125,12 +125,12 @@ export default class Level1Scene extends Phaser.Scene {
 
         this.stars =  this.physics.add.group({
             key: 'star',
-            repeat: 9,
-            setXY: {x: 40, y: 0, stepX: 70}
+            repeat: 25,
+            setXY: {x: 40, y: -300, stepX: 70}
         });
         console.log(this.stars);
         this.stars.children.iterate(function(child){
-            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+            child.setBounceY(Phaser.Math.FloatBetween(0.1, 0.3));
         })
 
         
@@ -153,12 +153,13 @@ export default class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(this.stars, this.building2);
         this.physics.add.collider(this.stars, this.building3);
         this.physics.add.collider(this.stars, this.building4);
-        console.log("ayoooo");
+        this.physics.add.collider(this.stars, this.fire);
+        
 
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
         //this.physics.add.collider(this.player, this.stars, this.collectStar(), null, this);
-        console.log("reachme 00");
+        
 
 
     }

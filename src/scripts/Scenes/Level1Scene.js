@@ -190,12 +190,16 @@ export default class Level1Scene extends Phaser.Scene {
             this.player.anims.play('turn');
         }
 
-        if (this.cursors.up.isDown && this.player.body.touching.down)
+        //if (this.cursors.up.isDown )
         {
-            this.player.setVelocityY(-367);
+            //this.player.setVelocityY(-367);
         }
+        //&& this.player.body.touching.down
         
-        
+        if (Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
+            this.player.setVelocityY(-367);
+
+        }
         
     }
 

@@ -54,7 +54,7 @@ export default class Level1Scene extends Phaser.Scene {
 
 
     create() {
-
+        
         this.bg = this.add.image(540, 360, 'sky').setScale(6,2);
         //this.add.image(540,360, 'store1');
         this.store1 = this.physics.add.staticGroup()

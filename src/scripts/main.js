@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import GlobalState from './GlobalState';
 import MyGameScene from './Scenes/MyGameScene';
 import GameOverScene from './Scenes/GameOverScene';
+import PlatGameOverScene from './Scenes/PlatGameOverScene';
 import MainMenuScene from './Scenes/MainMenuScene';
 import Level1Scene from './Scenes/Level1Scene';
 import WinScene from './Scenes/WinScene'
@@ -24,7 +25,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [Level1Scene,MainMenuScene, MyGameScene, GameOverScene, WinScene,],
+  scene: [Level1Scene,MainMenuScene, MyGameScene, GameOverScene, PlatGameOverScene,WinScene],
   audio: {
     disableWebAudio: true,
   },

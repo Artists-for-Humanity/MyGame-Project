@@ -19,6 +19,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.ground;
         this.bg;
         this.platforms;
+        this.falldeath;
         this.store1;
         this.building1;
         this.building2;
@@ -39,6 +40,7 @@ export default class Level1Scene extends Phaser.Scene {
     preload() {
         this.load.image('sky', new URL('../assets/sky.png',import.meta.url).href);
         this.load.image('ground', new URL('../assets/platform.png', import.meta.url).href);
+        this.load.image('falldeath', new URL('../assets/falldeath.png', import.meta.url).href);
         this.load.image('star', new URL('../assets/star.png', import.meta.url).href);
         this.load.image('bomb', new URL('../assets/bomb.png', import.meta.url).href);
         this.load.image('store1', new URL('../assets/Store.png', import.meta.url).href);
@@ -85,11 +87,11 @@ export default class Level1Scene extends Phaser.Scene {
         
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(540, 677, 'ground').setScale(12, 2).refreshBody();
-        // this.ground = this.physics.add.image(540, 677, 'ground').setScale(4, 2).refreshBody();
 
-        /*this.platforms.create(810, 440, 'ground');
-        this.platforms.create(50, 270, 'ground');
-        this.platforms.create(940, 220, 'ground');*/
+        this.falldeath = this.physics.add.staticGroup();
+        this.falldeath.create(792,655,'falldeath').setScale(0.2,1).refreshBody();
+        this.falldeath.create(1600,655,'falldeath').setScale(0.2,1).refreshBody();
+        
 
         this.player = this.physics.add.sprite(15, 600, 'dude');
         this.cameras.main.setBounds(0, -280, 5000, 1000, this.player);
@@ -128,7 +130,7 @@ export default class Level1Scene extends Phaser.Scene {
             repeat: 15,
             setXY: {x: 40, y: -300, stepX: 100}
         });
-        console.log(this.stars);
+        
         this.stars.children.iterate(function(child){
             child.setBounceY(Phaser.Math.FloatBetween(0.1, 0.3));
         })
@@ -147,6 +149,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.musicplace);
         this.physics.add.collider(this.player, this.fire);
         
+        
         this.physics.add.collider(this.stars, this.platforms);
         this.physics.add.collider(this.stars, this.store1);
         this.physics.add.collider(this.stars, this.building1);
@@ -159,7 +162,7 @@ export default class Level1Scene extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
         //this.physics.add.collider(this.player, this.stars, this.collectStar(), null, this);
-        
+        this.physics.add.collider(this.player, this.falldeath, this.gameOver, null, this);
 
 
     }
@@ -167,10 +170,7 @@ export default class Level1Scene extends Phaser.Scene {
     
 
     update() {
-        if (this.gameOver){
-            return;
-        } 
-
+        
         if (this.cursors.left.isDown)
         {
             this.player.setVelocityX(-190);
@@ -190,31 +190,31 @@ export default class Level1Scene extends Phaser.Scene {
             this.player.anims.play('turn');
         }
 
-        //if (this.cursors.up.isDown )
+        if (this.cursors.up.isDown && (this.player.body.touching.down)) 
         {
-            //this.player.setVelocityY(-367);
-        }
-        //&& this.player.body.touching.down
-        
-        if (Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
             this.player.setVelocityY(-367);
-
+            
         }
+        
+        
         
     }
 
-    
+    gameOver(){
+        this.scene.start('PlatGameOverScene');
+        this.score = 0;
+    }
     
     collectStar(player,star){
         star.disableBody(true,true);
         this.score += 10;
         this.scoreText.setText('Score: '+ this.score);
-        if (this.stars.countActive(true) === 0)
-        {
-            this.stars.children.iterate(function (child) {
-                child.enableBody(true, child.x, 0 , true, true);
-        });
-    }}
+        // if (this.stars.countActive(true) === 0)
+        // {
+        //     this.stars.children.iterate(function (child) {
+        //         child.enableBody(true, child.x, 0 , true, true);
+        // });
+    }
     
     
         

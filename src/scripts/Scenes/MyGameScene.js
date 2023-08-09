@@ -1,4 +1,4 @@
-export default class MicroGame31 extends Phaser.Scene {
+export default class MyGameScene extends Phaser.Scene {
     // Game Class Constructor
     constructor() {
         super({

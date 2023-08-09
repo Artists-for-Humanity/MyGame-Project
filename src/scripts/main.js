@@ -1,8 +1,9 @@
 // Add imports for phaser library, scenes, and plugins
 import Phaser from 'phaser';
 import GlobalState from './GlobalState';
-import MyGameScene from './Scenes/MyGameScene';
-
+import home from './Scenes/home';
+import gym from './Scenes/gym';
+import bench from './Scenes/bench';
 
 
 // Set configuration for phaser game instance
@@ -22,7 +23,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [MyGameScene],
+  scene: [home, gym, bench],
   audio: {
     disableWebAudio: true,
   },

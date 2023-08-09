@@ -125,8 +125,8 @@ export default class Level1Scene extends Phaser.Scene {
 
         this.stars =  this.physics.add.group({
             key: 'star',
-            repeat: 25,
-            setXY: {x: 40, y: -300, stepX: 70}
+            repeat: 15,
+            setXY: {x: 40, y: -300, stepX: 100}
         });
         console.log(this.stars);
         this.stars.children.iterate(function(child){

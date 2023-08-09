@@ -61,11 +61,17 @@ export default class bench extends Phaser.Scene {
     create() {
         this.add.image(540,360,"bbg");
         this.add.image(460, 410, "rack");
+        var u = this.physics.add.sprite(460, 390, 'up');
+        var m = this.physics.add.sprite(460, 402, 'mid');
+        var d = this.physics.add.sprite(460, 405, 'down');
         this.add.image(460, 550, "body");
         this.add.image(915, 520, "bad");
         this.add.image(960, 566, "good");
         this.add.image(985, 485, "tic");
-        this.arms = this.physics.add.sprite()
+        u.setVisible(false);
+        m.setVisible(false);
+        d.setVisible(false);
+        
     }
 
     update() {

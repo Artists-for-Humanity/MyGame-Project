@@ -14,29 +14,29 @@ export default class gym extends Phaser.Scene {
         this.lights;
         this.gtb;
         this.gth;
-        this.bench
+        this.bench;
     }
 
     preload() {
         this.load.image(
             "gbg",
-            new URL("/scripts/gymAssets/gymBackground.png", import.meta.url).href
+            new URL("/scripts/assets/gymAssets/gymBackground.png", import.meta.url).href
         );
         this.load.image(
             "bench",
-            new URL("/scripts/gymAssets/bench.png", import.meta.url).href
+            new URL("/scripts/assets/gymAssets/bench.png", import.meta.url).href
         );
         this.load.image(
             "gtb",
-            new URL("/scripts/gymAssets/gtb.png", import.meta.url).href
+            new URL("/scripts/assets/gymAssets/gtb.png", import.meta.url).href
         );
         this.load.image(
             "gth",
-            new URL("/scripts/gymAssets/gth.png", import.meta.url).href
+            new URL("/scripts/assets/gymAssets/gth.png", import.meta.url).href
             );
         this.load.image(
             "gmirror",
-            new URL("/scripts/gymAssets/gymMirror.png", import.meta.url).href
+            new URL("/scripts/assets/gymAssets/gymMirror.png", import.meta.url).href
         );
     }
 
@@ -45,6 +45,15 @@ export default class gym extends Phaser.Scene {
         this.bench = this.physics.add.sprite(280, 245,'bench');
         this.bench.setImmovable();
         this.add.image(660, 85,'gmirror');
+        this.anims.create({
+            key:"walk",
+            frames: [ 
+                {key:'sprite'}, 
+                {key:'sprite2'}, 
+                ],
+            frameRate: 4, 
+            repeat: -1,
+        });
         this.gtb = this.physics.add.sprite(330, 150,'gtb');
         this.gtb.setInteractive();
         this.gth = this.physics.add.sprite(980, 60,'gth');
@@ -53,6 +62,7 @@ export default class gym extends Phaser.Scene {
         this.gtb.on("pointerup",  ()=>{
             //make sprite walk to the bag
             //also add some walking animation
+            this.cat.anims.play("walk");
             this.physics.moveTo(this.cat, 475, 195, 150);
             this.physics.add.collider(this.cat, this.bench, ()=>{
                 this.cat.destroy();

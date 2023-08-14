@@ -17,63 +17,61 @@ export default class bench extends Phaser.Scene {
         this.reps = 0;
         this.clicks;
         this.repText;
-        this.ticSpeed = 300;
+        this.ticSpeed = 500;
         this.missed = 0;
+        this.missedText;
 
     }
 
     preload() {
         this.load.image(
             "bbg",
-            new URL("/scripts/benchAssets/benchBackground.png", import.meta.url).href
+            new URL("/scripts/assets/benchAssets/benchBackground.png", import.meta.url).href
         );
         this.load.image(
             "rack",
-            new URL("/scripts/benchAssets/rack.png", import.meta.url).href
+            new URL("/scripts/assets/benchAssets/rack.png", import.meta.url).href
         );
         this.load.image(
             "body",
-            new URL("/scripts/benchAssets/catBody.png", import.meta.url).href
+            new URL("/scripts/assets/benchAssets/catBody.png", import.meta.url).href
         );
         this.load.image(
             "spts",
-            new URL("/scripts/benchAssets/sPts.png", import.meta.url).href
-        );
+            new URL("/scripts/assets/benchAssets/sPts.png", import.meta.url).href
+        ); 
         this.load.image(
             "bad",
-            new URL("/scripts/benchAssets/badArea.png", import.meta.url).href
+            new URL("/scripts/assets/benchAssets/badArea.png", import.meta.url).href
         );
         this.load.image(
             "good",
-            new URL("/scripts/benchAssets/hitArea.png", import.meta.url).href
+            new URL("/scripts/assets/benchAssets/hitArea.png", import.meta.url).href
         );
         this.load.image(
             "tic",
-            new URL("/scripts/benchAssets/tic3.png", import.meta.url).href
+            new URL("/scripts/assets/benchAssets/tic3.png", import.meta.url).href
         );
         this.load.image(
             "up",
-            new URL("/scripts/benchAssets/up.png", import.meta.url).href
+            new URL("/scripts/assets/benchAssets/up.png", import.meta.url).href
         );
         this.load.image(
             "mid",
-            new URL("/scripts/benchAssets/mid.png", import.meta.url).href
+            new URL("/scripts/assets/benchAssets/mid.png", import.meta.url).href
         );
         this.load.image(
             "down",
-            new URL("/scripts/benchAssets/down.png", import.meta.url).href
+            new URL("/scripts/assets/benchAssets/down.png", import.meta.url).href
         );
-    
-
     }
 
     create() {
         this.add.image(540,360,"bbg");
         this.add.image(460, 410, "rack");
         this.arms = this.physics.add.sprite(460, 390, 'up');
-        // var m = this.physics.add.sprite(460, 402, 'mid');
-        // var d = this.physics.add.sprite(460, 405, 'down');
         this.repText = this.add.text(950, 50, this.reps + "/10").setFontSize(40);
+        this.missedText = this.add.text(250, 75, "",).setFontSize(100);
         this.add.image(460, 550, "body");
         this.add.image(915, 520, "bad");
         this.add.image(960, 566, "good");
@@ -87,53 +85,43 @@ export default class bench extends Phaser.Scene {
             frameRate: 3, 
             repeat: 0,
         });
-        
-        // u.setVisible(false);
-        // m.setVisible(false);
-        // d.setVisible(false);
         this.tic.setOrigin(0, .5);
         this.tic.setAngularVelocity(this.ticSpeed);
         this.input.keyboard.on('keydown-SPACE', () => {
-        // console.log(this.tic.angle);
-        if(this.tic.angle>=0 && this.tic.angle<=90){
-            this.arms.anims.play("bench", true);
-            this.reps++;  
-            this.clicks++;
-            this.repText.text = this.reps+ "/10";
-            this.tic.angle = Math.random()*270 + 90;
-            this.ticSpeed *= (-1);
-            this.tic.setAngularVelocity(this.ticSpeed);
-            // console.log(this.ticSpeed);
-  
-            
-            // console.log(this.tic.getAngularVelocity());
-            console.log("ye"); 
-        } else{
-            console.log("no boooo");
-            this.missed++;
-        }
-
+            if(this.tic.angle>=0 && this.tic.angle<=90){
+                this.arms.anims.play("bench", true);
+                this.reps++;
+                this.repText.text = this.reps+ "/10";
+                this.tic.angle = Math.random()*270 + 90;
+                this.ticSpeed *= (-1);
+                this.tic.setAngularVelocity(this.ticSpeed);
+                let spts = this.physics.add.sprite(915, 295, "spts").setVelocityY(-50).setVelocityX(Math.random()*20-10);
+                this.time.delayedCall(2000, ()=>{
+                    spts.destroy();
+                });
+                console.log("ye"); 
+            } else {
+                console.log("no boooo");
+                this.missed++;
+                this.missedText.setText(this.missedText.text += " X");
+            }
         });
-    
-    
-    }
-    benchAnim(){
-        
     }
     update() {
         if(this.reps === 10){ 
+            this.tic.setVisible(false);
             this.time.delayedCall(2000, ()=>{
                 this.scene.start('gym');
                 this.scene.stop('bench');
-            }) 
+            });
         }
         if(this.missed === 3){
+            this.tic.setVisible(false);
             this.time.delayedCall(2000, ()=>{
             this.scene.start('gym');
             this.scene.stop('bench');
             });
         }
-        // console.log(this.tic.angle);
         
 
     }

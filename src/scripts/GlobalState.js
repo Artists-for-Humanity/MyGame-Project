@@ -4,7 +4,7 @@ class GlobalState extends Phaser.Plugins.BasePlugin {
   constructor(pluginManager) {
     super(pluginManager);
 
-
+  //add to this tmr
 
   }
 

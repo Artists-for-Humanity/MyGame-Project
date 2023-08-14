@@ -14,11 +14,11 @@ export default class bench extends Phaser.Scene {
         this.tic;
         this.goodArea;
         this.badArea;
-        this.reps = 0;
-        this.clicks;
+        this.reps;
+        // this.clicks;
         this.repText;
-        this.ticSpeed = 500;
-        this.missed = 0;
+        this.ticSpeed;
+        this.missed;
         this.missedText;
 
     }
@@ -26,47 +26,50 @@ export default class bench extends Phaser.Scene {
     preload() {
         this.load.image(
             "bbg",
-            new URL("/scripts/assets/benchAssets/benchBackground.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/benchBackground.png", import.meta.url).href
         );
         this.load.image(
             "rack",
-            new URL("/scripts/assets/benchAssets/rack.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/rack.png", import.meta.url).href
         );
         this.load.image(
             "body",
-            new URL("/scripts/assets/benchAssets/catBody.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/catBody.png", import.meta.url).href
         );
         this.load.image(
             "spts",
-            new URL("/scripts/assets/benchAssets/sPts.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/sPts.png", import.meta.url).href
         ); 
         this.load.image(
             "bad",
-            new URL("/scripts/assets/benchAssets/badArea.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/badArea.png", import.meta.url).href
         );
         this.load.image(
             "good",
-            new URL("/scripts/assets/benchAssets/hitArea.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/hitArea.png", import.meta.url).href
         );
         this.load.image(
             "tic",
-            new URL("/scripts/assets/benchAssets/tic3.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/tic3.png", import.meta.url).href
         );
         this.load.image(
             "up",
-            new URL("/scripts/assets/benchAssets/up.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/up.png", import.meta.url).href
         );
         this.load.image(
             "mid",
-            new URL("/scripts/assets/benchAssets/mid.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/mid.png", import.meta.url).href
         );
         this.load.image(
             "down",
-            new URL("/scripts/assets/benchAssets/down.png", import.meta.url).href
+            new URL("/scripts/Assets/benchAssets/down.png", import.meta.url).href
         );
     }
 
     create() {
+        this.reps = 0;
+        this.missed = 0;
+        this.ticSpeed = 500;
         this.add.image(540,360,"bbg");
         this.add.image(460, 410, "rack");
         this.arms = this.physics.add.sprite(460, 390, 'up');
@@ -81,7 +84,8 @@ export default class bench extends Phaser.Scene {
             frames: [ 
                 {key:'mid'}, 
                 {key:'down'}, 
-                {key:'up'}],
+                {key:'up'}
+            ],
             frameRate: 3, 
             repeat: 0,
         });

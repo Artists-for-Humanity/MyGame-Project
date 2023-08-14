@@ -1,5 +1,6 @@
 
 import Phaser from 'phaser';
+
 export default class gym extends Phaser.Scene {
     // Game Class Constructor
     constructor() {
@@ -20,23 +21,23 @@ export default class gym extends Phaser.Scene {
     preload() {
         this.load.image(
             "gbg",
-            new URL("/scripts/assets/gymAssets/gymBackground.png", import.meta.url).href
+            new URL("/scripts/Assets/gymAssets/gymBackground.png", import.meta.url).href
         );
         this.load.image(
             "bench",
-            new URL("/scripts/assets/gymAssets/bench.png", import.meta.url).href
+            new URL("/scripts/Assets/gymAssets/bench.png", import.meta.url).href
         );
         this.load.image(
             "gtb",
-            new URL("/scripts/assets/gymAssets/gtb.png", import.meta.url).href
+            new URL("/scripts/Assets/gymAssets/gtb.png", import.meta.url).href
         );
         this.load.image(
             "gth",
-            new URL("/scripts/assets/gymAssets/gth.png", import.meta.url).href
+            new URL("/scripts/Assets/gymAssets/gth.png", import.meta.url).href
             );
         this.load.image(
             "gmirror",
-            new URL("/scripts/assets/gymAssets/gymMirror.png", import.meta.url).href
+            new URL("/scripts/Assets/gymAssets/gymMirror.png", import.meta.url).href
         );
     }
 

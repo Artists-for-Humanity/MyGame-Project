@@ -17,7 +17,7 @@ export default class bench extends Phaser.Scene {
         this.reps = 0;
         this.clicks;
         this.repText;
-        this.ticSpeed = 100;
+        this.ticSpeed = 300;
 
     }
 
@@ -82,20 +82,10 @@ export default class bench extends Phaser.Scene {
         // d.setVisible(false);
         this.tic.setOrigin(0, .5);
         this.tic.setAngularVelocity(this.ticSpeed);
-        this.tic.setInteractive();
-        
         this.input.keyboard.on('keydown-SPACE', () => {
-        // console.log(this.tic.angle);
-            if(this.tic.angle>=0 && this.tic.angle<=90){
-                this.reps++;
-                this.clicks++;
-                this.repText.text = this.reps+ "/10";
-                this.tic.setAngularVelocity((-1)*this.ticSpeed);
-                // console.log(this.tic.getAngularVelocity());
-                console.log("ye"); 
-            } else{
-                console.log("no boooo");
-            }
+        console.log(this.tic.angle);
+          
+
         });
     
     
@@ -104,5 +94,8 @@ export default class bench extends Phaser.Scene {
        
     }
     update() {
+        console.log(this.tic.angle);
+        
+
     }
 }

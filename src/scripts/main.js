@@ -24,6 +24,7 @@ const config = {
     },
   },
   scene: [home, gym, bench],
+  // scene: [bench],
   audio: {
     disableWebAudio: true,
   },

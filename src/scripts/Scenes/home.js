@@ -12,6 +12,7 @@ export default class home extends Phaser.Scene {
         
         this.htg;
         this.cat;
+        this.bar; 
     }
 
     preload() {
@@ -51,6 +52,14 @@ export default class home extends Phaser.Scene {
             "sprite",
             new URL("/scripts/homeAssets/sprite.png", import.meta.url).href
         );
+        this.load.image(
+            "barO",
+            new URL("/scripts/statusAssets/barOpen.png", import.meta.url).href
+        );
+        this.load.image(
+            "barC",
+            new URL("/scripts/statusAssets/barClosed.png", import.meta.url).href
+        );
     }
 
     create() {
@@ -61,6 +70,18 @@ export default class home extends Phaser.Scene {
         this.add.image(280, 130 , "dumbbells");
         this.add.image(80, 235, "hmirror");
         this.add.image(160, 415, "gymbag");
+        this.bar = this.add.image(110, 640, "barC");
+        this.bar.setInteractive();
+        this.bar.on("pointerup", ()=>{
+            if (this.bar.texture.key ==="barC"){
+                this.bar.x = 387.5;
+                this.bar.setTexture("barO");
+            } else {
+                this.bar.x = 110;
+                this.bar.setTexture("barC");
+            }
+        });
+        this.add.rectangle()
         this.htg = this.physics.add.sprite(265,420, "htg");
         this.htg.setImmovable();
         this.cat = this.physics.add.sprite(660, 345, "sprite");

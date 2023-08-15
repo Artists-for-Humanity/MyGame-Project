@@ -209,11 +209,6 @@ export default class Level1Scene extends Phaser.Scene {
         star.disableBody(true,true);
         this.score += 10;
         this.scoreText.setText('Score: '+ this.score);
-        // if (this.stars.countActive(true) === 0)
-        // {
-        //     this.stars.children.iterate(function (child) {
-        //         child.enableBody(true, child.x, 0 , true, true);
-        // });
     }
     
     

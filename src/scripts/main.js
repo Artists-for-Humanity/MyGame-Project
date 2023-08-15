@@ -7,7 +7,7 @@ import MenuScene from './Scenes/MenuScene';
 
 
 // Set configuration for phaser game instance
-const config = {
+var config = {
   type: Phaser.AUTO,
   width: 1080,
   height: 720,
@@ -20,7 +20,7 @@ const config = {
       gravity: {
         y: 0,
       },
-      debug: false,
+      debug: true,
     },
   },
   scene: [MenuScene, MyGameScene],

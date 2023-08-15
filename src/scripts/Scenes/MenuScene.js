@@ -8,15 +8,19 @@ export default class MenuScene extends Phaser.Scene {
         });
 
         // Game Object Declarations
-        this.myText;
-
+        this.myText; 
+        
     }
 
     preload() {
+        console.log('Preload START')
+        this.load.image('background', new URL('../../myAssets/blackJackBackground.jpeg', import.meta.url).href);
+        console.log('preload END')
     }
 
     create() {
         this.setText();
+        this.add.image(540, 360, 'background');
     }
 
     update() {
@@ -30,5 +34,13 @@ export default class MenuScene extends Phaser.Scene {
             align: 'center',
         });
         this.myText.setText('Start');
+        this.myText.setInteractive()
+        .on('pointerdown', () => {
+            this.scene.start('MyGameScene');
+        });
     }
+
+    
 }
+
+

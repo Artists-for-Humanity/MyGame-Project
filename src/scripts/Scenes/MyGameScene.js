@@ -17,6 +17,7 @@ export default class MyGameScene extends Phaser.Scene {
 
     create() {
         this.setText();
+        this.add.image(480, 360, 'background');
     }
 
     update() {

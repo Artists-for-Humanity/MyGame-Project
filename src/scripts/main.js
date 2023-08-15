@@ -2,6 +2,7 @@
 import Phaser from 'phaser';
 import GlobalState from './GlobalState';
 import MyGameScene from './Scenes/MyGameScene';
+import MenuScene from './Scenes/MenuScene';
 
 
 
@@ -22,7 +23,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [MyGameScene],
+  scene: [MenuScene, MyGameScene],
   audio: {
     disableWebAudio: true,
   },

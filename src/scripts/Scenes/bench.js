@@ -1,5 +1,6 @@
 
 import Phaser from 'phaser';
+import GlobalState from '../GlobalState';
 export default class bench extends Phaser.Scene {
     // Game Class Constructor
     constructor() {
@@ -95,6 +96,7 @@ export default class bench extends Phaser.Scene {
             if(this.tic.angle>=0 && this.tic.angle<=90){
                 this.arms.anims.play("bench", true);
                 this.reps++;
+                this.globalState.incScore1();
                 this.repText.text = this.reps+ "/10";
                 this.tic.angle = Math.random()*270 + 90;
                 this.ticSpeed *= (-1);
@@ -103,18 +105,20 @@ export default class bench extends Phaser.Scene {
                 this.time.delayedCall(2000, ()=>{
                     spts.destroy();
                 });
-                console.log("ye"); 
             } else {
-                console.log("no boooo");
                 this.missed++;
                 this.missedText.setText(this.missedText.text += " X");
             }
         });
     }
     update() {
+        // console.log(this.globalState.strength);
+        this.globalState.playerWinCheck();
+        console.log(this.globalState.energy +" "+ this.globalState.strength);
         if(this.reps === 10){ 
             this.tic.setVisible(false);
             this.time.delayedCall(2000, ()=>{
+                this.globalState.energy-=5;
                 this.scene.start('gym');
                 this.scene.stop('bench');
             });

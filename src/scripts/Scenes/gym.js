@@ -16,6 +16,14 @@ export default class gym extends Phaser.Scene {
         this.gtb;
         this.gth;
         this.bench;
+        this.energy = {
+            level: 70,
+            bar: null,
+        };
+        this.strength = {
+            level: 50,
+            bar: null,
+        };
     }
 
     preload() {
@@ -60,6 +68,26 @@ export default class gym extends Phaser.Scene {
         this.gth = this.physics.add.sprite(980, 60,'gth');
         this.gth.setInteractive();
         this.cat = this.physics.add.sprite(950, 200, "sprite");
+        this.barC = this.add.image(110, 640, "barC");
+        this.barO = this.add.image(387.5, 640, "barO").setVisible(false);
+        this.energy.bar = this.add.rectangle( 296.5, 639.5, 182, 45, 0x63EA24).setVisible(false);
+        this.strength.bar = this.add.rectangle( 578, 639.5, 182, 45, 0x63EA24).setVisible(false);
+        this.barC.setInteractive();
+        this.barO.setInteractive();
+        this.barC.on("pointerup", ()=>{
+            this.barC.setVisible(false);
+            this.barO.setVisible(true);
+            this.energy.bar.setVisible(true);
+            this.strength.bar.setVisible(true);
+        });
+        this.barO.on("pointerup", ()=>{
+            this.barC.setVisible(true);
+            this.barO.setVisible(false);
+            this.energy.bar.setVisible(false);
+            this.strength.bar.setVisible(false);
+        });
+        this.strength.bar.width = 182 *(this.globalState.strength/50);
+        this.energy.bar.width = 182 *(this.globalState.energy/50);
         this.gtb.on("pointerup",  ()=>{
             //make sprite walk to the bag
             //also add some walking animation

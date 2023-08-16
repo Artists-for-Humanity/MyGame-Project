@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import GlobalState from '../GlobalState';
 export default class home extends Phaser.Scene {
     // Game Class Constructor
     constructor() {
@@ -110,10 +111,8 @@ export default class home extends Phaser.Scene {
             this.energy.bar.setVisible(false);
             this.strength.bar.setVisible(false);
         });
-        this.input.keyboard.on("keydown-SPACE", ()=>{
-            this.energy.bar.width = 182 *(this.energy.level/100);
-            this.strength.bar.width = 182 *(this.strength.level/100);
-        });
+        this.strength.bar.width = 182 *(this.globalState.strength/50);
+        this.energy.bar.width = 182 *(this.globalState.energy/50);
         this.htg = this.physics.add.sprite(265,420, "htg");
         this.htg.setImmovable();
         this.cat = this.physics.add.sprite(660, 345, "sprite");

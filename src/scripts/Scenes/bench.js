@@ -24,7 +24,6 @@ export default class bench extends Phaser.Scene {
         this.missedText;
 
     }
-
     preload() {
         this.load.image(
             "bbg",
@@ -69,7 +68,6 @@ export default class bench extends Phaser.Scene {
               }
         );
     }
-
     create() {
         this.reps = 0;
         this.clicks = 0;
@@ -90,18 +88,18 @@ export default class bench extends Phaser.Scene {
         this.input.keyboard.on('keydown-SPACE', () => {
             // this.arms.anims.play("bench-victory");
             if(this.tic.angle>=0 && this.tic.angle<=90){
+                this.tic.setVisible(false);
+                this.time.delayedCall(2000, ()=>{
+                    this.tic.setVisible(true);
+                });
                 this.clicks++;
-                if (this.clicks%2===1){
-                    this.arms.anims.play("bench");
-                }else{
-                    this.arms.anims.playReverse("bench");
-                    this.reps++;
-                    this.globalState.incScore1();
-                    let spts = this.physics.add.sprite(915, 295, "spts").setVelocityY(-50).setVelocityX(Math.random()*20-10);
+                this.arms.anims.play("bench");
+                this.reps++;
+                this.globalState.incScore1();
+                let spts = this.physics.add.sprite(915, 295, "spts").setVelocityY(-50).setVelocityX(Math.random()*20-10);
                 this.time.delayedCall(2000, ()=>{
                     spts.destroy();
                 });
-                }
                 // if(this.anims.pl){}his.tic.setVisible(true);
                 this.repText.text = this.reps + "/10";
                 this.tic.angle = Math.random()*270 + 90;
@@ -117,7 +115,7 @@ export default class bench extends Phaser.Scene {
     makeAnims(){
         this.anims.create({
             key: "bench",
-            frames: [{key:'press_sheet', frame: 0},{key:'press_sheet', frame: 1},{key:'press_sheet', frame: 2},{key:'press_sheet', frame: 3},{key:'press_sheet', frame: 4},{key:'press_sheet', frame: 5},{key:'press_sheet', frame: 6},{key:'press_sheet', frame: 7},{key:'press_sheet', frame: 8}],
+            frames: [{key:'press_sheet', frame: 0},{key:'press_sheet', frame: 1},{key:'press_sheet', frame: 2},{key:'press_sheet', frame: 3},{key:'press_sheet', frame: 4},{key:'press_sheet', frame: 5},{key:'press_sheet', frame: 6},{key:'press_sheet', frame: 7},{key:'press_sheet', frame: 8},{key:'press_sheet', frame: 7},{key:'press_sheet', frame: 6},{key:'press_sheet', frame: 5},{key:'press_sheet', frame: 4},{key:'press_sheet', frame: 3},{key:'press_sheet', frame: 2},{key:'press_sheet', frame: 1},{key:'press_sheet', frame: 0}],
             frameRate: 9, 
             repeat: 0,   
         });
@@ -150,7 +148,5 @@ export default class bench extends Phaser.Scene {
             this.scene.stop('bench');
             });
         }
-        
-
     }
 }

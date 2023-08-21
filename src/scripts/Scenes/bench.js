@@ -61,6 +61,13 @@ export default class bench extends Phaser.Scene {
                 frameWidth: 854,
               }
         );
+        this.load.spritesheet(
+            "bench_victory_sheet",
+            new URL("/scripts/Assets/benchAssets/bench-victory-sheet.png", import.meta.url).href, {
+                frameHeight: 448,
+                frameWidth: 854,
+              }
+        );
     }
 
     create() {
@@ -81,6 +88,7 @@ export default class bench extends Phaser.Scene {
         this.tic.setOrigin(0, .5);
         this.tic.setAngularVelocity(this.ticSpeed);
         this.input.keyboard.on('keydown-SPACE', () => {
+            // this.arms.anims.play("bench-victory");
             if(this.tic.angle>=0 && this.tic.angle<=90){
                 this.clicks++;
                 if (this.clicks%2===1){
@@ -113,6 +121,12 @@ export default class bench extends Phaser.Scene {
             frameRate: 9, 
             repeat: 0,   
         });
+        this.anims.create({
+            key: "bench-victory",
+            frames: [{key:'bench_victory_sheet', frame: 0},{key:'bench_victory_sheet', frame: 1},{key:'bench_victory_sheet', frame: 2},{key:'bench_victory_sheet', frame: 3},{key:'bench_victory_sheet', frame: 4},{key:'bench_victory_sheet', frame: 5},{key:'bench_victory_sheet', frame: 6},{key:'bench_victory_sheet', frame: 7},{key:'bench_victory_sheet', frame: 8},{key:'bench_victory_sheet', frame: 9},{key:'bench_victory_sheet', frame: 10},{key:'bench_victory_sheet', frame: 12},{key:'bench_victory_sheet', frame: 13},{key:'bench_victory_sheet', frame: 14},{key:'bench_victory_sheet', frame: 15},{key:'bench_victory_sheet', frame: 16},{key:'bench_victory_sheet', frame: 17},{key:'bench_victory_sheet', frame: 17}, {key:'bench_victory_sheet', frame: 17}, {key:'bench_victory_sheet', frame: 17}, {key:'bench_victory_sheet', frame: 17}, {key:'bench_victory_sheet', frame: 17}, {key:'bench_victory_sheet', frame: 17}],
+            duration: 4000, 
+            repeat: 0,   
+        });
     }
     update() {
         // console.log(this.globalState.strength);
@@ -121,6 +135,9 @@ export default class bench extends Phaser.Scene {
         if(this.reps === 10){ 
             this.tic.setVisible(false);
             this.time.delayedCall(2000, ()=>{
+                this.arms.anims.play("bench-victory", true);
+            });
+            this.time.delayedCall(6000, ()=>{
                 this.globalState.energy-=5;
                 this.scene.start('gym');
                 this.scene.stop('bench');

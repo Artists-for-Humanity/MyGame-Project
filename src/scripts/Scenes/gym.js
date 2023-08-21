@@ -91,14 +91,15 @@ export default class gym extends Phaser.Scene {
         this.gtb.on("pointerup",  ()=>{
             //make sprite walk to the bag
             //also add some walking animation
-            this.cat.anims.play("walk");
-            this.physics.moveTo(this.cat, 475, 195, 150);
-            this.physics.add.collider(this.cat, this.bench, ()=>{
-                this.cat.destroy();
+            // this.cat.anims.play("walk");
+            this.cat.destroy();
                 this.scene.start('bench');
                 this.scene.stop('gym');
+            // this.physics.moveTo(this.cat, 475, 195, 150);
+            // this.physics.add.collider(this.cat, this.bench, ()=>{
                 
-            });
+                
+            // });
         });
         this.gth.on("pointerup",  ()=>{
             //make sprite walk to the bag

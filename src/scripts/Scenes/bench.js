@@ -142,6 +142,7 @@ export default class bench extends Phaser.Scene {
             });
         }
         if(this.missed === 3){
+            this.missedText.setTint(0xff0000)
             this.tic.setVisible(false);
             this.time.delayedCall(2000, ()=>{
             this.scene.start('gym');

@@ -20,10 +20,12 @@ export default class gym extends Phaser.Scene {
             level: 70,
             bar: null,
         };
+        this.energyText;
         this.strength = {
             level: 50,
             bar: null,
         };
+        this.strengthText;
     }
 
     preload() {
@@ -72,6 +74,9 @@ export default class gym extends Phaser.Scene {
         this.barO = this.add.image(387.5, 640, "barO").setVisible(false);
         this.energy.bar = this.add.rectangle( 296.5, 639.5, 182, 45, 0x63EA24).setVisible(false);
         this.strength.bar = this.add.rectangle( 578, 639.5, 182, 45, 0x63EA24).setVisible(false);
+        this.energyText = this.add.text(296.5, 639.5, this.globalState.energy+"/50").setVisible(false);
+        this.strengthText = this.add.text(578, 639.5, this.globalState.strength+"/50").setVisible(false);
+
         this.barC.setInteractive();
         this.barO.setInteractive();
         this.barC.on("pointerup", ()=>{
@@ -79,12 +84,19 @@ export default class gym extends Phaser.Scene {
             this.barO.setVisible(true);
             this.energy.bar.setVisible(true);
             this.strength.bar.setVisible(true);
+            this.energyText.setVisible(true);
+            this.strengthText.setVisible(true);
+
         });
         this.barO.on("pointerup", ()=>{
             this.barC.setVisible(true);
             this.barO.setVisible(false);
             this.energy.bar.setVisible(false);
             this.strength.bar.setVisible(false);
+            this.energyText.setVisible(false);
+            this.strengthText.setVisible(false);
+
+
         });
         this.strength.bar.width = 182 *(this.globalState.strength/50);
         this.energy.bar.width = 182 *(this.globalState.energy/50);

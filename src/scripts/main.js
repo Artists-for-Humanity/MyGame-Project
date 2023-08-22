@@ -23,8 +23,8 @@ const config = {
       debug: false,
     },
   },
-  scene: [home, gym, bench, deadlift], 
-  // scene: [bench],
+  // scene: [home, gym, bench, deadlift], 
+  scene: [deadlift],
   audio: {
     disableWebAudio: true,
   },

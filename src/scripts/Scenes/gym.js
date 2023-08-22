@@ -55,7 +55,7 @@ export default class gym extends Phaser.Scene {
         this.add.image(540, 360,'gbg');
         this.bench = this.physics.add.sprite(280, 245,'bench');
         this.bench.setImmovable();
-        this.add.image(660, 85,'gmirror');
+        // this.add.image(660, 85,'gmirror');
         this.anims.create({
             key:"walk",
             frames: [ 
@@ -74,8 +74,8 @@ export default class gym extends Phaser.Scene {
         this.barO = this.add.image(387.5, 640, "barO").setVisible(false);
         this.energy.bar = this.add.rectangle( 296.5, 639.5, 182, 45, 0x63EA24).setVisible(false);
         this.strength.bar = this.add.rectangle( 578, 639.5, 182, 45, 0x63EA24).setVisible(false);
-        this.energyText = this.add.text(296.5, 639.5, this.globalState.energy+"/50").setVisible(false);
-        this.strengthText = this.add.text(578, 639.5, this.globalState.strength+"/50").setVisible(false);
+        this.energyText = this.add.text(270, 634, this.globalState.energy+"/50").setVisible(false);
+        this.strengthText = this.add.text(560, 634, this.globalState.strength+"/50").setVisible(false);
 
         this.barC.setInteractive();
         this.barO.setInteractive();

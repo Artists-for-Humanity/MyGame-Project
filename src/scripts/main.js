@@ -4,7 +4,7 @@ import GlobalState from './GlobalState';
 import home from './Scenes/home';
 import gym from './Scenes/gym';
 import bench from './Scenes/bench';
-
+import deadlift from './Scenes/deadlift';
 
 // Set configuration for phaser game instance
 const config = {
@@ -23,7 +23,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [home, gym, bench], 
+  scene: [home, gym, bench, deadlift], 
   // scene: [bench],
   audio: {
     disableWebAudio: true,

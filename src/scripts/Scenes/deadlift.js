@@ -120,7 +120,7 @@ export default class deadlift extends Phaser.Scene {
     
     settimer(){
         // this.time.
-        // console.log("you are awesome >:(");
+        // console.laog("you are awesome >:(");
     }
     flashX(){
         this.missedText.setTint(0xff0000);

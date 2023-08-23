@@ -58,9 +58,14 @@ export default class gym extends Phaser.Scene {
             "gmirror",
             new URL("/scripts/Assets/gymAssets/gymMirror.png", import.meta.url).href
         );  
+        this.load.image(
+            "win-screen",
+            new URL("/scripts/Assets/winScreen.png", import.meta.url).href
+        );  
     }
 
     create() {
+        // this.globalState.strength = 50;
         this.add.image(540, 360,'gbg');
         this.add.image(280, 245,'bench');
         this.add.image(752, 548,'deadlift');
@@ -84,10 +89,12 @@ export default class gym extends Phaser.Scene {
         this.cat = this.physics.add.sprite(950, 200, "sprite");
         this.barC = this.add.image(110, 640, "barC");
         this.barO = this.add.image(387.5, 640, "barO").setVisible(false);
-        this.energy.bar = this.add.rectangle( 296.5, 639.5, 182, 45, 0x63EA24).setVisible(false);
+        if(this.globalState.strength<=50&& this.globalState.energy<=50){
+            this.energy.bar = this.add.rectangle( 296.5, 639.5, 182, 45, 0x63EA24).setVisible(false);
         this.strength.bar = this.add.rectangle( 578, 639.5, 182, 45, 0x63EA24).setVisible(false);
         this.energyText = this.add.text(270, 634, this.globalState.energy+"/50").setVisible(false);
         this.strengthText = this.add.text(560, 634, this.globalState.strength+"/50").setVisible(false);
+        }
         this.barC.setInteractive();
         this.barO.setInteractive();
         this.barC.on("pointerup", ()=>{
@@ -132,5 +139,14 @@ export default class gym extends Phaser.Scene {
     }
     
     update() {
+        if (this.globalState.strength===50){
+            this.globalState.strength++;
+            let x = this.add.image(540, 360, "win-screen");
+            this.gtb.destroy();
+            this.gtd.destroy();
+            this.time.delayedCall(3000, ()=>{
+                x.destroy();
+            });
+        }
     }
 }

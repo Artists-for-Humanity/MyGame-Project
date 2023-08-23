@@ -86,6 +86,7 @@ export default class home extends Phaser.Scene {
         this.add.image(280, 130 , "dumbbells");
         this.add.image(80, 235, "hmirror");
         this.add.image(160, 415, "gymbag");
+        this.add.text(150, 675, "Click the green buttons to navigate the room", {fontSize:25});
         this.barC = this.add.image(110, 640, "barC");
         this.barO = this.add.image(387.5, 640, "barO").setVisible(false);
         this.energy.bar = this.add.rectangle( 296.5, 639.5, 182, 45, 0x63EA24).setVisible(false);

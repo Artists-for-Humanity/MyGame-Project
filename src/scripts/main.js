@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import GlobalState from './GlobalState';
 import MyGameScene from './Scenes/MyGameScene';
 import MenuScene from './Scenes/MenuScene';
-
+import BetScene from './Scenes/BetScene';
 
 
 // Set configuration for phaser game instance
@@ -23,7 +23,7 @@ var config = {
       debug: true,
     },
   },
-  scene: [MenuScene, MyGameScene],
+  scene: [MenuScene, BetScene, MyGameScene],
   audio: {
     disableWebAudio: true,
   },

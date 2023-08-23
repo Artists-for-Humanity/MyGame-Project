@@ -15,6 +15,7 @@ export default class gym extends Phaser.Scene {
         this.lights;
         this.gtb;
         this.gth;
+        this.gtd;
         this.bench;
         this.energy = {
             level: 70,
@@ -46,15 +47,24 @@ export default class gym extends Phaser.Scene {
             new URL("/scripts/Assets/gymAssets/gth.png", import.meta.url).href
             );
         this.load.image(
+            "gtd",
+            new URL("/scripts/Assets/gymAssets/gtd.png", import.meta.url).href
+            );
+        this.load.image(
+            "deadlift",
+            new URL("/scripts/Assets/gymAssets/deadlift.png", import.meta.url).href
+            );
+        this.load.image(
             "gmirror",
             new URL("/scripts/Assets/gymAssets/gymMirror.png", import.meta.url).href
-        );
+        );  
     }
 
     create() {
         this.add.image(540, 360,'gbg');
-        this.bench = this.physics.add.sprite(280, 245,'bench');
-        this.bench.setImmovable();
+        this.add.image(280, 245,'bench');
+        this.add.image(752, 548,'deadlift');
+        // this.bench.setImmovable();
         // this.add.image(660, 85,'gmirror');
         this.anims.create({
             key:"walk",
@@ -69,6 +79,8 @@ export default class gym extends Phaser.Scene {
         this.gtb.setInteractive();
         this.gth = this.physics.add.sprite(980, 60,'gth');
         this.gth.setInteractive();
+        this.gtd = this.physics.add.sprite(770, 450,"gtd");
+        this.gtd.setInteractive();
         this.cat = this.physics.add.sprite(950, 200, "sprite");
         this.barC = this.add.image(110, 640, "barC");
         this.barO = this.add.image(387.5, 640, "barO").setVisible(false);
@@ -76,7 +88,6 @@ export default class gym extends Phaser.Scene {
         this.strength.bar = this.add.rectangle( 578, 639.5, 182, 45, 0x63EA24).setVisible(false);
         this.energyText = this.add.text(270, 634, this.globalState.energy+"/50").setVisible(false);
         this.strengthText = this.add.text(560, 634, this.globalState.strength+"/50").setVisible(false);
-
         this.barC.setInteractive();
         this.barO.setInteractive();
         this.barC.on("pointerup", ()=>{
@@ -95,8 +106,6 @@ export default class gym extends Phaser.Scene {
             this.strength.bar.setVisible(false);
             this.energyText.setVisible(false);
             this.strengthText.setVisible(false);
-
-
         });
         this.strength.bar.width = 182 *(this.globalState.strength/50);
         this.energy.bar.width = 182 *(this.globalState.energy/50);
@@ -104,15 +113,16 @@ export default class gym extends Phaser.Scene {
             //make sprite walk to the bag
             //also add some walking animation
             // this.cat.anims.play("walk");
-            this.cat.destroy();
-                this.scene.start('bench');
-                this.scene.stop('gym');
+            this.scene.start('bench');
+            this.scene.stop('gym');
             // this.physics.moveTo(this.cat, 475, 195, 150);
             // this.physics.add.collider(this.cat, this.bench, ()=>{
-                
-                
             // });
         });
+        this.gtd.on("pointerup", ()=>{
+            this.scene.start('deadlift');
+            this.scene.stop('gym');
+        })
         this.gth.on("pointerup",  ()=>{
             //make sprite walk to the bag
             //also add some walking animation
@@ -120,11 +130,7 @@ export default class gym extends Phaser.Scene {
             this.scene.stop('gym');
         });
     }
-
+    
     update() {
-    }
-
-    setText() {
-        
     }
 }

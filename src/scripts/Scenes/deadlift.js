@@ -31,8 +31,8 @@ export default class deadlift extends Phaser.Scene {
         this.anims.create({
             key: "deadlift",
             frames: [{key:"deadlift-sheet", frame:0},{key:"deadlift-sheet", frame:1},{key:"deadlift-sheet", frame:2},{key:"deadlift-sheet", frame:3},{key:"deadlift-sheet", frame:4},{key:"deadlift-sheet", frame:5},{key:"deadlift-sheet", frame:6},{key:"deadlift-sheet", frame:7},{key:"deadlift-sheet", frame:8},{key:"deadlift-sheet", frame:9},{key:"deadlift-sheet", frame:10},{key:"deadlift-sheet", frame:11},{key:"deadlift-sheet", frame:13},{key:"deadlift-sheet", frame:14}],
-            // frameRate: 7
-            duration: 1000
+            frameRate: 2  
+            // duration: 1000
         });
         let x = this.physics.add.sprite(540,360,"sprite");
         x.anims.play("deadlift");

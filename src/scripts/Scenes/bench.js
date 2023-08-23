@@ -68,6 +68,7 @@ export default class bench extends Phaser.Scene {
               }
         );
     }
+
     create() {
         this.reps = 0;
         this.clicks = 0;
@@ -95,15 +96,14 @@ export default class bench extends Phaser.Scene {
                 // });
                 this.clicks++;
                 if(this.clicks%2===0){
-                this.arms.anims.playReverse("bench");
-                this.reps++;
-                this.globalState.incStrength1();
-                this.globalState.decEnergy1();
-                let spts = this.physics.add.sprite(915, 295, "spts").setVelocityY(-50).setVelocityX(Math.random()*20-10);
-                this.time.delayedCall(2000, ()=>{
-                    spts.destroy();
-                });
-                
+                    this.arms.anims.playReverse("bench");
+                    this.reps++;
+                    this.globalState.incStrength1();
+                    this.globalState.decEnergy1();
+                    let spts = this.physics.add.sprite(915, 295, "spts").setVelocityY(-50).setVelocityX(Math.random()*20-10);
+                    this.time.delayedCall(2000, ()=>{
+                        spts.destroy();
+                    });
                 } else {
                     this.arms.anims.play("bench");
                 }
@@ -111,7 +111,6 @@ export default class bench extends Phaser.Scene {
                 this.tic.angle = Math.random()*270 + 90;
                 this.ticSpeed *= (-1);
                 this.tic.setAngularVelocity(this.ticSpeed);
-                
             } else {
                 this.missed++;
                 this.missedText.setText(this.missedText.text += " X");

@@ -31,21 +31,21 @@ export default class deadlift extends Phaser.Scene {
             new URL("/scripts/Assets/deadliftAssets/deadlift-sheet.png", import.meta.url).href, {
                 frameHeight: 535,
                 frameWidth: 991,
-              }
+            }
         );
         this.load.spritesheet(
             "deadlift-getup",
             new URL("/scripts/Assets/deadliftAssets/deadlift-getup.png", import.meta.url).href, {
                 frameHeight: 535,
                 frameWidth: 991,
-              }
+            }
         );
         this.load.spritesheet(
             "deadlift-sweat",
             new URL("/scripts/Assets/deadliftAssets/deadlift-sweat.png", import.meta.url).href, {
                 frameHeight: 535,
                 frameWidth: 991,
-              }
+            }
         );
         this.load.image(
             "sprite",
@@ -117,11 +117,7 @@ export default class deadlift extends Phaser.Scene {
         this.sprite.setFrame(this.frame);
         // console.log("dropping...");
     }
-    
-    settimer(){
-        // this.time.
-        // console.laog("you are awesome >:(");
-    }
+   
     flashX(){
         this.missedText.setTint(0xff0000);
         for (let i= 1; i<=3; i++){
@@ -133,6 +129,7 @@ export default class deadlift extends Phaser.Scene {
             });
         }
     }
+
     update(time, delta){
         this.timer+= delta;
         if (this.started){
@@ -182,6 +179,4 @@ export default class deadlift extends Phaser.Scene {
             this.reps++;
         }
     }
-
-
 }

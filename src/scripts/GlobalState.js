@@ -8,9 +8,13 @@ class GlobalState extends Phaser.Plugins.BasePlugin {
   this.strength = 0;
   this.energy = 50;
   }
-  incScore1(){
+  incStrength1(){
     this.strength += 1;
   }
+  decEnergy1(){
+    this.energy-=1;
+  }
+
   playerWinCheck(){
     if(this.strength=== 50){
       // console.log("you win YAYYYYYY!");

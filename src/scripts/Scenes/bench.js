@@ -97,8 +97,8 @@ export default class bench extends Phaser.Scene {
                 if(this.clicks%2===0){
                 this.arms.anims.playReverse("bench");
                 this.reps++;
-                this.globalState.incScore1();
-                this.globalState.energy--;
+                this.globalState.incStrength1();
+                this.globalState.decEnergy1();
                 let spts = this.physics.add.sprite(915, 295, "spts").setVelocityY(-50).setVelocityX(Math.random()*20-10);
                 this.time.delayedCall(2000, ()=>{
                     spts.destroy();
